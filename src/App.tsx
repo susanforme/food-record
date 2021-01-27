@@ -1,12 +1,17 @@
-import { renderRoutes } from 'react-router-config';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import routes from '@/router';
+import NavBar from '@/components/NavBar';
+import { Suspense } from 'react';
+import renderRoutes from './router/renderRoutes';
 
 function App() {
   return (
-    <div>
-      <HashRouter>{renderRoutes(routes)}</HashRouter>
-    </div>
+    <>
+      <Router>
+        <Suspense fallback={<div>Loading...</div>}>{renderRoutes(routes)}</Suspense>
+        <NavBar></NavBar>
+      </Router>
+    </>
   );
 }
 
