@@ -13,6 +13,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
+  plugins: ['@typescript-eslint', 'react-hooks'],
   rules: {
     '@typescript-eslint/no-unused-vars': 'error',
     'no-unused-vars': 0,
@@ -20,6 +21,8 @@ module.exports = {
     '@typescript-eslint/no-unused-expressions': 0,
     'no-var': 2,
     camelcase: 2,
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'error',
     'lines-around-comment': [
       'error',
       {
@@ -61,5 +64,4 @@ module.exports = {
     // 禁止不必要的构造函数
     'no-useless-constructor': 'error',
   },
-  plugins: ['@typescript-eslint'],
 };
