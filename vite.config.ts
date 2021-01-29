@@ -10,4 +10,7 @@ export default defineConfig({
   alias: {
     '@': path.resolve(__dirname, './src'),
   },
+  optimizeDeps: {
+    include: ['antd/lib/locale/zh_CN'],
+  },
 });
