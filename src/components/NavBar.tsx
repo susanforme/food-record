@@ -3,23 +3,22 @@ import style from './NavBar.module.less';
 import Icon from './Icon';
 import { connect } from 'react-redux';
 import { State } from '@/store/reducer';
-import { push } from 'connected-react-router';
+import { history } from '@/store';
+import { getIsChildRoute } from '@/utils';
 
 function NavBar({ pathname }: NavBarProps) {
-  console.log(pathname);
-
   const Links = routes
-    .filter((v) => v.path !== '/')
+    .filter((v) => v.args?.isMenu)
     .map((v) => {
-      const activeClass = v.path === pathname ? style.active : undefined;
+      const path = v.path?.toString() || '';
+      const activeClass = getIsChildRoute(path, pathname) ? style.active : undefined;
+      if (path === '/publish') {
+        return <div key={path}>publish</div>;
+      }
       return (
-        <div
-          key={v.path as string}
-          className={style.iconFather}
-          onClick={() => push(v.path as string)}
-        >
+        <div key={path} className={style.iconFather} onClick={() => history.push(path)}>
           <Icon type="icon-home" className={activeClass}></Icon>
-          <a href={v.path as string} className={activeClass} onClick={(e) => e.preventDefault()}>
+          <a href={path} className={activeClass} onClick={(e) => e.preventDefault()}>
             {v.title}
           </a>
         </div>

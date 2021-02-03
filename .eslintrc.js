@@ -1,9 +1,14 @@
 module.exports = {
   env: {
     es6: true,
+    browser: true,
     node: true,
   },
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/eslint-recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+  ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -12,8 +17,11 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
-  plugins: ['@typescript-eslint', 'react-hooks'],
+  plugins: ['@typescript-eslint', 'react-hooks', 'react'],
   rules: {
     '@typescript-eslint/no-unused-vars': 'error',
     'no-unused-vars': 0,
@@ -63,5 +71,7 @@ module.exports = {
     'no-duplicate-imports': 'error',
     // 禁止不必要的构造函数
     'no-useless-constructor': 'error',
+    'react/react-in-jsx-scope': 0,
+    'react/display-name': 0,
   },
 };

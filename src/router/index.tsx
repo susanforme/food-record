@@ -21,28 +21,47 @@ const routes: RouteConfig[] = [
     path: '/home',
     component: Home,
     title: '首页',
+    args: {
+      iconName: 'icon-home',
+      isMenu: true,
+    },
   },
   {
     path: '/distance',
     component: Distance,
     auth: true,
     title: '距离',
+    args: {
+      iconName: 'icon-home',
+      isMenu: true,
+    },
   },
   {
     path: '/publish',
     component: Publish,
     auth: true,
     title: '发表',
+    args: {
+      isMenu: true,
+    },
   },
   {
     path: '/message',
     component: Message,
     title: '消息',
+    args: {
+      iconName: 'icon-home',
+      isMenu: true,
+    },
   },
   {
     path: '/me',
     component: Me,
     title: '我的',
+    args: {
+      iconName: 'icon-home',
+      isMenu: true,
+    },
     routes: [
       {
         path: '/me/login',

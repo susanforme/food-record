@@ -1,5 +1,7 @@
-function Message() {
-  return <div>互相交流的地方</div>;
+import renderRoutes from '@/router/renderRoutes';
+
+function Message(props: any) {
+  return renderRoutes(props.route.routes);
 }
 
 export default Message;

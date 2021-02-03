@@ -1,11 +1,9 @@
-import { BrowserRouter as Router } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import routes from '@/router';
-import NavBar from '@/components/NavBar';
 import { Suspense } from 'react';
 import renderRoutes from './router/renderRoutes';
 import { useQuery } from '@apollo/client';
 import { API } from './api';
-import { Button } from 'antd';
 import { ConnectedRouter } from 'connected-react-router';
 import { History } from 'history';
 
@@ -23,10 +21,8 @@ function App({ history }: AppProps) {
   console.log(data);
   return (
     <ConnectedRouter history={history}>
-      <Router>
+      <Router history={history}>
         <Suspense fallback={<div>Loading...</div>}>{renderRoutes(routes)}</Suspense>
-        <Button>button</Button>
-        <NavBar></NavBar>
       </Router>
     </ConnectedRouter>
   );
