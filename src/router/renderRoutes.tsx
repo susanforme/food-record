@@ -15,7 +15,8 @@ function renderRoutes(routes: RouteConfig[], extraProps: any = {}, switchProps =
           render={(props) => {
             const { isLogin } = store.getState().state;
             if (!route.auth || isLogin) {
-              const nav = route.args.isMenu ? <NavBar /> : null;
+              const nav = route?.args?.isMenu ? <NavBar /> : null;
+              console.log(route?.args?.isMenu, 123123);
 
               if (route.title) {
                 document.title = route.title;
@@ -31,7 +32,7 @@ function renderRoutes(routes: RouteConfig[], extraProps: any = {}, switchProps =
                 </>
               );
             }
-            return <Redirect to="/me/login" />;
+            return <Redirect to="/login" />;
           }}
         />
       ))}

@@ -8,7 +8,7 @@ import { lazy } from 'react';
 const Distance = lazy(() => import('../views/Distance/Distance'));
 const Publish = lazy(() => import('../views/Publish/Publish'));
 const Me = lazy(() => import('../views/Me/Me'));
-const Login = lazy(() => import('../views/Me/Login'));
+const Login = lazy(() => import('../views/Login/Login'));
 const Message = lazy(() => import('../views/Message/Message'));
 const routes: RouteConfig[] = [
   {
@@ -62,13 +62,11 @@ const routes: RouteConfig[] = [
       iconName: 'icon-home',
       isMenu: true,
     },
-    routes: [
-      {
-        path: '/me/login',
-        component: Login,
-        title: '登录',
-      },
-    ],
+  },
+  {
+    path: '/login',
+    component: Login,
+    title: '登录',
   },
 ];
 
