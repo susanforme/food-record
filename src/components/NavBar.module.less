@@ -1,0 +1,28 @@
+.nav-bar {
+  @height: 50px;
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: @height;
+  width: 100%;
+  .icon-father {
+    flex: 1;
+    text-align: center;
+    flex-direction: column;
+    display: flex;
+
+    > * {
+      flex: 1;
+      color: rgb(66, 64, 64);
+    }
+
+    span {
+      font-size: 28px;
+    }
+    .active {
+      color: gold;
+    }
+  }
+}

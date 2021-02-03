@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import App from './App';
 import { Provider } from 'react-redux';
-import store from './store';
+import store, { history } from './store';
 import { ApolloProvider } from '@apollo/client';
 import client from './api';
 import zhCN from 'antd/lib/locale/zh_CN';
@@ -14,7 +14,7 @@ ReactDOM.render(
     <ConfigProvider locale={zhCN}>
       <ApolloProvider client={client}>
         <Provider store={store}>
-          <App />
+          <App history={history} />
         </Provider>
       </ApolloProvider>
     </ConfigProvider>

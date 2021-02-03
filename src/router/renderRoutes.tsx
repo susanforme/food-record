@@ -12,7 +12,7 @@ function renderRoutes(routes: RouteConfig[], extraProps: any = {}, switchProps =
           exact={route.exact}
           strict={route.strict}
           render={(props) => {
-            const { isLogin } = store.getState();
+            const { isLogin } = store.getState().state;
             if (!route.auth || isLogin) {
               if (route.title) {
                 document.title = route.title;

@@ -6,8 +6,10 @@ import renderRoutes from './router/renderRoutes';
 import { useQuery } from '@apollo/client';
 import { API } from './api';
 import { Button } from 'antd';
+import { ConnectedRouter } from 'connected-react-router';
+import { History } from 'history';
 
-function App() {
+function App({ history }: AppProps) {
   // 若需刷新再解构出refetch
   const { loading, error, data } = useQuery(API.USER_DATA, {
     variables: {
@@ -15,19 +17,23 @@ function App() {
     },
   });
   if (loading) {
-    return <div>loading</div>;
+    console.log(loading);
   }
   if (error) console.log(error);
   console.log(data);
   return (
-    <>
+    <ConnectedRouter history={history}>
       <Router>
         <Suspense fallback={<div>Loading...</div>}>{renderRoutes(routes)}</Suspense>
         <Button>button</Button>
         <NavBar></NavBar>
       </Router>
-    </>
+    </ConnectedRouter>
   );
 }
 
 export default App;
+
+interface AppProps {
+  history: History;
+}
