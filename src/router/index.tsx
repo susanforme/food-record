@@ -1,16 +1,11 @@
 import { Redirect } from 'react-router-dom';
-import Home from '../views/Home/Home';
-// 只用types来提供类型声明
-import { RouteConfig } from 'react-router-config';
 import { lazy } from 'react';
+import Layout from '@/container/Layout';
 
 // 懒加载优化
-const Distance = lazy(() => import('../views/Distance/Distance'));
 const Publish = lazy(() => import('../views/Publish/Publish'));
-const Me = lazy(() => import('../views/Me/Me'));
 const Login = lazy(() => import('../views/Login/Login'));
-const Message = lazy(() => import('../views/Message/Message'));
-const routes: RouteConfig[] = [
+const routes = [
   {
     path: '/',
     // 精确匹配,有先后顺序,不然只能渲染空白
@@ -19,7 +14,7 @@ const routes: RouteConfig[] = [
   },
   {
     path: '/home',
-    component: Home,
+    component: Layout,
     title: '首页',
     args: {
       iconName: 'icon-home',
@@ -28,7 +23,7 @@ const routes: RouteConfig[] = [
   },
   {
     path: '/distance',
-    component: Distance,
+    component: Layout,
     auth: true,
     title: '距离',
     args: {
@@ -47,7 +42,7 @@ const routes: RouteConfig[] = [
   },
   {
     path: '/message',
-    component: Message,
+    component: Layout,
     title: '消息',
     args: {
       iconName: 'icon-home',
@@ -56,7 +51,7 @@ const routes: RouteConfig[] = [
   },
   {
     path: '/me',
-    component: Me,
+    component: Layout,
     title: '我的',
     args: {
       iconName: 'icon-home',

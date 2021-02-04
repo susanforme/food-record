@@ -1,13 +1,17 @@
-import renderRoutes from '@/router/renderRoutes';
+import Routes from '@/router/Routes';
 import { RouteComponentProps, StaticContext } from 'react-router';
 
 function Me(props: MeProps) {
   const isChild = props.location.pathname !== props.route.path;
 
   if (isChild) {
-    return renderRoutes(props.route.routes);
+    return <Routes routes={props.route.routes}></Routes>;
   }
-  return <div style={{ backgroundColor: 'blue', width: 100, height: 100 }}>me</div>;
+  return (
+    <>
+      <div style={{ backgroundColor: 'blue', width: '100%', height: 100 }}>home</div>
+    </>
+  );
 }
 export default Me;
 

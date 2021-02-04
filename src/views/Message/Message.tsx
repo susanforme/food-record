@@ -1,7 +1,7 @@
-import renderRoutes from '@/router/renderRoutes';
+import Routes from '@/router/Routes';
 
 function Message(props: any) {
-  return renderRoutes(props.route.routes);
+  return <Routes routes={props.route.routes}></Routes>;
 }
 
 export default Message;

@@ -1,7 +1,7 @@
 import { Router } from 'react-router-dom';
 import routes from '@/router';
 import { Suspense } from 'react';
-import renderRoutes from './router/renderRoutes';
+import Routes from './router/Routes';
 import { useQuery } from '@apollo/client';
 import { API } from './api';
 import { ConnectedRouter } from 'connected-react-router';
@@ -21,7 +21,7 @@ function App({ history }: AppProps) {
     <ConnectedRouter history={history}>
       <Router history={history}>
         <Suspense fallback={<Spin tip="加载中" className="loading"></Spin>}>
-          {renderRoutes(routes)}
+          <Routes routes={routes}></Routes>
         </Suspense>
       </Router>
     </ConnectedRouter>
