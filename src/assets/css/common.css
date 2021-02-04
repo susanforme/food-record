@@ -138,3 +138,46 @@ a:active {
   margin: 0;
   padding: 0;
 }
+
+.loading {
+  color: gold;
+}
+
+.slide {
+  transition: all 250ms ease-in;
+}
+
+.slide-enter {
+  transform: translateX(-100%);
+}
+.slide-enter-done {
+  transform: translateX(0);
+}
+.slide-exit {
+  transform: translateX(0);
+}
+.slide-exit-done {
+  transform: translateX(100%);
+}
+
+.fade-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 500ms;
+}
+
+.fade-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: all 500ms;
+}

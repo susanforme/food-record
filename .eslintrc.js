@@ -73,5 +73,6 @@ module.exports = {
     'no-useless-constructor': 'error',
     'react/react-in-jsx-scope': 0,
     'react/display-name': 0,
+    'react/jsx-no-undef': 0,
   },
 };
