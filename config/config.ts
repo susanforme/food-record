@@ -1,10 +1,12 @@
 import { defineConfig } from 'umi';
+import routes from './routes';
 const px2rem = require('postcss-pxtorem');
 
 export default defineConfig({
   nodeModulesTransform: {
     type: 'none',
   },
+  routes,
   mock: false,
   // 禁用sourcemap
   devtool: false,
@@ -14,7 +16,8 @@ export default defineConfig({
     default: 'zh-CN',
   },
   dva: {
-    hmr: true, //是否启用 dva 的 热更新
+    // 是否启用 dva 的 热更新
+    hmr: true,
     immer: true,
   },
   extraPostCSSPlugins: [

@@ -42,3 +42,7 @@ const IndexModel: IndexModelType = {
 };
 
 export default IndexModel;
+
+export interface State {
+  index: IndexModelState;
+}

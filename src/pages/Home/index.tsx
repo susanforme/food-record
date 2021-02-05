@@ -1,7 +1,6 @@
-import React from 'react';
 import styles from './index.less';
 
-const Home: React.FC = () => {
+const Home: React.FC<HomeProps> = () => {
   return (
     <div className="home">
       home
@@ -11,3 +10,7 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+interface HomeProps {
+  title: string;
+}
