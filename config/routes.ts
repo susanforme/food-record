@@ -12,9 +12,19 @@ const routes: IRoute[] = [
         component: '@/pages/Ranging',
         title: '测距',
       },
-      { exact: true, path: '/message', component: '@/pages/Message', title: '消息' },
+      {
+        exact: true,
+        path: '/message',
+        component: '@/pages/Message',
+        title: '消息',
+      },
       { exact: true, path: '/me', component: '@/pages/Me', title: '我的' },
-      { exact: true, path: '/login', component: '@/pages/Login', title: '登录' },
+      {
+        exact: true,
+        path: '/login',
+        component: '@/pages/Login',
+        title: '登录',
+      },
       {
         exact: true,
         path: '/publish',
