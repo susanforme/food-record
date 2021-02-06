@@ -1,7 +1,7 @@
 import style from './BottomNav.less';
 import Icon from './Icon';
 import { createPortal } from 'react-dom';
-import { connect, history, IndexModelState } from 'umi';
+import { connect, history, State } from 'umi';
 import { bottomNavMap, getIsChildRoute } from '@/utils';
 
 const BottomNav: React.FC<NavBarProps> = ({ pathname }) => {
@@ -34,7 +34,7 @@ const BottomNav: React.FC<NavBarProps> = ({ pathname }) => {
   );
 };
 
-const mapStateToProps = ({ index }: { index: IndexModelState }) => ({
+const mapStateToProps = ({ index }: State) => ({
   pathname: index.pathname,
 });
 

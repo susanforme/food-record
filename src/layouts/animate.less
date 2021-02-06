@@ -1,4 +1,5 @@
 /* 路由前进时的入场/离场动画 */
+@animate-time: 300ms;
 .forward-enter {
   opacity: 0;
   transform: translateX(100%);
@@ -7,7 +8,7 @@
 .forward-enter-active {
   opacity: 1;
   transform: translateX(0);
-  transition: all 500ms;
+  transition: all @animate-time;
   position: absolute;
 }
 
@@ -19,7 +20,7 @@
 .forward-exit-active {
   opacity: 0;
   transform: translateX(-100%);
-  transition: all 500ms;
+  transition: all @animate-time;
   position: absolute;
 }
 
@@ -32,7 +33,8 @@
 .back-enter-active {
   opacity: 1;
   transform: translateX(0);
-  transition: all 500ms;
+  transition: all @animate-time;
+  position: absolute;
 }
 
 .back-exit {
@@ -43,5 +45,33 @@
 .back-exit-active {
   opacity: 0;
   transform: translate(100%);
-  transition: all 500ms;
+  transition: all @animate-time;
+  position: absolute;
+}
+
+/* 下方*/
+.bottom-enter {
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.bottom-enter-active {
+  z-index: 2;
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 300ms;
+  position: absolute;
+}
+
+.bottom-exit {
+  z-index: 1;
+  opacity: 1;
+}
+
+.bottom-exit-active {
+  z-index: 1;
+  opacity: 0.3;
+  transition: all 300ms;
+  position: absolute;
 }
