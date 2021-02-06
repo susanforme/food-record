@@ -37,6 +37,13 @@ const IndexModel: IndexModelType = {
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen((location) => {
+        // 防止dva未初始化发生bug
+        if (!getDvaApp) {
+          return dispatch({
+            type: 'UPDATE_ROUTE_HISTORY',
+            payload: location,
+          });
+        }
         const state: IndexModelState = getDvaApp()._store.getState().index;
         const type =
           state.routeHistory.length >= 10

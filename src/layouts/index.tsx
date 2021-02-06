@@ -25,7 +25,7 @@ const Layout: React.FC<LayoutProps> = ({ children, route, routeHistory }) => {
   const currentRoute = route.routes?.find((v) => v.path === path);
   let key = history.location.key;
   if (currentRoute?.wrappers || history.action === 'REPLACE') {
-    key = routeHistory[routeHistory.length - 2].key;
+    key = routeHistory[routeHistory.length - 2]?.key;
   }
   if (path === '/') {
     return <Redirect to="/home" />;
