@@ -11,21 +11,26 @@ export const bottomNavMap = [
   {
     path: '/home',
     title: '首页',
+    icon: 'icon-home',
   },
   {
     path: '/ranging',
     title: '测距',
+    icon: 'icon-feiji',
   },
   {
     path: '/publish',
-    title: '',
+    title: '发表',
+    icon: '',
   },
   {
     path: '/message',
     title: '消息',
+    icon: 'icon-message',
   },
   {
     path: '/me',
     title: '我的',
+    icon: 'icon-user',
   },
 ];

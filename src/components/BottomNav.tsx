@@ -9,11 +9,17 @@ const BottomNav: React.FC<NavBarProps> = ({ pathname }) => {
     const path = v.path;
     const activeClass = getIsChildRoute(path, pathname) ? style.active : undefined;
     if (path === '/publish') {
-      return <div key={v.path}>publish</div>;
+      return (
+        <div key={v.path} className={style.publish} onClick={() => history.push(path)}>
+          <div className={style['wrapper']}>
+            <div className={style.icon}>+</div>
+          </div>
+        </div>
+      );
     }
     return (
       <div key={path} className={style['icon-father']} onClick={() => history.push(path)}>
-        <Icon type="icon-home" className={activeClass}></Icon>
+        <Icon type={v.icon} className={activeClass}></Icon>
         <a href={path} className={activeClass} onClick={(e) => e.preventDefault()}>
           {v.title}
         </a>

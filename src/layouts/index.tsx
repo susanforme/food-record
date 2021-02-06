@@ -10,7 +10,7 @@ document.documentElement.style.fontSize = document.documentElement.clientWidth /
 
 const Layout: React.FC<LayoutProps> = (props) => {
   const path = history.location.pathname;
-  const isShowBottomNav = !!bottomNavMap.find((v) => v.path === path);
+  const isShowBottomNav = !!bottomNavMap.find((v) => v.path === path) && path !== '/publish';
   // 可根据不同的路径来加头部
   if (path === '/') {
     return <Redirect to="/home" />;
