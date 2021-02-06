@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Login: React.FC = () => {
-  return <div>login</div>;
+  return <div style={{ backgroundColor: 'blue', height: '100vh' }}>login</div>;
 };
 
 export default Login;
