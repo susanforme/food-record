@@ -1,6 +1,5 @@
 import { ApolloProvider } from '@apollo/client';
 import client from '@/api';
-import './index.css';
 import './animate.less';
 import BottomNav from '@/components/BottomNav';
 import { history, Redirect, IRoute, connect, State, Location } from 'umi';

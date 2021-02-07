@@ -1,5 +1,6 @@
 import { defineConfig } from 'umi';
 import routes from './routes';
+import theme from './theme';
 const px2rem = require('postcss-pxtorem');
 
 export default defineConfig({
@@ -20,6 +21,7 @@ export default defineConfig({
     hmr: true,
     immer: true,
   },
+  theme,
   extraPostCSSPlugins: [
     px2rem({
       rootValue: 18.75,
@@ -31,4 +33,9 @@ export default defineConfig({
       mediaQuery: false,
     }),
   ],
+  lessLoader: {
+    globalVars: {
+      '@padding': '2vw',
+    },
+  },
 });
