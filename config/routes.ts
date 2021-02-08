@@ -5,35 +5,41 @@ const routes: IRoute[] = [
     path: '/',
     component: '@/layouts/index',
     routes: [
-      { exact: true, path: '/home', component: '@/pages/Home', title: '首页' },
+      { path: '/home', component: '@/pages/Home', title: '首页' },
       {
-        exact: true,
         path: '/ranging',
         component: '@/pages/Ranging',
         title: '测距',
       },
       {
-        exact: true,
         path: '/message',
         component: '@/pages/Message',
         title: '消息',
       },
-      { exact: true, path: '/me', component: '@/pages/Me', title: '我的' },
+      { path: '/me', component: '@/pages/Me', title: '我的' },
       {
-        exact: true,
-        path: '/login',
-        component: '@/pages/Login',
-        title: '登录',
+        path: '/account',
+        component: '@/pages/Account',
+        routes: [
+          {
+            path: '/account/login',
+            component: '@/pages/Account/Login',
+            title: '登录',
+          },
+          {
+            path: '/account/register',
+            component: '@/pages/Account/Register',
+            title: '注册',
+          },
+        ],
       },
       {
-        exact: true,
         path: '/publish',
         component: '@/pages/Publish',
         title: '发表',
         wrappers: ['@/wrappers/Auth'],
       },
       {
-        exact: true,
         path: '/about',
         component: '@/pages/About',
         title: '关于我',

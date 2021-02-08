@@ -10,7 +10,7 @@ const Auth: React.FC = (props) => {
     return (
       <Redirect
         to={{
-          pathname: '/login',
+          pathname: '/account/login',
           state: { from: location.pathname },
         }}
       />
