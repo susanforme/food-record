@@ -11,7 +11,7 @@ const Auth: React.FC = (props) => {
       <Redirect
         to={{
           pathname: '/account/login',
-          state: { from: location.pathname },
+          state: { from: location.pathname, title: '登录' },
         }}
       />
     );

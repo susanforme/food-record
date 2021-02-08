@@ -72,7 +72,7 @@ const Login: React.FC = () => {
       </p>
       <p className={style.tips}>
         新用户登录即自动注册，并表示已同意 《用户服务协议》和
-        <span>《隐私权政策》</span>
+        <span onClick={() => goToOtherPage()}>《隐私权政策》</span>
       </p>
       <Button className={style['login-button']} type="primary">
         登录
@@ -81,10 +81,10 @@ const Login: React.FC = () => {
         <span className={style.about} onClick={() => history.push('/about')}>
           关于我们
         </span>
-        <span>|</span>
+        <span className={style.shu}>|</span>
         <span
           className={style.about}
-          onClick={() => history.push('/account/register')}
+          onClick={() => history.push('/account/register', { title: '注册' })}
         >
           注册账号
         </span>
@@ -94,3 +94,9 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+
+function goToOtherPage() {
+  open(
+    'https://chengcheng-1256396014.cos.ap-guangzhou.myqcloud.com/%E9%9A%90%E7%A7%81%E6%9D%83%E6%94%BF%E7%AD%96.html',
+  );
+}
