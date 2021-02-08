@@ -32,6 +32,12 @@ const routes: IRoute[] = [
         title: '发表',
         wrappers: ['@/wrappers/Auth'],
       },
+      {
+        exact: true,
+        path: '/about',
+        component: '@/pages/About',
+        title: '关于我',
+      },
       { path: '*', component: '@/pages/404', title: '页面走丢了' },
     ],
   },
