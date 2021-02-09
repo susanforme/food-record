@@ -45,7 +45,7 @@ const Register: React.FC = () => {
     if (!password) {
       return notification.error({ message: '密码不能为空', duration: 1.5 });
     }
-    if (password === repassword) {
+    if (password !== repassword) {
       return notification.error({ message: '两次密码必须相同', duration: 1.5 });
     }
     if (

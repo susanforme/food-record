@@ -1,18 +1,23 @@
 import { ImmerReducer, Subscription, Location, getDvaApp } from 'umi';
+import { notification } from 'antd';
+import effects, { Action } from './action';
 
 export interface IndexModelState {
   isLogin: boolean;
   routeHistory: Location[];
+  user: User;
 }
 
 export interface IndexModelType {
   namespace: 'index';
   state: IndexModelState;
   reducers: {
-    LOGIN: ImmerReducer<IndexModelState>;
     UPDATE_ROUTE_HISTORY: ImmerReducer<IndexModelState>;
     UPDATE_AND_CLEAN_ROUTE_HISTORY: ImmerReducer<IndexModelState>;
+    UPDATE_USER: ImmerReducer<IndexModelState>;
+    FETCH_ERROR: ImmerReducer<IndexModelState>;
   };
+  effects: Action;
   subscriptions: { setup: Subscription };
 }
 
@@ -21,11 +26,9 @@ const IndexModel: IndexModelType = {
   state: {
     isLogin: false,
     routeHistory: [],
+    user: {},
   },
   reducers: {
-    LOGIN(state, action) {
-      state.isLogin = action.payload;
-    },
     UPDATE_ROUTE_HISTORY(state, action) {
       state.routeHistory.push(action.payload);
     },
@@ -33,7 +36,15 @@ const IndexModel: IndexModelType = {
     UPDATE_AND_CLEAN_ROUTE_HISTORY(state, action) {
       state.routeHistory = [...state.routeHistory.slice(6), action.payload];
     },
+    UPDATE_USER(state, action) {
+      state.isLogin = true;
+      state.user = { ...state.user, ...action.payload };
+    },
+    FETCH_ERROR(state, { payload }) {
+      return notification.error({ message: payload, duration: 1.5 });
+    },
   },
+  effects,
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen((location) => {
@@ -69,3 +80,14 @@ export default IndexModel;
 export interface State {
   index: IndexModelState;
 }
+
+type User =
+  | {
+      username: string;
+      id: string;
+      headImg: string;
+      createTime: number;
+      location: string;
+      email: string;
+    }
+  | {};

@@ -8,13 +8,11 @@ import {
 } from '@ant-design/icons';
 import AuthCode from '@/components/AuthCode';
 import Icon from '@/components/Icon';
-import { history } from 'umi';
+import { connect, history, withRouter } from 'umi';
 import { useState } from 'react';
 import style from './account.less';
-import { useMutation } from '@apollo/client';
-import { USER_API } from '@/api/query';
 
-const Login: React.FC = () => {
+const Login: React.FC<LoginProps> = ({ beLogin }) => {
   // 1位为手机登录,2为邮箱登录
   const [loginStatus, setLoginStatus] = useState(1);
   const [captcha, setCaptcha] = useState('');
@@ -25,7 +23,6 @@ const Login: React.FC = () => {
     password: '',
     captcha: '',
   });
-  const [mutateLogin] = useMutation(USER_API.LOGIN);
   const changLoginMethod = () => {
     const status = loginStatus === 1 ? 2 : 1;
     setLoginStatus(status);
@@ -62,17 +59,7 @@ const Login: React.FC = () => {
             username: '',
             password,
           };
-    mutateLogin({
-      variables: {
-        data,
-      },
-    })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        return notification.error({ message: err.message, duration: 1.5 });
-      });
+    beLogin(data);
   }
   return (
     <>
@@ -165,7 +152,16 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+const mapDispatchToProps = (dispatch: Function) => ({
+  beLogin(data: any) {
+    dispatch({
+      type: 'index/login',
+      payload: data,
+    });
+  },
+});
+
+export default withRouter(connect(null, mapDispatchToProps)(Login));
 
 function goToOtherPage() {
   open(
@@ -178,4 +174,7 @@ interface LoginArgs {
   captcha: string;
   email: string;
   password: string;
+}
+interface LoginProps {
+  beLogin(data: any): void;
 }
