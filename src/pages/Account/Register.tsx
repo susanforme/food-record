@@ -8,17 +8,14 @@ import {
 } from '@ant-design/icons';
 import AuthCode from '@/components/AuthCode';
 import Icon from '@/components/Icon';
-import { history } from 'umi';
-import { useState } from 'react';
+import { connect, history, State, withRouter } from 'umi';
+import { useEffect, useState } from 'react';
 import style from './account.less';
 import { SHA256 as sha256 } from 'crypto-js';
-import { useMutation } from '@apollo/client';
-import { USER_API } from '@/api/query';
 
-const Register: React.FC = () => {
+const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
   const [captcha, setCaptcha] = useState('');
   const [needRefresh, setNeedrefresh] = useState(false);
-  const [mutate] = useMutation(USER_API.REGISTER);
   const [loginArgs, setLoginArgs] = useState<RegisterArgs>({
     email: '',
     username: '',
@@ -26,6 +23,11 @@ const Register: React.FC = () => {
     repassword: '',
     captcha: '',
   });
+  useEffect(() => {
+    if (isLogin) {
+      return history.goBack();
+    }
+  }, [isLogin]);
   function validateAndRegister() {
     const {
       username,
@@ -64,17 +66,7 @@ const Register: React.FC = () => {
       password: sha256(password).toString(),
       email,
     };
-    mutate({
-      variables: {
-        data,
-      },
-    })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        return notification.error({ message: err.message, duration: 1.5 });
-      });
+    register(data);
   }
   return (
     <>
@@ -175,7 +167,22 @@ const Register: React.FC = () => {
   );
 };
 
-export default Register;
+const mapStateToProps = (state: State) => ({
+  isLogin: state.index.isLogin,
+});
+
+const mapDispatchToProps = (dispatch: Function) => ({
+  register(data: any) {
+    dispatch({
+      type: 'index/register',
+      payload: data,
+    });
+  },
+});
+
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Register),
+);
 
 function goToOtherPage() {
   open(
@@ -183,6 +190,10 @@ function goToOtherPage() {
   );
 }
 
+interface RegisterProps {
+  register(data: any): void;
+  isLogin: boolean;
+}
 interface RegisterArgs {
   username: string;
   captcha: string;

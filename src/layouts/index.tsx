@@ -6,7 +6,7 @@ import { history, Redirect, IRoute, connect, State, Location } from 'umi';
 import { bottomNavMap } from '@/utils';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import TopNav from '@/components/TopNav';
-import { cloneElement } from 'react';
+import { cloneElement, useEffect } from 'react';
 
 document.documentElement.style.fontSize =
   document.documentElement.clientWidth / 20 + 'px';
@@ -17,7 +17,15 @@ const DEFAULT_ANIMATION_MAP: DefaultAnimationMap = {
   REPLACE: 'bottom',
 };
 
-const Layout: React.FC<LayoutProps> = ({ children, route, routeHistory }) => {
+const Layout: React.FC<LayoutProps> = ({
+  children,
+  route,
+  routeHistory,
+  loginBySession,
+}) => {
+  useEffect(() => {
+    loginBySession();
+  }, [loginBySession]);
   const path = history.location.pathname;
   const isShowBottomNav =
     !!bottomNavMap.find((v) => v.path === path) && path !== '/publish';
@@ -52,12 +60,21 @@ const mapStateToProps = ({ index }: State) => ({
   routeHistory: index.routeHistory,
 });
 
-export default connect(mapStateToProps)(Layout);
+const mapDispatchToProps = (dispatch: Function) => ({
+  loginBySession() {
+    dispatch({
+      type: 'index/loginBySession',
+    });
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);
 
 interface LayoutProps {
   children: React.ReactNode;
   route: IRoute;
   routeHistory: Location[];
+  loginBySession(): void;
 }
 
 type ChildComponent = React.FunctionComponentElement<{ classNames: any }>;

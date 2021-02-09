@@ -2,13 +2,16 @@ import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import io from 'socket.io-client';
 
+const uri = '/api';
 const uploadLink = createUploadLink({
-  uri: 'http://localhost:4000/graphql',
+  uri,
 }) as unknown;
+
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
+  uri,
   link: uploadLink as ApolloLink,
   cache: new InMemoryCache(),
+  credentials: 'same-origin',
 });
 
 export default client;

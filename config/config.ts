@@ -38,4 +38,11 @@ export default defineConfig({
       '@padding': '2vw',
     },
   },
+  proxy: {
+    '/api': {
+      target: 'http://localhost:4000/graphql',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
+  },
 });

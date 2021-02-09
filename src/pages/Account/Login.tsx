@@ -8,11 +8,12 @@ import {
 } from '@ant-design/icons';
 import AuthCode from '@/components/AuthCode';
 import Icon from '@/components/Icon';
-import { connect, history, withRouter } from 'umi';
-import { useState } from 'react';
+import { connect, history, State, withRouter } from 'umi';
+import { useEffect, useState } from 'react';
 import style from './account.less';
+import { SHA256 as sha256 } from 'crypto-js';
 
-const Login: React.FC<LoginProps> = ({ beLogin }) => {
+const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
   // 1位为手机登录,2为邮箱登录
   const [loginStatus, setLoginStatus] = useState(1);
   const [captcha, setCaptcha] = useState('');
@@ -27,6 +28,13 @@ const Login: React.FC<LoginProps> = ({ beLogin }) => {
     const status = loginStatus === 1 ? 2 : 1;
     setLoginStatus(status);
   };
+
+  useEffect(() => {
+    if (isLogin) {
+      return history.goBack();
+    }
+  }, [isLogin]);
+
   function validateAndLogin() {
     const { username, email, password, captcha: inputCaptcha } = loginArgs;
     // eslint-disable-next-line no-useless-escape
@@ -53,11 +61,11 @@ const Login: React.FC<LoginProps> = ({ beLogin }) => {
     }
     const data =
       loginStatus === 1
-        ? { email: '', username, password }
+        ? { email: '', username, password: sha256(password).toString() }
         : {
             email,
             username: '',
-            password,
+            password: sha256(password).toString(),
           };
     beLogin(data);
   }
@@ -152,6 +160,10 @@ const Login: React.FC<LoginProps> = ({ beLogin }) => {
   );
 };
 
+const mapStateToProps = (state: State) => ({
+  isLogin: state.index.isLogin,
+});
+
 const mapDispatchToProps = (dispatch: Function) => ({
   beLogin(data: any) {
     dispatch({
@@ -161,7 +173,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
 });
 
-export default withRouter(connect(null, mapDispatchToProps)(Login));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));
 
 function goToOtherPage() {
   open(
@@ -177,4 +189,5 @@ interface LoginArgs {
 }
 interface LoginProps {
   beLogin(data: any): void;
+  isLogin: boolean;
 }

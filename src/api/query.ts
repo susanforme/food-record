@@ -21,6 +21,18 @@ export const USER_API = {
       }
     }
   `,
+  LOGIN_BY_SESSION: gql`
+    mutation loginBySession {
+      loginBySession {
+        username
+        id
+        headImg
+        createTime
+        location
+        email
+      }
+    }
+  `,
   REGISTER: gql`
     mutation register($data: RegisterData!) {
       register(data: $data) {
