@@ -31,8 +31,12 @@ const Layout: React.FC<LayoutProps> = ({
     !!bottomNavMap.find((v) => v.path === path) && path !== '/publish';
   const currentRoute = route.routes?.find((v) => v.path === path);
   let key = history.location.key;
-  if (currentRoute?.wrappers || history.action === 'REPLACE') {
+  let animateClass = DEFAULT_ANIMATION_MAP[history.action];
+  if (history.action === 'REPLACE') {
     key = routeHistory[routeHistory.length - 2]?.key;
+  }
+  if (currentRoute?.wrappers) {
+    animateClass = 'bottom';
   }
   if (path === '/') {
     return <Redirect to="/home" />;
@@ -43,7 +47,7 @@ const Layout: React.FC<LayoutProps> = ({
       <TransitionGroup
         childFactory={(child: ChildComponent) =>
           cloneElement(child, {
-            classNames: DEFAULT_ANIMATION_MAP[history.action],
+            classNames: animateClass,
           })
         }
       >

@@ -21,7 +21,7 @@ const effects: Action = {
       });
       yield put({ type: 'UPDATE_USER', payload: result?.data?.login });
     } catch (error) {
-      yield put({ type: 'FETCH_ERROR', payload: error?.message });
+      console.log(error?.message);
     }
   },
   *register({ payload }, { call, put }) {

@@ -36,6 +36,7 @@ export default defineConfig({
   lessLoader: {
     globalVars: {
       '@padding': '2vw',
+      '@animate-time': '400ms',
     },
   },
   proxy: {
