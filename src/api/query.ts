@@ -9,6 +9,30 @@ export const USER_API = {
       }
     }
   `,
+  LOGIN: gql`
+    mutation login($data: LoginData!) {
+      login(data: $data) {
+        username
+        id
+        headImg
+        createTime
+        location
+        email
+      }
+    }
+  `,
+  REGISTER: gql`
+    mutation register($data: RegisterData!) {
+      register(data: $data) {
+        username
+        id
+        headImg
+        createTime
+        location
+        email
+      }
+    }
+  `,
 };
 
 export const TOOL_API = {

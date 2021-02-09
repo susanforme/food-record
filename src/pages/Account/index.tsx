@@ -3,7 +3,14 @@ import { createUseStyles } from 'react-jss';
 
 const Login: React.FC = (props) => {
   const style = useStyles();
-  return <div className={style.account}>{props.children}</div>;
+  return (
+    <div className={style.account}>
+      <div className={style.imgFather}>
+        <img src={require('@/img/icon.png')} />
+      </div>
+      {props.children}
+    </div>
+  );
 };
 
 export default Login;
@@ -17,6 +24,14 @@ function useStyles() {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
+    },
+    imgFather: {
+      width: '45%',
+      marginBottom: '5%',
+      '& img': {
+        width: '7.52rem',
+        height: '6.5rem',
+      },
     },
   })();
 }
