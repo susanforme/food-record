@@ -6,6 +6,7 @@
     "build": "umi build",
     "lint": "eslint ./ --ext  .tsx --cache --fix",
     "prettier": "prettier --write .",
+    "verify-dist": "tree ./dist && serve ./dist",
     "postinstall": "umi generate tmp"
   },
   "gitHooks": {
