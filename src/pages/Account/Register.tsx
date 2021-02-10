@@ -29,13 +29,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
     }
   }, [isLogin]);
   function validateAndRegister() {
-    const {
-      username,
-      email,
-      password,
-      captcha: inputCaptcha,
-      repassword,
-    } = loginArgs;
+    const { username, email, password, captcha: inputCaptcha, repassword } = loginArgs;
     // eslint-disable-next-line no-useless-escape
     const emailPattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
     if (!username) {
@@ -77,9 +71,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         maxLength={20}
         allowClear
         value={loginArgs.username}
-        onChange={(e) =>
-          setLoginArgs((pre) => ({ ...pre, username: e.target.value }))
-        }
+        onChange={(e) => setLoginArgs((pre) => ({ ...pre, username: e.target.value }))}
         prefix={<UserOutlined />}
       />
       <Input
@@ -89,9 +81,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         type="email"
         allowClear
         value={loginArgs.email}
-        onChange={(e) =>
-          setLoginArgs((pre) => ({ ...pre, email: e.target.value }))
-        }
+        onChange={(e) => setLoginArgs((pre) => ({ ...pre, email: e.target.value }))}
         prefix={<MailOutlined />}
         className={style.input}
       />
@@ -99,13 +89,9 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         size="large"
         placeholder="密码"
         maxLength={24}
-        iconRender={(visible) =>
-          visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-        }
+        iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
         value={loginArgs.password}
-        onChange={(e) =>
-          setLoginArgs((pre) => ({ ...pre, password: e.target.value }))
-        }
+        onChange={(e) => setLoginArgs((pre) => ({ ...pre, password: e.target.value }))}
         className={style.input}
         prefix={<LockOutlined />}
       />
@@ -113,13 +99,9 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         size="large"
         placeholder="重复密码"
         maxLength={24}
-        iconRender={(visible) =>
-          visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-        }
+        iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
         value={loginArgs.repassword}
-        onChange={(e) =>
-          setLoginArgs((pre) => ({ ...pre, repassword: e.target.value }))
-        }
+        onChange={(e) => setLoginArgs((pre) => ({ ...pre, repassword: e.target.value }))}
         className={style.input}
         prefix={<LockOutlined />}
       />
@@ -128,9 +110,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         prefix={<Icon type="icon-yanzhengma-2" style={{ fontSize: '16px' }} />}
         maxLength={4}
         value={loginArgs.captcha}
-        onChange={(e) =>
-          setLoginArgs((pre) => ({ ...pre, captcha: e.target.value }))
-        }
+        onChange={(e) => setLoginArgs((pre) => ({ ...pre, captcha: e.target.value }))}
         suffix={
           <AuthCode
             setCaptcha={setCaptcha}
@@ -180,9 +160,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
 });
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Register),
-);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Register));
 
 function goToOtherPage() {
   open(

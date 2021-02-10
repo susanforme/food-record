@@ -9,9 +9,7 @@ const BottomNav: React.FC<NavBarProps> = ({ pathname }) => {
 
   const Links = bottomNavMap.map((v) => {
     const path = v.path;
-    const activeClass = getIsChildRoute(path, pathname)
-      ? style.active
-      : undefined;
+    const activeClass = getIsChildRoute(path, pathname) ? style.active : undefined;
     const jump = () => {
       debounceFunc(() => {
         history.push(path);
@@ -29,11 +27,7 @@ const BottomNav: React.FC<NavBarProps> = ({ pathname }) => {
     return (
       <div key={path} className={style['icon-father']} onClick={jump}>
         <Icon type={v.icon} className={activeClass}></Icon>
-        <a
-          href={path}
-          className={activeClass}
-          onClick={(e) => e.preventDefault()}
-        >
+        <a href={path} className={activeClass} onClick={(e) => e.preventDefault()}>
           {v.title}
         </a>
       </div>

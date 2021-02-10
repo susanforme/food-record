@@ -79,9 +79,7 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
           maxLength={20}
           allowClear
           value={loginArgs.username}
-          onChange={(e) =>
-            setLoginArgs((pre) => ({ ...pre, username: e.target.value }))
-          }
+          onChange={(e) => setLoginArgs((pre) => ({ ...pre, username: e.target.value }))}
           prefix={<UserOutlined />}
         />
       ) : (
@@ -92,9 +90,7 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
           type="email"
           allowClear
           value={loginArgs.email}
-          onChange={(e) =>
-            setLoginArgs((pre) => ({ ...pre, email: e.target.value }))
-          }
+          onChange={(e) => setLoginArgs((pre) => ({ ...pre, email: e.target.value }))}
           prefix={<MailOutlined />}
           className={style.input}
         />
@@ -103,13 +99,9 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
         size="large"
         placeholder="密码"
         maxLength={24}
-        iconRender={(visible) =>
-          visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-        }
+        iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
         value={loginArgs.password}
-        onChange={(e) =>
-          setLoginArgs((pre) => ({ ...pre, password: e.target.value }))
-        }
+        onChange={(e) => setLoginArgs((pre) => ({ ...pre, password: e.target.value }))}
         className={style.input}
         prefix={<LockOutlined />}
       />
@@ -118,9 +110,7 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
         prefix={<Icon type="icon-yanzhengma-2" style={{ fontSize: '16px' }} />}
         maxLength={4}
         value={loginArgs.captcha}
-        onChange={(e) =>
-          setLoginArgs((pre) => ({ ...pre, captcha: e.target.value }))
-        }
+        onChange={(e) => setLoginArgs((pre) => ({ ...pre, captcha: e.target.value }))}
         suffix={
           <AuthCode
             setCaptcha={setCaptcha}
@@ -137,11 +127,7 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
         登录即自动表示已同意 《用户服务协议》和
         <span onClick={() => goToOtherPage()}>《隐私权政策》</span>
       </p>
-      <Button
-        className={style['login-button']}
-        type="primary"
-        onClick={() => validateAndLogin()}
-      >
+      <Button className={style['login-button']} type="primary" onClick={() => validateAndLogin()}>
         登录
       </Button>
       <div className={style.bottom}>

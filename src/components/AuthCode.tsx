@@ -4,11 +4,7 @@ import { Spin } from 'antd';
 import { LoadingOutlined, CloseOutlined } from '@ant-design/icons';
 import { useCallback, useEffect } from 'react';
 
-const AuthCode: React.FC<AuthCodeProps> = ({
-  setCaptcha,
-  style,
-  needRefresh = false,
-}) => {
+const AuthCode: React.FC<AuthCodeProps> = ({ setCaptcha, style, needRefresh = false }) => {
   const { loading, data, error, refetch } = useQuery<ToolApiData['verifyCode']>(
     TOOL_API.VERIFY_CODE,
   );
@@ -30,9 +26,7 @@ const AuthCode: React.FC<AuthCodeProps> = ({
     setCaptcha(res?.data?.captcha.text);
   }
   if (loading) {
-    return (
-      <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
-    );
+    return <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />;
   }
   if (error) {
     <div onClick={() => updateData()} style={style}>
@@ -40,14 +34,7 @@ const AuthCode: React.FC<AuthCodeProps> = ({
       <span>点击重新加载</span>
     </div>;
   }
-  return (
-    <img
-      style={style}
-      src={data?.captcha.img}
-      onClick={() => refetch()}
-      alt="验证码"
-    />
-  );
+  return <img style={style} src={data?.captcha.img} onClick={() => refetch()} alt="验证码" />;
 };
 
 export default AuthCode;

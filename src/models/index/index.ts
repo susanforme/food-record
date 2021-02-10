@@ -62,10 +62,7 @@ const IndexModel: IndexModelType = {
             ? 'UPDATE_AND_CLEAN_ROUTE_HISTORY'
             : 'UPDATE_ROUTE_HISTORY';
         console.log(state);
-        if (
-          state.routeHistory[state.routeHistory.length - 1]?.pathname !==
-          location.pathname
-        ) {
+        if (state.routeHistory[state.routeHistory.length - 1]?.pathname !== location.pathname) {
           dispatch({
             type,
             payload: location,

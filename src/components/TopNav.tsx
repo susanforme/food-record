@@ -7,11 +7,7 @@ const TopNav: React.FC<TopNavProps> = ({ title }) => {
   const aTitle = useLocation<LocationStateProps>().state?.title || title;
   return (
     <div className={style.topNav}>
-      <Icon
-        type="icon-left"
-        className={style.icon}
-        onClick={() => history.goBack()}
-      ></Icon>
+      <Icon type="icon-left" className={style.icon} onClick={() => history.goBack()}></Icon>
       <span>{aTitle}</span>
     </div>
   );
