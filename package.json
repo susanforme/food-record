@@ -4,9 +4,9 @@
   "scripts": {
     "dev": "umi dev",
     "build": "umi build",
-    "postinstall": "umi generate tmp",
-    "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
-    "lint": "eslint ./ --ext  .tsx --cache --fix"
+    "lint": "eslint ./ --ext  .tsx --cache --fix",
+    "prettier": "prettier --write .",
+    "postinstall": "umi generate tmp"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
@@ -52,6 +52,7 @@
     "prettier": "^2.2.0",
     "react": "17.x",
     "react-dom": "17.x",
+    "serve": "^11.3.2",
     "typescript": "^4.1.2",
     "yorkie": "^2.0.0"
   }

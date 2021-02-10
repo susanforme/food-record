@@ -8,8 +8,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import TopNav from '@/components/TopNav';
 import { cloneElement, useEffect } from 'react';
 
-document.documentElement.style.fontSize =
-  document.documentElement.clientWidth / 20 + 'px';
+document.documentElement.style.fontSize = document.documentElement.clientWidth / 20 + 'px';
 
 const DEFAULT_ANIMATION_MAP: DefaultAnimationMap = {
   PUSH: 'forward',
@@ -17,18 +16,12 @@ const DEFAULT_ANIMATION_MAP: DefaultAnimationMap = {
   REPLACE: 'bottom',
 };
 
-const Layout: React.FC<LayoutProps> = ({
-  children,
-  route,
-  routeHistory,
-  loginBySession,
-}) => {
+const Layout: React.FC<LayoutProps> = ({ children, route, routeHistory, loginBySession }) => {
   useEffect(() => {
     loginBySession();
   }, [loginBySession]);
   const path = history.location.pathname;
-  const isShowBottomNav =
-    !!bottomNavMap.find((v) => v.path === path) && path !== '/publish';
+  const isShowBottomNav = !!bottomNavMap.find((v) => v.path === path) && path !== '/publish';
   const currentRoute = route.routes?.find((v) => v.path === path);
   let key = history.location.key;
   let animateClass = DEFAULT_ANIMATION_MAP[history.action];

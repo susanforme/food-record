@@ -19,7 +19,7 @@ const effects: Action = {
       const result = yield call(client.mutate, {
         mutation: USER_API.LOGIN_BY_SESSION,
       });
-      yield put({ type: 'UPDATE_USER', payload: result?.data?.login });
+      yield put({ type: 'UPDATE_USER', payload: result?.data?.loginBySession });
     } catch (error) {
       console.log(error?.message);
     }
@@ -30,7 +30,7 @@ const effects: Action = {
         variables: { data: payload },
         mutation: USER_API.REGISTER,
       });
-      yield put({ type: 'UPDATE_USER', payload: result?.data?.login });
+      yield put({ type: 'UPDATE_USER', payload: result?.data?.register });
     } catch (error) {
       yield put({ type: 'FETCH_ERROR', payload: error?.message });
     }
