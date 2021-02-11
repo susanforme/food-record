@@ -2,9 +2,9 @@ import { ToolApiData, TOOL_API } from '@/api/query';
 import { useQuery } from '@apollo/client';
 import { Spin } from 'antd';
 import { LoadingOutlined, CloseOutlined } from '@ant-design/icons';
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
-const AuthCode: React.FC<AuthCodeProps> = ({ setCaptcha, style, needRefresh = false }) => {
+const AuthCode = React.memo<AuthCodeProps>(({ setCaptcha, style, needRefresh = false }) => {
   const { loading, data, error, refetch } = useQuery<ToolApiData['verifyCode']>(
     TOOL_API.VERIFY_CODE,
   );
@@ -18,9 +18,11 @@ const AuthCode: React.FC<AuthCodeProps> = ({ setCaptcha, style, needRefresh = fa
     }
   }, [data, needRefresh, setCaptcha, updateData]);
   useEffect(() => {
-    const inter = setInterval(() => updateData(), 30000);
-    return clearInterval(inter);
-  }, [updateData, refetch, setCaptcha]);
+    const inter = setInterval(() => {
+      updateData();
+    }, 60000);
+    return () => clearInterval(inter);
+  }, [updateData, data]);
   async function refreshAndUpdateData() {
     const res = await refetch();
     setCaptcha(res?.data?.captcha.text);
@@ -35,7 +37,7 @@ const AuthCode: React.FC<AuthCodeProps> = ({ setCaptcha, style, needRefresh = fa
     </div>;
   }
   return <img style={style} src={data?.captcha.img} onClick={() => refetch()} alt="验证码" />;
-};
+});
 
 export default AuthCode;
 

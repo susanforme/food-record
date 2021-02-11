@@ -1,4 +1,4 @@
-import { Button, Input, notification } from 'antd';
+import { Button, Input } from 'antd';
 import {
   UserOutlined,
   EyeTwoTone,
@@ -11,7 +11,7 @@ import Icon from '@/components/Icon';
 import { connect, history, State, withRouter } from 'umi';
 import { useEffect, useState } from 'react';
 import style from './account.less';
-import { SHA256 as sha256 } from 'crypto-js';
+import { LoginArgs, validateAndLogin } from '@/utils';
 
 const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
   // 1位为手机登录,2为邮箱登录
@@ -28,47 +28,12 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
     const status = loginStatus === 1 ? 2 : 1;
     setLoginStatus(status);
   };
-
   useEffect(() => {
     if (isLogin) {
       return history.goBack();
     }
   }, [isLogin]);
 
-  function validateAndLogin() {
-    const { username, email, password, captcha: inputCaptcha } = loginArgs;
-    // eslint-disable-next-line no-useless-escape
-    const emailPattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-    if (loginStatus === 1 && !username) {
-      return notification.error({ message: '请正确输入用户名', duration: 1.5 });
-    }
-    if (loginStatus === 2 && !emailPattern.test(email)) {
-      return notification.error({ message: '请正确输入邮箱', duration: 1.5 });
-    }
-    if (!password) {
-      return notification.error({ message: '密码不能为空', duration: 1.5 });
-    }
-    if (
-      captcha === undefined ||
-      captcha === '' ||
-      inputCaptcha.toLowerCase() !== captcha.toLowerCase()
-    ) {
-      notification.error({ message: '验证码错误', duration: 1.5 });
-      setTimeout(() => {
-        setNeedrefresh(false);
-      }, 10);
-      return setNeedrefresh(true);
-    }
-    const data =
-      loginStatus === 1
-        ? { email: '', username, password: sha256(password).toString() }
-        : {
-            email,
-            username: '',
-            password: sha256(password).toString(),
-          };
-    beLogin(data);
-  }
   return (
     <>
       {loginStatus === 1 ? (
@@ -119,6 +84,9 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
           />
         }
         className={style.input}
+        onPressEnter={() =>
+          validateAndLogin(loginArgs, captcha, loginStatus, setNeedrefresh, beLogin)
+        }
       />
       <p className={style['email-login']} onClick={changLoginMethod}>
         {loginStatus === 1 ? '邮箱登录' : '用户名登录'}
@@ -127,7 +95,11 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
         登录即自动表示已同意 《用户服务协议》和
         <span onClick={() => goToOtherPage()}>《隐私权政策》</span>
       </p>
-      <Button className={style['login-button']} type="primary" onClick={() => validateAndLogin()}>
+      <Button
+        className={style['login-button']}
+        type="primary"
+        onClick={() => validateAndLogin(loginArgs, captcha, loginStatus, setNeedrefresh, beLogin)}
+      >
         登录
       </Button>
       <div className={style.bottom}>
@@ -167,12 +139,6 @@ function goToOtherPage() {
   );
 }
 
-interface LoginArgs {
-  username: string;
-  captcha: string;
-  email: string;
-  password: string;
-}
 interface LoginProps {
   beLogin(data: any): void;
   isLogin: boolean;

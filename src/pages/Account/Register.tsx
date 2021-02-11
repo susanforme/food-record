@@ -1,4 +1,4 @@
-import { Button, Input, notification } from 'antd';
+import { Button, Input } from 'antd';
 import {
   UserOutlined,
   EyeTwoTone,
@@ -11,12 +11,12 @@ import Icon from '@/components/Icon';
 import { connect, history, State, withRouter } from 'umi';
 import { useEffect, useState } from 'react';
 import style from './account.less';
-import { SHA256 as sha256 } from 'crypto-js';
+import { RegisterArgs, validateAndRegister } from '@/utils';
 
 const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
   const [captcha, setCaptcha] = useState('');
   const [needRefresh, setNeedrefresh] = useState(false);
-  const [loginArgs, setLoginArgs] = useState<RegisterArgs>({
+  const [registerArgs, setRegisterArgs] = useState<RegisterArgs>({
     email: '',
     username: '',
     password: '',
@@ -28,40 +28,6 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
       return history.goBack();
     }
   }, [isLogin]);
-  function validateAndRegister() {
-    const { username, email, password, captcha: inputCaptcha, repassword } = loginArgs;
-    // eslint-disable-next-line no-useless-escape
-    const emailPattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-    if (!username) {
-      return notification.error({ message: '请正确输入用户名', duration: 1.5 });
-    }
-    if (!emailPattern.test(email)) {
-      return notification.error({ message: '请正确输入邮箱', duration: 1.5 });
-    }
-    if (!password) {
-      return notification.error({ message: '密码不能为空', duration: 1.5 });
-    }
-    if (password !== repassword) {
-      return notification.error({ message: '两次密码必须相同', duration: 1.5 });
-    }
-    if (
-      captcha === undefined ||
-      captcha === '' ||
-      inputCaptcha.toLowerCase() !== captcha.toLowerCase()
-    ) {
-      notification.error({ message: '验证码错误', duration: 1.5 });
-      setTimeout(() => {
-        setNeedrefresh(false);
-      }, 10);
-      return setNeedrefresh(true);
-    }
-    const data = {
-      username,
-      password: sha256(password).toString(),
-      email,
-    };
-    register(data);
-  }
   return (
     <>
       <Input
@@ -70,8 +36,8 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         className={style.input}
         maxLength={20}
         allowClear
-        value={loginArgs.username}
-        onChange={(e) => setLoginArgs((pre) => ({ ...pre, username: e.target.value }))}
+        value={registerArgs.username}
+        onChange={(e) => setRegisterArgs((pre) => ({ ...pre, username: e.target.value }))}
         prefix={<UserOutlined />}
       />
       <Input
@@ -80,8 +46,8 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         maxLength={40}
         type="email"
         allowClear
-        value={loginArgs.email}
-        onChange={(e) => setLoginArgs((pre) => ({ ...pre, email: e.target.value }))}
+        value={registerArgs.email}
+        onChange={(e) => setRegisterArgs((pre) => ({ ...pre, email: e.target.value }))}
         prefix={<MailOutlined />}
         className={style.input}
       />
@@ -90,8 +56,8 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         placeholder="密码"
         maxLength={24}
         iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-        value={loginArgs.password}
-        onChange={(e) => setLoginArgs((pre) => ({ ...pre, password: e.target.value }))}
+        value={registerArgs.password}
+        onChange={(e) => setRegisterArgs((pre) => ({ ...pre, password: e.target.value }))}
         className={style.input}
         prefix={<LockOutlined />}
       />
@@ -100,8 +66,8 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         placeholder="重复密码"
         maxLength={24}
         iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-        value={loginArgs.repassword}
-        onChange={(e) => setLoginArgs((pre) => ({ ...pre, repassword: e.target.value }))}
+        value={registerArgs.repassword}
+        onChange={(e) => setRegisterArgs((pre) => ({ ...pre, repassword: e.target.value }))}
         className={style.input}
         prefix={<LockOutlined />}
       />
@@ -109,8 +75,8 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         placeholder="验证码"
         prefix={<Icon type="icon-yanzhengma-2" style={{ fontSize: '16px' }} />}
         maxLength={4}
-        value={loginArgs.captcha}
-        onChange={(e) => setLoginArgs((pre) => ({ ...pre, captcha: e.target.value }))}
+        value={registerArgs.captcha}
+        onChange={(e) => setRegisterArgs((pre) => ({ ...pre, captcha: e.target.value }))}
         suffix={
           <AuthCode
             setCaptcha={setCaptcha}
@@ -119,6 +85,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
           />
         }
         className={style.input}
+        onPressEnter={() => validateAndRegister(registerArgs, captcha, setNeedrefresh, register)}
       />
       <p className={style.tips}>
         注册即代表自动同意 《用户服务协议》和
@@ -127,7 +94,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
       <Button
         className={style['login-button']}
         type="primary"
-        onClick={() => validateAndRegister()}
+        onClick={() => validateAndRegister(registerArgs, captcha, setNeedrefresh, register)}
       >
         注册
       </Button>
@@ -171,11 +138,4 @@ function goToOtherPage() {
 interface RegisterProps {
   register(data: any): void;
   isLogin: boolean;
-}
-interface RegisterArgs {
-  username: string;
-  captcha: string;
-  email: string;
-  password: string;
-  repassword: string;
 }
