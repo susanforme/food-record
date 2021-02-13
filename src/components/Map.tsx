@@ -2,6 +2,7 @@ import { Map, Marker } from 'react-amap';
 import { Spin, Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { getMapPlugins } from '@/utils';
+import { createUseStyles } from 'react-jss';
 
 const MyMap: React.FC = () => {
   const [position, setPosition] = useState({
@@ -10,6 +11,7 @@ const MyMap: React.FC = () => {
   });
   const [ranging, setRanging] = useState(false);
   const [rule, setRule] = useState<any>({});
+  const style = useStyles();
   const plugins: any = [
     'Scale',
     'OverView',
@@ -47,12 +49,16 @@ const MyMap: React.FC = () => {
       amapkey="4801718d9e3051bda7fe64b0717b0a53"
       viewMode="3D"
       plugins={plugins}
-      loading={<Spin />}
+      loading={
+        <div className={style.loadingFather}>
+          <Spin tip="加载中" size="large" />
+        </div>
+      }
       center={position}
       events={events}
     >
       <Marker position={position} draggable visible={!ranging} />
-      <div className="custom-layer">
+      <div className={style.customLayer}>
         <Button title="开启测距" onClick={() => setRanging(true)}>
           开启测距
         </Button>
@@ -65,3 +71,27 @@ const MyMap: React.FC = () => {
 };
 
 export default MyMap;
+
+function useStyles() {
+  return createUseStyles({
+    customLayer: {
+      position: 'absolute',
+      top: '70%',
+      display: 'flex',
+      flexDirection: 'column',
+      '& button': {
+        margin: {
+          top: '0.3rem',
+          left: '0.1rem',
+        },
+      },
+    },
+    loadingFather: {
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  })();
+}

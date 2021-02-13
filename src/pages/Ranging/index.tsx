@@ -7,9 +7,9 @@ const Ranging: React.FC = () => {
   return (
     <div className={style.ranging}>
       <Input.Search />
-      <div className="map" style={{ width: '100%', height: '400px' }}>
-        <Suspense fallback={<Spin />}>
-          <Map></Map>
+      <div className={style.map} style={{ width: '100%', height: '400px' }}>
+        <Suspense fallback={<Spin size="large" tip="加载中" />}>
+          <Map />
         </Suspense>
       </div>
     </div>
