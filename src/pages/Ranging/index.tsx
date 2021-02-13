@@ -1,13 +1,15 @@
 import { Map, Marker } from 'react-amap';
 import { Input, Spin, Button } from 'antd';
-import { useState } from 'react';
-import MapChild from '@/components/MapChild';
+import { useEffect, useState } from 'react';
+import { getMapPlugins } from '@/utils';
+
 const Ranging: React.FC = () => {
   const [position, setPosition] = useState({
     longitude: 106.747558,
     latitude: 31.874116,
   });
   const [ranging, setRanging] = useState(false);
+  const [rule, setRule] = useState<any>({});
   const plugins: any = [
     'Scale',
     'OverView',
@@ -22,7 +24,24 @@ const Ranging: React.FC = () => {
         latitude: map.lnglat.lat,
       });
     },
+    created(instance: any) {
+      window.AMap.plugin(['AMap.RangingTool'], () => {
+        const rule = new window.AMap.RangingTool(instance, getMapPlugins());
+        setRule(rule);
+      });
+    },
   };
+  useEffect(() => {
+    if (!rule) {
+      return;
+    }
+    // rule的this指向是大坑
+    if (ranging) {
+      rule.turnOn();
+    } else {
+      rule.turnOff();
+    }
+  }, [rule, ranging]);
   return (
     <div>
       <Input.Search />
@@ -34,21 +53,9 @@ const Ranging: React.FC = () => {
           loading={<Spin />}
           center={position}
           events={events}
-          useAMapUI={(t: any) => {
-            console.log(t, 'asdasdasd');
-          }}
         >
           <Marker position={position} draggable visible={!ranging} />
-          <MapChild
-            callback={(param: any) => {
-              if (ranging) {
-                param.turnOn();
-              } else {
-                param.turnOff();
-              }
-            }}
-          />
-          <div className="customLayer">
+          <div className="custom-layer">
             <Button title="开启测距" onClick={() => setRanging(true)}>
               开启测距
             </Button>

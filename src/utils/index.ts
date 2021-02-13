@@ -144,6 +144,46 @@ export const validateAndRegister = (
   register(data);
 };
 
+export function getMapPlugins() {
+  const { AMap } = window;
+  const startMarkerOptions = {
+    icon: new AMap.Icon({
+      // 图标大小
+      size: new AMap.Size(19, 31),
+      imageSize: new AMap.Size(19, 31),
+      image: 'https://webapi.amap.com/theme/v1.3/markers/b/start.png',
+    }),
+  };
+  const endMarkerOptions = {
+    icon: new AMap.Icon({
+      size: new AMap.Size(19, 31),
+      imageSize: new AMap.Size(19, 31),
+      image: 'https://webapi.amap.com/theme/v1.3/markers/b/end.png',
+    }),
+    offset: new AMap.Pixel(-9, -31),
+  };
+  const midMarkerOptions = {
+    icon: new AMap.Icon({
+      size: new AMap.Size(19, 31),
+      imageSize: new AMap.Size(19, 31),
+      image: 'https://webapi.amap.com/theme/v1.3/markers/b/mid.png',
+    }),
+    offset: new AMap.Pixel(-9, -31),
+  };
+  const lineOptions = {
+    strokeStyle: 'solid',
+    strokeColor: '#FF33FF',
+    strokeOpacity: 1,
+    strokeWeight: 2,
+  };
+  return {
+    startMarkerOptions,
+    midMarkerOptions,
+    endMarkerOptions,
+    lineOptions,
+  };
+}
+
 export interface RegisterArgs {
   username: string;
   captcha: string;
