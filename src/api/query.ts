@@ -47,6 +47,7 @@ export const USER_API = {
   `,
 };
 
+// 注意wallpaer,自己收集图片然后随机生成
 export const TOOL_API = {
   VERIFY_CODE: gql`
     query getCaptcha {
@@ -54,6 +55,11 @@ export const TOOL_API = {
         text
         img
       }
+    }
+  `,
+  WALL_PAPER: gql`
+    query getWallPaper {
+      wallPaper
     }
   `,
 };

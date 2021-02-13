@@ -8,8 +8,6 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import TopNav from '@/components/TopNav';
 import { cloneElement, useEffect } from 'react';
 
-document.documentElement.style.fontSize = document.documentElement.clientWidth / 20 + 'px';
-
 const DEFAULT_ANIMATION_MAP: DefaultAnimationMap = {
   PUSH: 'forward',
   POP: 'back',
