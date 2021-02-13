@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import style from './index.less';
 
 const Ranging: React.FC = () => {
-  const Map = React.lazy(() => import('./Map'));
+  const Map = React.lazy(() => import('../../components/Map'));
   return (
     <div className={style.ranging}>
       <Input.Search />
