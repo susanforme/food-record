@@ -14,6 +14,8 @@ const DEFAULT_ANIMATION_MAP: DefaultAnimationMap = {
   REPLACE: 'bottom',
 };
 
+document.documentElement.style.fontSize = document.documentElement.clientWidth / 20 + 'px';
+
 const Layout: React.FC<LayoutProps> = ({ children, route, routeHistory, loginBySession }) => {
   useEffect(() => {
     loginBySession();
