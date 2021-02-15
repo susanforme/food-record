@@ -1,6 +1,7 @@
 import { ImmerReducer, Subscription, Location, getDvaApp } from 'umi';
 import { notification } from 'antd';
 import effects, { Action } from './action';
+import { HomeModelState } from '../home/home';
 
 export interface IndexModelState {
   isLogin: boolean;
@@ -77,15 +78,14 @@ export default IndexModel;
 
 export interface State {
   index: IndexModelState;
+  home: HomeModelState;
 }
 
-type User =
-  | {
-      username: string;
-      id: string;
-      headImg: string;
-      createTime: number;
-      location: string;
-      email: string;
-    }
-  | {};
+type User = {
+  username?: string;
+  id?: string;
+  headImg?: string;
+  createTime?: number;
+  location?: string;
+  email?: string;
+};

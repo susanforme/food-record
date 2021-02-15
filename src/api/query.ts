@@ -72,6 +72,15 @@ export const TOOL_API = {
       }
     }
   `,
+  WEATHER: gql`
+    query getWeather($city: String!) {
+      weather(city: $city) {
+        temperature
+        weather
+        city
+      }
+    }
+  `,
 };
 
 export interface ToolApiData {
