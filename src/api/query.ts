@@ -62,6 +62,16 @@ export const TOOL_API = {
       wallPaper
     }
   `,
+  COORD: gql`
+    query getCoord($search: String!) {
+      coord(search: $search) {
+        citycode
+        adcode
+        name
+        center
+      }
+    }
+  `,
 };
 
 export interface ToolApiData {

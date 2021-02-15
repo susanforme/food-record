@@ -4,11 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { getMapPlugins } from '@/utils';
 import { createUseStyles } from 'react-jss';
 
-const MyMap: React.FC = () => {
-  const [position, setPosition] = useState({
-    longitude: 106.747558,
-    latitude: 31.874116,
-  });
+const MyMap: React.FC<MyMapProps> = ({ position, onClick }) => {
   const [ranging, setRanging] = useState(false);
   const [rule, setRule] = useState<any>({});
   const style = useStyles();
@@ -21,10 +17,7 @@ const MyMap: React.FC = () => {
   ];
   const events = {
     click: (map: any) => {
-      setPosition({
-        longitude: map.lnglat.lng,
-        latitude: map.lnglat.lat,
-      });
+      onClick(map);
     },
     created(instance: any) {
       window.AMap.plugin(['AMap.RangingTool'], () => {
@@ -48,6 +41,7 @@ const MyMap: React.FC = () => {
     <Map
       amapkey="4801718d9e3051bda7fe64b0717b0a53"
       viewMode="3D"
+      zoom={15}
       plugins={plugins}
       loading={
         <div className={style.loadingFather}>
@@ -94,4 +88,12 @@ function useStyles() {
       alignItems: 'center',
     },
   })();
+}
+
+interface MyMapProps {
+  position: {
+    longitude: number;
+    latitude: number;
+  };
+  onClick: (map: any) => any;
 }
