@@ -6,7 +6,7 @@ const effects: Action = {
   *getWeather({ payload }, { call, put }) {
     try {
       const result = yield call(client.query, {
-        variables: { data: payload },
+        variables: { city: payload },
         query: TOOL_API.WEATHER,
       });
       yield put({ type: 'UPDATE_WEATHER', payload: result?.data?.weather });

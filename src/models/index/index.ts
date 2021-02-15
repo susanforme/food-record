@@ -27,7 +27,9 @@ const IndexModel: IndexModelType = {
   state: {
     isLogin: false,
     routeHistory: [],
-    user: {},
+    user: {
+      location: '510700',
+    },
   },
   reducers: {
     UPDATE_ROUTE_HISTORY(state, action) {

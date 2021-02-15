@@ -2,6 +2,7 @@ import { defineConfig } from 'umi';
 import routes from './routes';
 import theme from './theme';
 const px2rem = require('postcss-pxtorem');
+const dayjsMoment = require('antd-dayjs-webpack-plugin');
 
 export default defineConfig({
   nodeModulesTransform: {
@@ -45,5 +46,8 @@ export default defineConfig({
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
+  },
+  chainWebpack(config) {
+    config.plugin('antd-dayjs-webpack-plugin').use(dayjsMoment);
   },
 });

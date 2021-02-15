@@ -184,6 +184,35 @@ export function getMapPlugins() {
   };
 }
 
+/**
+ * @description
+ * 将天气从中文转换为英文
+ */
+export function convertWeather(weather?: string) {
+  if (!weather) {
+    return 'CLOUDY';
+  }
+  const hour = new Date().getHours();
+  const isDay = hour > 6 && hour < 18;
+  if (weather.includes('雨')) {
+    return 'RAIN';
+  } else if (weather.includes('雾')) {
+    return 'FOG';
+  } else if (weather.includes('雪')) {
+    return 'SNOW';
+  } else if (weather.includes('风')) {
+    return 'WIND';
+  } else if (weather.includes('多云')) {
+    return 'CLOUDY';
+  }
+  // 未匹配天气默认晴
+  if (isDay) {
+    return 'CLEAR_DAY';
+  } else {
+    return 'CLEAR_NIGHT';
+  }
+}
+
 export interface RegisterArgs {
   username: string;
   captcha: string;

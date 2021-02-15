@@ -1,17 +1,51 @@
 .home-img {
   height: 300px;
   width: 100%;
-  opacity: 0.8;
   position: absolute;
+  top: 0;
+  opacity: 0.8;
+  // filter: blur(2vw);
+  filter: brightness(80%);
 }
 .home {
   min-height: 100vh;
   background-color: #fff;
+  .img-wrapper {
+    height: 300px;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    .title-content {
+      color: white;
+      font-size: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      top: -30px;
+      height: 100%;
+      .temp {
+        font-size: 12px;
+        margin-left: 3px;
+      }
+      .city-title {
+        font-size: 26px;
+        font-weight: 700;
+        margin-right: 10px;
+      }
+    }
+    .right {
+      position: absolute;
+      bottom: 0;
+      color: white;
+      font-size: 12px;
+    }
+  }
 }
 .title {
   display: flex;
   padding: 2vw;
-  z-index: 10;
+  z-index: 2;
   position: fixed;
   width: 96vw;
   margin-top: 10px;
