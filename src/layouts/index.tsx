@@ -38,6 +38,7 @@ const Layout: React.FC<LayoutProps> = ({ children, route, routeHistory, loginByS
     <ApolloProvider client={client}>
       {isShowBottomNav ? null : <TopNav title={currentRoute?.title} />}
       <TransitionGroup
+        exit={false}
         childFactory={(child: ChildComponent) =>
           cloneElement(child, {
             classNames: animateClass,
@@ -45,7 +46,9 @@ const Layout: React.FC<LayoutProps> = ({ children, route, routeHistory, loginByS
         }
       >
         <CSSTransition timeout={400} key={key}>
-          <div className="layout">{children}</div>
+          <div className="layout" key={key}>
+            {children}
+          </div>
         </CSSTransition>
       </TransitionGroup>
       {isShowBottomNav ? <BottomNav /> : null}

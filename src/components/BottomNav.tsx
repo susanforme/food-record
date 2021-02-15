@@ -13,6 +13,9 @@ const BottomNav: React.FC<NavBarProps> = ({ pathname }) => {
     const activeClass = getIsChildRoute(path, pathname) ? styles.active : undefined;
     const jump = () => {
       debounceFunc(() => {
+        if (activeClass) {
+          return;
+        }
         history.push(path);
       });
     };

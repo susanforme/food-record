@@ -5,7 +5,6 @@ import { connect, State } from 'umi';
 import { useEffect } from 'react';
 import { convertWeather } from '@/utils';
 import AnimatedWeather from 'react-animated-weather';
-console.log(AnimatedWeather);
 
 const Home: React.FC<HomeProps> = ({ location, getWeather, weather }) => {
   const { city, weather: localWeather, temperature } = weather;
