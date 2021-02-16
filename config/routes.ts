@@ -9,13 +9,6 @@ const routes: IRoute[] = [
         path: '/home',
         component: '@/pages/Home',
         title: '首页',
-        routes: [
-          {
-            path: '/home/food',
-            component: '@/pages/Home/Food',
-            title: '寻美食',
-          },
-        ],
       },
       {
         path: '/ranging',
@@ -52,8 +45,13 @@ const routes: IRoute[] = [
       },
       {
         path: '/about',
-        component: '@/pages/About',
+        component: '@/pages/Other/About',
         title: '关于我',
+      },
+      {
+        path: '/food',
+        component: '@/pages/Other/Food',
+        title: '寻美食',
       },
       { path: '*', component: '@/pages/404', title: '页面走丢了' },
     ],
