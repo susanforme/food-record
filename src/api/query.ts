@@ -83,6 +83,24 @@ export const TOOL_API = {
   `,
 };
 
+export const ARTICLE_API = {
+  KIND: gql`
+    query getKind {
+      kind {
+        kindName
+        id
+      }
+    }
+  `,
+};
+export interface ArticleApiData {
+  kind: {
+    kind: {
+      kindName: string;
+      id: string;
+    }[];
+  };
+}
 export interface ToolApiData {
   verifyCode: {
     captcha: { text: string; img: string };

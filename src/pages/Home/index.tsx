@@ -1,5 +1,5 @@
 import styles from './index.less';
-import { Input, Avatar } from 'antd';
+import { Input, Avatar, Tabs, Spin } from 'antd';
 import { SearchOutlined, DownOutlined } from '@ant-design/icons';
 import { connect, State } from 'umi';
 import { useEffect } from 'react';
@@ -7,9 +7,13 @@ import { convertWeather } from '@/utils';
 import AnimatedWeather from 'react-animated-weather';
 import Icon from '@/components/Icon';
 import Propose from './components/Propose';
+import { useQuery } from '@apollo/client';
+import { ArticleApiData, ARTICLE_API } from '@/api/query';
 
+const { TabPane } = Tabs;
 const Home: React.FC<HomeProps> = ({ location, getWeather, weather }) => {
   const { city, weather: localWeather, temperature } = weather;
+  const { data: kindResponse, loading } = useQuery<ArticleApiData['kind']>(ARTICLE_API.KIND);
   useEffect(() => {
     if (!city) {
       getWeather(location || '510700');
@@ -22,6 +26,9 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather }) => {
       }}
     />
   );
+  const TabPanes = kindResponse?.kind?.map((v) => {
+    return <TabPane key={v.id} tab={v.kindName} />;
+  });
   const water = Array(5)
     .fill(1)
     .map((v, index) => {
@@ -59,6 +66,16 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather }) => {
         </div>
       </div>
       <Propose />
+      {loading ? (
+        <div className={styles['loading-center']}>
+          <Spin />
+        </div>
+      ) : (
+        <Tabs defaultActiveKey="1" centered>
+          <TabPane key="1" tab="全部"></TabPane>
+          {TabPanes}
+        </Tabs>
+      )}
     </div>
   );
 };
