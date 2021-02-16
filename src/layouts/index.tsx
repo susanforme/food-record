@@ -23,6 +23,7 @@ const Layout: React.FC<LayoutProps> = ({ children, route, routeHistory, loginByS
   const path = history.location.pathname;
   const isShowBottomNav = !!bottomNavMap.find((v) => v.path === path) && path !== '/publish';
   const currentRoute = route.routes?.find((v) => v.path === path);
+  const noNav = currentRoute?.noNav;
   let key = history.location.key;
   let animateClass = DEFAULT_ANIMATION_MAP[history.action];
   if (history.action === 'REPLACE') {
@@ -36,7 +37,7 @@ const Layout: React.FC<LayoutProps> = ({ children, route, routeHistory, loginByS
   }
   return (
     <ApolloProvider client={client}>
-      {isShowBottomNav ? null : <TopNav title={currentRoute?.title} />}
+      {!isShowBottomNav && !noNav ? <TopNav title={currentRoute?.title} /> : null}
       <TransitionGroup
         exit={false}
         childFactory={(child: ChildComponent) =>
@@ -51,7 +52,7 @@ const Layout: React.FC<LayoutProps> = ({ children, route, routeHistory, loginByS
           </div>
         </CSSTransition>
       </TransitionGroup>
-      {isShowBottomNav ? <BottomNav /> : null}
+      {isShowBottomNav && !noNav ? <BottomNav /> : null}
     </ApolloProvider>
   );
 };

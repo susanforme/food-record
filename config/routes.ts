@@ -42,6 +42,7 @@ const routes: IRoute[] = [
         component: '@/pages/Publish',
         title: '发表',
         wrappers: ['@/wrappers/Auth'],
+        noNav: true,
       },
       {
         path: '/about',
