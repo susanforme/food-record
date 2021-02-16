@@ -13,7 +13,8 @@ import { ArticleApiData, ARTICLE_API } from '@/api/query';
 const { TabPane } = Tabs;
 const Home: React.FC<HomeProps> = ({ location, getWeather, weather }) => {
   const { city, weather: localWeather, temperature } = weather;
-  const { data: kindResponse, loading } = useQuery<ArticleApiData['kind']>(ARTICLE_API.KIND);
+  const { data: kindResponse, loading, error } = useQuery<ArticleApiData['kind']>(ARTICLE_API.KIND);
+  console.log(error);
   useEffect(() => {
     if (!city) {
       getWeather(location || '510700');
