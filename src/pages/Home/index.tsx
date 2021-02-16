@@ -1,10 +1,12 @@
 import styles from './index.less';
-import { Input } from 'antd';
+import { Input, Avatar } from 'antd';
 import { SearchOutlined, DownOutlined } from '@ant-design/icons';
 import { connect, State } from 'umi';
 import { useEffect } from 'react';
 import { convertWeather } from '@/utils';
 import AnimatedWeather from 'react-animated-weather';
+import Icon from '@/components/Icon';
+import Propose from './components/Propose';
 
 const Home: React.FC<HomeProps> = ({ location, getWeather, weather }) => {
   const { city, weather: localWeather, temperature } = weather;
@@ -20,6 +22,11 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather }) => {
       }}
     />
   );
+  const water = Array(5)
+    .fill(1)
+    .map((v, index) => {
+      return <Icon type="icon-water-drop" className={styles.icon} key={index} />;
+    });
   return (
     <div className={styles.home}>
       <img className={styles['home-img']} src={require('@/img/food.jpeg')} />
@@ -37,13 +44,21 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather }) => {
           <span className={styles.temp}>{temperature}°C</span>
         </div>
         <div className={styles.right}>
-          <div className="first">城市亮度</div>
-          <div className="second">
+          <div className={styles.first}>城市亮度 {water}</div>
+          <div className={styles.second}>
             {/* 查询当地的多少文章发表 */}
             已有336个美食守护者
           </div>
         </div>
+        <div className={styles.left}>
+          {/* 显示当前城市投稿最多 */}
+          <div className={styles.circle}>
+            <Avatar src={<img src={require('@/img/headimg.png')} alt="" />}></Avatar>
+          </div>
+          <span>美食城主</span>
+        </div>
       </div>
+      <Propose />
     </div>
   );
 };

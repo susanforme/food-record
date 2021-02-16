@@ -5,7 +5,18 @@ const routes: IRoute[] = [
     path: '/',
     component: '@/layouts/index',
     routes: [
-      { path: '/home', component: '@/pages/Home', title: '首页' },
+      {
+        path: '/home',
+        component: '@/pages/Home',
+        title: '首页',
+        routes: [
+          {
+            path: '/home/food',
+            component: '@/pages/Home/Food',
+            title: '寻美食',
+          },
+        ],
+      },
       {
         path: '/ranging',
         component: '@/pages/Ranging',

@@ -67,12 +67,24 @@ export const validateAndLogin = (
   // eslint-disable-next-line no-useless-escape
   const emailPattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
   if (loginStatus === 1 && !username) {
+    setTimeout(() => {
+      setNeedrefresh(false);
+    }, 10);
+    setNeedrefresh(true);
     return notification.error({ message: '请正确输入用户名', duration: 1.5 });
   }
   if (loginStatus === 2 && !emailPattern.test(email)) {
+    setTimeout(() => {
+      setNeedrefresh(false);
+    }, 10);
+    setNeedrefresh(true);
     return notification.error({ message: '请正确输入邮箱', duration: 1.5 });
   }
   if (!password) {
+    setTimeout(() => {
+      setNeedrefresh(false);
+    }, 10);
+    setNeedrefresh(true);
     return notification.error({ message: '密码不能为空', duration: 1.5 });
   }
   if (
@@ -114,15 +126,31 @@ export const validateAndRegister = (
   // eslint-disable-next-line no-useless-escape
   const emailPattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
   if (!username) {
+    setTimeout(() => {
+      setNeedrefresh(false);
+    }, 10);
+    setNeedrefresh(true);
     return notification.error({ message: '请正确输入用户名', duration: 1.5 });
   }
   if (!emailPattern.test(email)) {
+    setTimeout(() => {
+      setNeedrefresh(false);
+    }, 10);
+    setNeedrefresh(true);
     return notification.error({ message: '请正确输入邮箱', duration: 1.5 });
   }
   if (!password) {
+    setTimeout(() => {
+      setNeedrefresh(false);
+    }, 10);
+    setNeedrefresh(true);
     return notification.error({ message: '密码不能为空', duration: 1.5 });
   }
   if (password !== repassword) {
+    setTimeout(() => {
+      setNeedrefresh(false);
+    }, 10);
+    setNeedrefresh(true);
     return notification.error({ message: '两次密码必须相同', duration: 1.5 });
   }
   if (
