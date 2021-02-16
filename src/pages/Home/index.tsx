@@ -36,7 +36,7 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather, getKind, kin
     });
   return (
     <div className={styles.home}>
-      <img className={styles['home-img']} src={require('@/img/food.jpeg')} />
+      <img className={styles['home-img']} src={require('@/assets/img/food.jpeg')} />
       <div className={styles['img-wrapper']}>
         <div className={styles.title}>
           <div className={styles.location}>
@@ -60,7 +60,7 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather, getKind, kin
         <div className={styles.left}>
           {/* 显示当前城市投稿最多 */}
           <div className={styles.circle}>
-            <Avatar src={<img src={require('@/img/headimg.png')} alt="" />}></Avatar>
+            <Avatar src={<img src={require('@/assets/img/headimg.png')} alt="" />}></Avatar>
           </div>
           <span>美食城主</span>
         </div>

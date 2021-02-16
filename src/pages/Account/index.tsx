@@ -6,7 +6,7 @@ const Login: React.FC = (props) => {
   return (
     <div className={style.account}>
       <div className={style.imgFather}>
-        <img src={require('@/img/icon.png')} />
+        <img src={require('@/assets/img/icon.png')} />
       </div>
       {props.children}
     </div>
