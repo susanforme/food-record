@@ -1,5 +1,5 @@
 import client from '@/api';
-import { TOOL_API } from '@/api/query';
+import { ARTICLE_API, TOOL_API } from '@/api/query';
 import { Effect } from 'umi';
 
 const effects: Action = {
@@ -14,9 +14,20 @@ const effects: Action = {
       yield put({ type: 'FETCH_ERROR', payload: error?.message });
     }
   },
+  *getKind(action, { call, put }) {
+    try {
+      const result = yield call(client.query, {
+        query: ARTICLE_API.KIND,
+      });
+      yield put({ type: 'UPDATE_KIND', payload: result?.data?.kind });
+    } catch (error) {
+      yield put({ type: 'FETCH_ERROR', payload: error?.message });
+    }
+  },
 };
 export default effects;
 
 export interface Action {
   getWeather: Effect;
+  getKind: Effect;
 }

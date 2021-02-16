@@ -1,5 +1,5 @@
 import styles from './index.less';
-import { Input, Avatar, Tabs, Spin } from 'antd';
+import { Input, Avatar, Tabs } from 'antd';
 import { SearchOutlined, DownOutlined } from '@ant-design/icons';
 import { connect, State } from 'umi';
 import { useEffect } from 'react';
@@ -7,14 +7,13 @@ import { convertWeather } from '@/utils';
 import AnimatedWeather from 'react-animated-weather';
 import Icon from '@/components/Icon';
 import Propose from './components/Propose';
-import { useQuery } from '@apollo/client';
-import { ArticleApiData, ARTICLE_API } from '@/api/query';
 
 const { TabPane } = Tabs;
-const Home: React.FC<HomeProps> = ({ location, getWeather, weather }) => {
+const Home: React.FC<HomeProps> = ({ location, getWeather, weather, getKind, kind }) => {
   const { city, weather: localWeather, temperature } = weather;
-  const { data: kindResponse, loading, error } = useQuery<ArticleApiData['kind']>(ARTICLE_API.KIND);
-  console.log(error);
+  useEffect(() => {
+    getKind();
+  }, [getKind]);
   useEffect(() => {
     if (!city) {
       getWeather(location || '510700');
@@ -27,8 +26,8 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather }) => {
       }}
     />
   );
-  const TabPanes = kindResponse?.kind?.map((v) => {
-    return <TabPane key={v.id} tab={v.kindName} />;
+  const TabPanes = kind?.map((v, index) => {
+    return <TabPane key={v.id || index} tab={v.kindName} />;
   });
   const water = Array(5)
     .fill(1)
@@ -67,16 +66,10 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather }) => {
         </div>
       </div>
       <Propose />
-      {loading ? (
-        <div className={styles['loading-center']}>
-          <Spin />
-        </div>
-      ) : (
-        <Tabs defaultActiveKey="1" centered>
-          <TabPane key="1" tab="全部"></TabPane>
-          {TabPanes}
-        </Tabs>
-      )}
+      <Tabs defaultActiveKey="1" centered>
+        <TabPane key="all" tab="全部"></TabPane>
+        {TabPanes}
+      </Tabs>
     </div>
   );
 };
@@ -84,6 +77,7 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather }) => {
 const mapStateToProps = (state: State) => ({
   weather: state.home.weather,
   location: state.index.user.location,
+  kind: state.home.kind,
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -91,6 +85,11 @@ const mapDispatchToProps = (dispatch: Function) => ({
     dispatch({
       type: 'home/getWeather',
       payload: city,
+    });
+  },
+  getKind() {
+    dispatch({
+      type: 'home/getKind',
     });
   },
 });
@@ -101,9 +100,14 @@ interface HomeProps {
   title: string;
   location?: string;
   getWeather(city: string): void;
+  getKind(): void;
   weather: {
     temperature?: string;
     weather?: string;
     city?: string;
   };
+  kind: {
+    kindName?: string;
+    id?: string;
+  }[];
 }
