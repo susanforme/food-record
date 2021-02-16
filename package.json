@@ -2,7 +2,7 @@
   "private": true,
   "name": "food-record",
   "scripts": {
-    "dev": "umi dev",
+    "dev": "umi dev ",
     "build": "umi build",
     "lint": "eslint ./ --ext  .tsx --cache --fix",
     "prettier": "prettier --write .",
