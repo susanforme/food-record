@@ -160,5 +160,9 @@ img {
 }
 
 .ant-image-preview-img {
-  height: 250px;
+  height: inherit;
+}
+.ant-image {
+  width: 100%;
+  height: 100%;
 }

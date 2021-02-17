@@ -2,6 +2,7 @@ import { Button, Rate } from 'antd';
 import styles from './index.less';
 import { LeftOutlined } from '@ant-design/icons';
 import { history } from 'umi';
+import ImgPicker from '@/components/ImgPicker';
 
 const Publish: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const Publish: React.FC = () => {
         </div>
       </header>
       <main>
+        <ImgPicker></ImgPicker>
         {/* 限制为6个字 */}
         <input placeholder="填写一个好的标题能有更多人看到哦~" />
         <textarea placeholder="看到了美食,我要感觉记录下来"></textarea>
