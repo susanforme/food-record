@@ -1,3 +1,5 @@
+import client from '@/api';
+import { TOOL_API } from '@/api/query';
 import { notification } from 'antd';
 import { SHA256 as sha256 } from 'crypto-js';
 
@@ -247,4 +249,44 @@ export interface RegisterArgs {
   email: string;
   password: string;
   repassword: string;
+}
+
+export function parseFile(file: File, index: number): Promise<ParseFileData> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataURL = (e.target as any).result;
+      if (!dataURL) {
+        reject(`Fail to get the ${index} image`);
+        return;
+      }
+      resolve({
+        src: dataURL,
+        file,
+        isUpload: false,
+      });
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+export interface ParseFileData {
+  file: File;
+  src: string;
+  isUpload: boolean;
+}
+
+export async function uploadImg(file: File, onUploadProgress: (progress: ProgressEvent) => void) {
+  const data = await client.mutate({
+    mutation: TOOL_API.UPLOAD_IMG,
+    variables: {
+      file,
+    },
+    context: {
+      fetchOptions: {
+        onUploadProgress,
+      },
+    },
+  });
+  return data;
 }

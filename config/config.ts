@@ -50,4 +50,5 @@ export default defineConfig({
   chainWebpack(config) {
     config.plugin('antd-dayjs-webpack-plugin').use(dayjsMoment);
   },
+  inlineLimit: 1000000,
 });

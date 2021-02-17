@@ -11,3 +11,5 @@ declare module '*.svg' {
 }
 
 declare module 'react-animated-weather';
+
+declare module '@lifeomic/axios-fetch';

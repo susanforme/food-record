@@ -2,42 +2,65 @@ import { createUseStyles } from 'react-jss';
 import { PlusOutlined } from '@ant-design/icons';
 import TouchFeedback from 'rmc-feedback';
 import { useState } from 'react';
-import { Image } from 'antd';
-import closeImg from '../assets/img/close.svg';
+import { Image, Progress } from 'antd';
+import closeImg from '../assets/img/close.png';
+import { parseFile, ParseFileData, uploadImg } from '@/utils';
 
 const ImgPicker: React.FC = () => {
   const styles = useStyles();
   // 最多4张
   const [files, setFils] = useState<ParseFileData[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<number[]>([]);
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
 
     if (file) {
       parseFile(file[0], files.length + 1).then((v) => {
+        uploadImg(file[0], (progress) => {
+          const uploadProgre = [...uploadProgress];
+          uploadProgre.splice(uploadProgre.length - 1, 1, progress.loaded / progress.total);
+          setUploadProgress(uploadProgre);
+        })
+          .then(() => {
+            const file = [...files];
+            file.splice(file.length - 1, 1, { ...v, isUpload: true });
+            console.log(file);
+            setFils(file);
+            console.log('上传成功');
+          })
+          .catch(() => {});
         setFils([...files, v]);
+        setUploadProgress([...uploadProgress, 0]);
       });
     }
   };
-  console.log(files);
   const length = files.length < 4 ? files.length + 1 : files.length;
   const ImgItems = Array(length)
     .fill(1)
     .map((v, index) => {
       const file = files[index];
+      console.log(uploadProgress[index], uploadProgress, index);
       return (
+        // 有时间添加动画
         <TouchFeedback activeClassName={styles.active} key={index}>
           <div className={styles.imgItem} style={!file ? undefined : { border: 'none' }}>
             {file ? (
               <>
-                <Image src={file.src} className={styles.img} />
-                <div
-                  className={styles.close}
-                  onClick={() => {
-                    const file = [...files];
-                    file.splice(index, 1);
-                    setFils(file);
-                  }}
-                ></div>
+                {file.isUpload ? (
+                  <>
+                    <Image src={file.src} className={styles.img} />
+                    <div
+                      className={styles.close}
+                      onClick={() => {
+                        const file = [...files];
+                        file.splice(index, 1);
+                        setFils(file);
+                      }}
+                    ></div>
+                  </>
+                ) : (
+                  <Progress type="circle" percent={uploadProgress[index] * 100} width={80} />
+                )}
               </>
             ) : (
               <>
@@ -67,13 +90,12 @@ function useStyles() {
     imgItem: {
       width: '3.8rem',
       height: '3.5rem',
-      border: '1px dashed transparent',
+      border: '1px dashed rgba(128, 128, 128, 0.3)',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       position: 'relative',
-      background: `linear-gradient(rgb(249,249,247),rgb(249,249,247)) padding-box,
-      repeating-linear-gradient(-45deg,#ccc 0, #ccc 0.25rem,white 0,white 0.75rem)`,
+      backgroundColor: 'rgb(249,249,247)',
       overflow: 'hidden',
       borderRadius: '3px',
     },
@@ -107,27 +129,4 @@ function useStyles() {
       backgroundImage: `url(${closeImg})`,
     },
   })();
-}
-
-function parseFile(file: File, index: number): Promise<ParseFileData> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const dataURL = (e.target as any).result;
-      if (!dataURL) {
-        reject(`Fail to get the ${index} image`);
-        return;
-      }
-      resolve({
-        src: dataURL,
-        file,
-      });
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-interface ParseFileData {
-  file: File;
-  src: string;
 }

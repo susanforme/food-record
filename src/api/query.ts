@@ -81,6 +81,13 @@ export const TOOL_API = {
       }
     }
   `,
+  UPLOAD_IMG: gql`
+    mutation upload($file: Upload!) {
+      singleUpload(file: $file) {
+        url
+      }
+    }
+  `,
 };
 
 export const ARTICLE_API = {
