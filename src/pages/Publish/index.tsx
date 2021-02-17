@@ -1,12 +1,13 @@
 import { Button, Rate } from 'antd';
 import styles from './index.less';
 import { LeftOutlined } from '@ant-design/icons';
+import { history } from 'umi';
 
 const Publish: React.FC = () => {
   return (
     <div className={styles.publish}>
       <header>
-        <LeftOutlined />
+        <LeftOutlined onClick={() => history.goBack()} />
         <div className={styles.right}>
           <span>保存</span>
           <Button className={styles['right-button']}>发布文章</Button>

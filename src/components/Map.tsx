@@ -57,7 +57,7 @@ const MyMap: React.FC<MyMapProps> = ({ position, onClick }) => {
           开启测距
         </Button>
         <Button title="关闭测距" onClick={() => setRanging(false)}>
-          关闭测距
+          结束测距
         </Button>
       </div>
     </Map>
