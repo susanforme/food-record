@@ -251,13 +251,13 @@ export interface RegisterArgs {
   repassword: string;
 }
 
-export function parseFile(file: File, index: number): Promise<ParseFileData> {
+export function parseFile(file: File): Promise<ParseFileData> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const dataURL = (e.target as any).result;
       if (!dataURL) {
-        reject(`Fail to get the ${index} image`);
+        reject(`Fail to get the  image`);
         return;
       }
       resolve({
