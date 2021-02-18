@@ -288,3 +288,23 @@ export async function uploadImg(file: File, onUploadProgress: (progress: Progres
   });
   return data;
 }
+
+export function radomlyGeneratColor(random: number) {
+  const colors = [
+    'magenta',
+    'red',
+    'volcano',
+    'orange',
+    'gold',
+    'geekblue',
+    'blue',
+    'lime',
+    'cyan',
+  ];
+  const res = [];
+  for (let i = 0; i < random; i++) {
+    const randomNum = Math.round(Math.random() * (colors.length - 1));
+    res.push(colors[randomNum]);
+  }
+  return res;
+}

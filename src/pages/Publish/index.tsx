@@ -3,8 +3,9 @@ import styles from './index.less';
 import { LeftOutlined, PlusOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import ImgPicker from './components/ImgPicker';
-import { useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { TweenOneGroup } from 'rc-tween-one';
+import { radomlyGeneratColor } from '@/utils';
 
 const Publish: React.FC = () => {
   const [imgUrl, setImgUrl] = useState<string[]>([]);
@@ -14,15 +15,19 @@ const Publish: React.FC = () => {
     inputVisible: false,
     inputValue: '',
   });
+  const colors = useMemo(() => radomlyGeneratColor(inputState.tags.length), [inputState.tags]);
   console.log(imgUrl);
-  const handleClose = (removeTag: string) => {
-    const newtags = inputState.tags.filter((tag) => tag !== removeTag);
-    setInputState({
-      ...inputState,
-      tags: newtags,
-    });
-  };
-  const showInput = () => {
+  const handleClose = useCallback(
+    (removeTag: string) => {
+      const newtags = inputState.tags.filter((tag) => tag !== removeTag);
+      setInputState({
+        ...inputState,
+        tags: newtags,
+      });
+    },
+    [inputState],
+  );
+  const showInput = useCallback(() => {
     setInputState({
       ...inputState,
       inputVisible: true,
@@ -30,8 +35,8 @@ const Publish: React.FC = () => {
     setTimeout(() => {
       inputRef.current?.focus();
     }, 0);
-  };
-  const handleInputConfirm = () => {
+  }, [inputState]);
+  const handleInputConfirm = useCallback(() => {
     const { inputValue, tags } = inputState;
     const newTags = [...tags];
     if (inputValue && tags.indexOf(inputValue) === -1) {
@@ -43,7 +48,7 @@ const Publish: React.FC = () => {
       inputVisible: false,
       inputValue: '',
     });
-  };
+  }, [inputState]);
   const handleInputChange = (e: any) => {
     setInputState({
       ...inputState,
@@ -51,8 +56,8 @@ const Publish: React.FC = () => {
     });
   };
 
-  const tags = inputState.tags.map((tag) => {
-    const isLongTag = tag.length > 10;
+  const tags = inputState.tags.map((tag, index) => {
+    const isLongTag = tag.length > 7;
     const tagEle = (
       <Tag
         className="edit-tag"
@@ -61,8 +66,9 @@ const Publish: React.FC = () => {
           e.preventDefault();
           handleClose(tag);
         }}
+        color={colors[index]}
       >
-        <span>{isLongTag ? `${tag.slice(0, 10)}...` : tag}</span>
+        <span>{isLongTag ? `${tag.slice(0, 7)}...` : tag}</span>
       </Tag>
     );
     return (

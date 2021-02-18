@@ -1,6 +1,7 @@
 import { createUseStyles } from 'react-jss';
 import UploadImg from '@/components/UploadImg';
 import { useState } from 'react';
+import { TweenOneGroup } from 'rc-tween-one';
 
 const ImgPicker: React.FC<ImgPickerProps> = ({ onChange }) => {
   const styles = useStyles();
@@ -51,10 +52,22 @@ const ImgPicker: React.FC<ImgPickerProps> = ({ onChange }) => {
     );
   });
   return (
-    <div className={styles.imgPicker}>
-      {/* 有时间添加动画 */}
+    <TweenOneGroup
+      enter={{
+        scale: 0.8,
+        opacity: 0,
+        type: 'from',
+        duration: 100,
+        onComplete: (e: any) => {
+          e.target.style = '';
+        },
+      }}
+      className={styles.imgPicker}
+      leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
+      // appear={false}
+    >
       {ImgItems}
-    </div>
+    </TweenOneGroup>
   );
 };
 
