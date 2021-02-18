@@ -6,7 +6,7 @@ const ImgPicker: React.FC<ImgPickerProps> = ({ onChange }) => {
   const styles = useStyles();
   // 最多4张
   const [img, setImg] = useState<ImgData[]>([{ url: '', id: Date.now(), isUpload: false }]);
-  onChange(img);
+
   const ImgItems = img.map((v, index) => {
     const deleteImg = () => {
       const newImg = [...img];
@@ -14,6 +14,7 @@ const ImgPicker: React.FC<ImgPickerProps> = ({ onChange }) => {
       if (newImg.length < 1 || img.filter((v) => v.url).length === 4) {
         newImg.push({ url: '', id: Date.now(), isUpload: false });
       }
+      onChange(newImg);
       setImg(newImg);
     };
     const onComplete = (url: string) => {
@@ -27,6 +28,7 @@ const ImgPicker: React.FC<ImgPickerProps> = ({ onChange }) => {
       if (newImg.length < 4) {
         newImg.push({ url: '', id: Date.now(), isUpload: false });
       }
+      onChange(newImg);
       setImg(newImg);
     };
     const onReadComplete = (url: string) => {
@@ -36,6 +38,7 @@ const ImgPicker: React.FC<ImgPickerProps> = ({ onChange }) => {
         ...v,
         url,
       });
+      onChange(newImg);
       setImg(newImg);
     };
     return (
