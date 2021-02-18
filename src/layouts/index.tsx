@@ -7,6 +7,7 @@ import { bottomNavMap } from '@/utils';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import TopNav from '@/components/TopNav';
 import { cloneElement, useEffect } from 'react';
+import Shelf from '@/components/Shelf';
 
 const DEFAULT_ANIMATION_MAP: DefaultAnimationMap = {
   PUSH: 'forward',
@@ -16,10 +17,17 @@ const DEFAULT_ANIMATION_MAP: DefaultAnimationMap = {
 
 document.documentElement.style.fontSize = document.documentElement.clientWidth / 20 + 'px';
 
-const Layout: React.FC<LayoutProps> = ({ children, route, routeHistory, loginBySession }) => {
+const Layout: React.FC<LayoutProps> = ({
+  children,
+  route,
+  routeHistory,
+  loginBySession,
+  loading: ALoading,
+}) => {
   useEffect(() => {
     loginBySession();
   }, [loginBySession]);
+  const loading = ALoading === undefined ? true : ALoading;
   const path = history.location.pathname;
   const isShowBottomNav = !!bottomNavMap.find((v) => v.path === path) && path !== '/publish';
   const currentRoute = route.routes?.find((v) => v.path === path);
@@ -47,9 +55,13 @@ const Layout: React.FC<LayoutProps> = ({ children, route, routeHistory, loginByS
         }
       >
         <CSSTransition timeout={400} key={key}>
-          <div className="layout" key={key}>
-            {children}
-          </div>
+          {loading ? (
+            <Shelf />
+          ) : (
+            <div className="layout" key={key}>
+              {children}
+            </div>
+          )}
         </CSSTransition>
       </TransitionGroup>
       {isShowBottomNav && !noNav ? <BottomNav /> : null}
@@ -57,8 +69,9 @@ const Layout: React.FC<LayoutProps> = ({ children, route, routeHistory, loginByS
   );
 };
 
-const mapStateToProps = ({ index }: State) => ({
-  routeHistory: index.routeHistory,
+const mapStateToProps = (state: State) => ({
+  routeHistory: state.index.routeHistory,
+  loading: state.loading.effects['index/loginBySession'],
 });
 
 const mapDispatchToProps = (dispatch: Function) => ({
@@ -76,6 +89,7 @@ interface LayoutProps {
   route: IRoute;
   routeHistory: Location[];
   loginBySession(): void;
+  loading: boolean | undefined;
 }
 
 type ChildComponent = React.FunctionComponentElement<{ classNames: any }>;

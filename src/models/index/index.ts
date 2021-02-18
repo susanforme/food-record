@@ -1,4 +1,4 @@
-import { ImmerReducer, Subscription, Location, getDvaApp } from 'umi';
+import { ImmerReducer, Subscription, Location, getDvaApp, Loading } from 'umi';
 import { notification } from 'antd';
 import effects, { Action } from './action';
 import { HomeModelState } from '../home/home';
@@ -80,6 +80,7 @@ export default IndexModel;
 export interface State {
   index: IndexModelState;
   home: HomeModelState;
+  loading: Loading;
 }
 
 type User = {
