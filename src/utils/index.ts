@@ -263,7 +263,6 @@ export function parseFile(file: File): Promise<ParseFileData> {
       resolve({
         src: dataURL,
         file,
-        isUpload: false,
       });
     };
     reader.readAsDataURL(file);
@@ -273,7 +272,6 @@ export function parseFile(file: File): Promise<ParseFileData> {
 export interface ParseFileData {
   file: File;
   src: string;
-  isUpload: boolean;
 }
 
 export async function uploadImg(file: File, onUploadProgress: (progress: ProgressEvent) => void) {

@@ -6,7 +6,7 @@ import { Image, Progress } from 'antd';
 import closeImg from '../assets/img/close.png';
 import { parseFile, ParseFileData, uploadImg } from '@/utils';
 
-const UploadImg: React.FC<UploadImgProps> = ({ onClick, onComplete, addImg }) => {
+const UploadImg: React.FC<UploadImgProps> = ({ onClick, onComplete, onReadComplete }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUpload, setIsUpload] = useState(false);
   const [file, setFile] = useState<ParseFileData>();
@@ -15,17 +15,16 @@ const UploadImg: React.FC<UploadImgProps> = ({ onClick, onComplete, addImg }) =>
     if (file) {
       parseFile(file[0])
         .then((v) => {
-          uploadImg(file[0], (progress) => {
-            setUploadProgress(progress.loaded / progress.total);
-          })
-            .then((data) => {
-              setIsUpload(true);
-              console.log(data);
-              console.log('上传成功');
-            })
-            .catch(() => {});
           setFile(v);
-          addImg();
+          onReadComplete && onReadComplete(v.src);
+          return uploadImg(file[0], (progress) => {
+            setUploadProgress(progress.loaded / progress.total);
+          });
+        })
+        .then((data) => {
+          setIsUpload(true);
+          onComplete(data.data?.singleUpload.url);
+          console.log('上传成功');
         })
         .catch(() => {
           // 请重新上传
@@ -45,7 +44,12 @@ const UploadImg: React.FC<UploadImgProps> = ({ onClick, onComplete, addImg }) =>
                 <div className={styles.close} onClick={() => onClick()}></div>
               </>
             ) : (
-              <Progress type="circle" percent={uploadProgress * 100} width={80} />
+              <Progress
+                type="circle"
+                percent={Math.round(uploadProgress * 100)}
+                strokeColor="gold"
+                width={40}
+              />
             )}
           </>
         ) : (
@@ -110,5 +114,5 @@ function useStyles() {
 interface UploadImgProps {
   onClick: Function;
   onComplete: (url: string) => any;
-  addImg: Function;
+  onReadComplete?: (url: string) => any;
 }
