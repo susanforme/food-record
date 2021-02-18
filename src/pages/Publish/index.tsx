@@ -1,11 +1,12 @@
 import { Button, Rate, Tag, Input, Tooltip } from 'antd';
 import styles from './index.less';
-import { LeftOutlined, PlusOutlined } from '@ant-design/icons';
+import { LeftOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import ImgPicker from './components/ImgPicker';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { TweenOneGroup } from 'rc-tween-one';
 import { radomlyGeneratColor } from '@/utils';
+import FoodPlace from './components/FoodPlace';
 
 const Publish: React.FC = () => {
   const [imgUrl, setImgUrl] = useState<string[]>([]);
@@ -15,6 +16,7 @@ const Publish: React.FC = () => {
     inputVisible: false,
     inputValue: '',
   });
+  const [modalVisible, setModalVisible] = useState(false);
   const colors = useMemo(() => radomlyGeneratColor(inputState.tags.length), [inputState.tags]);
   console.log(imgUrl);
   const handleClose = useCallback(
@@ -142,15 +144,24 @@ const Publish: React.FC = () => {
           </>
         </div>
       </main>
-      <div>
+      <div className={styles.bottom}>
         对菜品进行评分
-        <Rate />
+        <Rate className={styles['rate-child']} />
       </div>
-      <div>
+      <div className={styles.bottom}>
         关联美食地点
         {/* 市级单位,在这里填写城市,然后请求接口 */}
-        <span>去选择</span>
+        <span
+          className={styles.choose}
+          onClick={() => {
+            setModalVisible(true);
+          }}
+        >
+          {modalVisible ? '选择中' : '去选择'}
+          <RightOutlined />
+        </span>
       </div>
+      <FoodPlace modalVisible={modalVisible} setModalVisible={setModalVisible} />
     </div>
   );
 };

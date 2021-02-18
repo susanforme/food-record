@@ -1,67 +1,70 @@
 import { createUseStyles } from 'react-jss';
 import { PlusOutlined } from '@ant-design/icons';
 import TouchFeedback from 'rmc-feedback';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Image, Progress } from 'antd';
 import closeImg from '../assets/img/close.png';
 import { parseFile, ParseFileData, uploadImg } from '@/utils';
 
-const UploadImg: React.FC<UploadImgProps> = ({ onClick, onComplete, onReadComplete }) => {
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUpload, setIsUpload] = useState(false);
-  const [file, setFile] = useState<ParseFileData>();
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files;
-    if (file) {
-      parseFile(file[0])
-        .then((v) => {
-          setFile(v);
-          onReadComplete && onReadComplete(v.src);
-          return uploadImg(file[0], (progress) => {
-            setUploadProgress(progress.loaded / progress.total);
+// 解决上级使用动画调用ref报错
+const UploadImg = React.forwardRef<null, UploadImgProps>(
+  ({ onClick, onComplete, onReadComplete }) => {
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [isUpload, setIsUpload] = useState(false);
+    const [file, setFile] = useState<ParseFileData>();
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files;
+      if (file) {
+        parseFile(file[0])
+          .then((v) => {
+            setFile(v);
+            onReadComplete && onReadComplete(v.src);
+            return uploadImg(file[0], (progress) => {
+              setUploadProgress(progress.loaded / progress.total);
+            });
+          })
+          .then((data) => {
+            setIsUpload(true);
+            onComplete(data.data?.singleUpload.url);
+            console.log('上传成功');
+          })
+          .catch(() => {
+            // 请重新上传
           });
-        })
-        .then((data) => {
-          setIsUpload(true);
-          onComplete(data.data?.singleUpload.url);
-          console.log('上传成功');
-        })
-        .catch(() => {
-          // 请重新上传
-        });
-    }
-  };
-  const styles = useStyles();
-  return (
-    // 有时间添加动画
-    <TouchFeedback activeClassName={styles.active}>
-      <div className={styles.imgItem} style={!file ? undefined : { border: 'none' }}>
-        {file ? (
-          <>
-            {isUpload ? (
-              <>
-                <Image src={file.src} className={styles.img} />
-                <div className={styles.close} onClick={() => onClick()}></div>
-              </>
-            ) : (
-              <Progress
-                type="circle"
-                percent={Math.round(uploadProgress * 100)}
-                strokeColor="gold"
-                width={40}
-              />
-            )}
-          </>
-        ) : (
-          <>
-            <PlusOutlined size={30} />
-            <input type="file" className={styles.inputFile} onChange={onChange} />
-          </>
-        )}
-      </div>
-    </TouchFeedback>
-  );
-};
+      }
+    };
+    const styles = useStyles();
+    return (
+      // 有时间添加动画
+      <TouchFeedback activeClassName={styles.active}>
+        <div className={styles.imgItem} style={!file ? undefined : { border: 'none' }}>
+          {file ? (
+            <>
+              {isUpload ? (
+                <>
+                  <Image src={file.src} className={styles.img} />
+                  <div className={styles.close} onClick={() => onClick()}></div>
+                </>
+              ) : (
+                <Progress
+                  type="circle"
+                  percent={Math.round(uploadProgress * 100)}
+                  strokeColor="gold"
+                  width={40}
+                />
+              )}
+            </>
+          ) : (
+            <>
+              <PlusOutlined size={30} />
+              <input type="file" className={styles.inputFile} onChange={onChange} />
+            </>
+          )}
+        </div>
+      </TouchFeedback>
+    );
+  },
+);
 
 export default UploadImg;
 

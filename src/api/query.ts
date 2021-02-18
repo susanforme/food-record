@@ -65,10 +65,7 @@ export const TOOL_API = {
   COORD: gql`
     query getCoord($search: String!) {
       coord(search: $search) {
-        citycode
-        adcode
-        name
-        center
+        location
       }
     }
   `,

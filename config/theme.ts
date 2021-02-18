@@ -20,7 +20,7 @@ export default {
   // 失效色
   'disabled-color': 'rgba(0, 0, 0, 0.25)',
   // 组件/浮层圆角
-  'border-radius-base': '2px',
+  'border-radius-base': '5px',
   // 边框色
   'border-color-base': ' #d9d9d9',
 };

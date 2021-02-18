@@ -15,19 +15,22 @@
     .right {
       position: absolute;
       right: 4vw;
+      display: flex;
+      align-items: center;
+
       .right-button {
         margin-left: 8px;
         border-radius: 15px;
         font-size: 12px;
         font-weight: 400;
-        background-color: rgba(255, 100, 53, 0.692);
+        background-color: rgba(255, 217, 0, 0.726);
         color: white;
         height: 28px;
         line-height: 10px;
         border: none;
       }
       .right-button:active {
-        background-color: rgba(255, 100, 53, 0.932);
+        background-color: gold;
       }
     }
   }
@@ -39,9 +42,10 @@
       width: 100%;
       border: none;
       outline: none;
-      height: 50px;
+      height: 40px;
       font-size: 18px;
       border-bottom: 1px solid rgba(213, 213, 213, 0.705);
+      margin-top: 20px;
     }
     input::placeholder {
       color: rgb(213, 213, 213);
@@ -70,6 +74,28 @@
     }
     .anima-span {
       display: inline-block;
+    }
+  }
+  .bottom {
+    margin-top: 10px;
+    background-color: #fff;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 55px;
+    .rate-child {
+      position: absolute;
+      right: 10px;
+    }
+    .choose {
+      position: absolute;
+      right: 10px;
+      font-size: 14px;
+      font-weight: 400;
+      color: gray;
     }
   }
 }
