@@ -70,3 +70,8 @@ interface CoordInputProps {
   onSuccess: (data: { longitude: number; latitude: number }) => any;
   size?: InputProps['size'];
 }
+
+export interface TudeProps {
+  longitude: number;
+  latitude: number;
+}

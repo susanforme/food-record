@@ -85,6 +85,11 @@ export const TOOL_API = {
       }
     }
   `,
+  IMG_COORD: gql`
+    query getImgByCoord($location: String!) {
+      imgByCoord(location: $location)
+    }
+  `,
 };
 
 export const ARTICLE_API = {
