@@ -110,6 +110,27 @@ export const ARTICLE_API = {
       }
     }
   `,
+  ARTICLE_ITEM: gql`
+    query getArticleItems($data: ArticleItemsInput!) {
+      articleItems(data: $data) {
+        total
+        items {
+          img
+          score
+          author {
+            headImg
+            username
+            userId
+          }
+          give
+          title
+          content
+          label
+          id
+        }
+      }
+    }
+  `,
 };
 export interface ArticleApiData {
   kind: {

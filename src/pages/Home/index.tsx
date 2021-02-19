@@ -2,15 +2,18 @@ import styles from './index.less';
 import { Input, Avatar, Tabs } from 'antd';
 import { SearchOutlined, DownOutlined } from '@ant-design/icons';
 import { connect, State } from 'umi';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { convertWeather } from '@/utils';
 import AnimatedWeather from 'react-animated-weather';
 import Icon from '@/components/Icon';
 import Propose from './components/Propose';
+import ArticleItems from '@/components/ArticleItems';
 
 const { TabPane } = Tabs;
 const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
   const { city, weather: localWeather, temperature } = weather;
+  const [articleKind, setArticleKind] = useState<string>();
+
   useEffect(() => {
     if (!city) {
       getWeather(location || '510700');
@@ -63,10 +66,21 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
         </div>
       </div>
       <Propose />
-      <Tabs defaultActiveKey="1" centered>
+      <Tabs
+        defaultActiveKey="1"
+        centered
+        onChange={(key) => {
+          if (key === 'all') {
+            setArticleKind(undefined);
+          } else {
+            setArticleKind(key);
+          }
+        }}
+      >
         <TabPane key="all" tab="全部"></TabPane>
         {TabPanes}
       </Tabs>
+      <ArticleItems kind={articleKind} />
     </div>
   );
 };

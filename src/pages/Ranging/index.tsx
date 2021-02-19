@@ -13,7 +13,7 @@ const Ranging: React.FC = () => {
     <div className={style.ranging}>
       <CoordInput
         onSuccess={(data) => {
-          setPosition(data);
+          setPosition(data.tude);
         }}
       />
       <div className={style.map} style={{ width: '100%', height: '400px' }}>
@@ -26,6 +26,7 @@ const Ranging: React.FC = () => {
             });
           }}
         />
+        {/* 下方随机推荐当地美食 */}
       </div>
     </div>
   );
