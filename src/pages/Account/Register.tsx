@@ -73,7 +73,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
       />
       <Input
         placeholder="验证码"
-        prefix={<Icon type="icon-yanzhengma-2" style={{ fontSize: '16px' }} />}
+        prefix={<Icon type="icon-yanzhengma-2" style={{ fontSize: '0.8533333333333334rem' }} />}
         maxLength={4}
         value={registerArgs.captcha}
         onChange={(e) => setRegisterArgs((pre) => ({ ...pre, captcha: e.target.value }))}

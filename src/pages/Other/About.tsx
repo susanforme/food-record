@@ -30,7 +30,7 @@ function useStyles() {
     layout: {
       padding: '0 3.733333vw 4vw',
       margin: {
-        top: '30px',
+        top: '1.6rem',
       },
       '& h3': {
         'font-size': '0.8rem',

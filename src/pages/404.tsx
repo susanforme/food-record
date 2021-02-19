@@ -11,7 +11,7 @@ const ErrPage = React.memo(() => {
       extra={
         <Button
           type="primary"
-          style={{ borderRadius: '5px' }}
+          style={{ borderRadius: '0.26666666666666666rem' }}
           onClick={() => {
             history.push('/home');
           }}

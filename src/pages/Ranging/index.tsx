@@ -16,7 +16,7 @@ const Ranging: React.FC = () => {
           setPosition(data.tude);
         }}
       />
-      <div className={style.map} style={{ width: '100%', height: '400px' }}>
+      <div className={style.map} style={{ width: '100%', height: '21.333333333333332rem' }}>
         <Map
           position={position}
           onClick={(map) => {

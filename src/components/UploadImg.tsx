@@ -73,14 +73,14 @@ function useStyles() {
     imgItem: {
       width: '3.8rem',
       height: '3.5rem',
-      border: '1px dashed rgba(128, 128, 128, 0.3)',
+      border: '0.05333333333333334rem dashed rgba(128, 128, 128, 0.3)',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       position: 'relative',
       backgroundColor: 'rgb(249,249,247)',
       overflow: 'hidden',
-      borderRadius: '3px',
+      borderRadius: '0.16rem',
     },
     inputFile: {
       width: '100%',

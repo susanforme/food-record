@@ -72,7 +72,7 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
       />
       <Input
         placeholder="验证码"
-        prefix={<Icon type="icon-yanzhengma-2" style={{ fontSize: '16px' }} />}
+        prefix={<Icon type="icon-yanzhengma-2" style={{ fontSize: '0.8533333333333334rem' }} />}
         maxLength={4}
         value={loginArgs.captcha}
         onChange={(e) => setLoginArgs((pre) => ({ ...pre, captcha: e.target.value }))}

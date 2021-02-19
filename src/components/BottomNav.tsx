@@ -62,7 +62,7 @@ function useStyles() {
       height: '2.66rem',
       width: '100%',
       backgroundColor: 'white',
-      boxShadow: '1px 1px 10px 0 #ccc',
+      boxShadow: '0.05333333333333334rem 0.05333333333333334rem 0.5333333333333333rem 0 #ccc',
       zIndex: 10,
     },
     iconFather: {
@@ -92,7 +92,7 @@ function useStyles() {
       justifyContent: 'center',
       backgroundColor: 'gold',
       alignItems: 'center',
-      border: '1px solid rgba(0, 0, 0, 0.007)',
+      border: '0.05333333333333334rem solid rgba(0, 0, 0, 0.007)',
     },
     icon: {
       color: 'white',

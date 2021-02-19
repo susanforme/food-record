@@ -18,7 +18,7 @@ export default TopNav;
 function useStyles() {
   return createUseStyles({
     topNav: {
-      height: '50px',
+      height: '2.6666666666666665rem',
       'background-color': 'gold',
       display: 'flex',
       'align-items': 'center',
@@ -30,8 +30,8 @@ function useStyles() {
     },
     icon: {
       color: 'white',
-      'font-size': '25px',
-      'margin-left': '10px',
+      'font-size': '1.3333333333333333rem',
+      'margin-left': '0.5333333333333333rem',
       position: 'absolute',
       left: 0,
     },

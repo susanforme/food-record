@@ -64,11 +64,11 @@ function useStyles() {
       alignItems: 'center',
     },
     title: {
-      fontSize: '13px',
+      fontSize: '0.6933333333333334rem',
       fontWeight: 500,
     },
     icon: {
-      fontSize: '35px',
+      fontSize: '1.8666666666666667rem',
     },
   })();
 }

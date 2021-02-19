@@ -19,7 +19,7 @@ function useStyles() {
   return createUseStyles({
     account: {
       backgroundColor: 'white',
-      minHeight: 'calc(100vh - 50px)',
+      minHeight: 'calc(100vh - 2.6666666666666665rem)',
       padding: '4vw 8vw',
       display: 'flex',
       flexDirection: 'column',

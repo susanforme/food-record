@@ -10,15 +10,18 @@ import FoodPlace from './components/FoodPlace';
 import { TudeProps } from '@/components/CoordInput';
 
 const { Option } = Select;
-const storageData = {
-  tags: [],
-  title: '',
-  content: '',
-  rate: 0,
-  ...JSON.parse(localStorage.getItem('article') as string),
-};
 
 const Publish: React.FC<PublishProps> = ({ userId, kinds }) => {
+  const storageData = useMemo(
+    () => ({
+      tags: [],
+      title: '',
+      content: '',
+      rate: 0,
+      ...JSON.parse(localStorage.getItem('article') as string),
+    }),
+    [],
+  );
   const [imgUrl, setImgUrl] = useState<string[]>([]);
   const inputRef = useRef<Input>(null);
   // 经纬度

@@ -1,5 +1,5 @@
 import styles from './index.less';
-import { Input, Avatar, Tabs } from 'antd';
+import { Input, Avatar, Tabs, BackTop } from 'antd';
 import { SearchOutlined, DownOutlined } from '@ant-design/icons';
 import { connect, State } from 'umi';
 import { useEffect, useState } from 'react';
@@ -66,21 +66,25 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
         </div>
       </div>
       <Propose />
-      <Tabs
-        defaultActiveKey="1"
-        centered
-        onChange={(key) => {
-          if (key === 'all') {
-            setArticleKind(undefined);
-          } else {
-            setArticleKind(key);
-          }
-        }}
-      >
-        <TabPane key="all" tab="全部"></TabPane>
-        {TabPanes}
-      </Tabs>
+      <div className={styles.tab}>
+        <Tabs
+          defaultActiveKey="1"
+          centered
+          onChange={(key) => {
+            if (key === 'all') {
+              setArticleKind(undefined);
+            } else {
+              setArticleKind(key);
+            }
+          }}
+        >
+          <TabPane key="all" tab="全部"></TabPane>
+          {TabPanes}
+        </Tabs>
+      </div>
       <ArticleItems kind={articleKind} />
+      <div className={styles.position}></div>
+      <BackTop />
     </div>
   );
 };
