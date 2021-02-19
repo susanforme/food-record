@@ -84,7 +84,9 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
       </div>
       <ArticleItems kind={articleKind} />
       <div className={styles.position}></div>
-      <BackTop />
+      <BackTop style={{ bottom: '5rem' }}>
+        <Icon type="icon-top" style={{ fontSize: '3rem' }} />
+      </BackTop>
     </div>
   );
 };
