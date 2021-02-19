@@ -58,5 +58,5 @@ interface FoodPlaceProps {
   modalVisible: boolean;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   tude?: TudeProps;
-  setLocation: React.Dispatch<React.SetStateAction<LocationState | undefined>>;
+  setLocation: React.Dispatch<React.SetStateAction<LocationState>>;
 }

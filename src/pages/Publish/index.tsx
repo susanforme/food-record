@@ -5,31 +5,39 @@ import { connect, history, State } from 'umi';
 import ImgPicker from './components/ImgPicker';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { TweenOneGroup } from 'rc-tween-one';
-import { CreateArticleData, radomlyGeneratColor, sendArticleAndValidate } from '@/utils';
+import { radomlyGeneratColor, sendArticleAndValidate } from '@/utils';
 import FoodPlace from './components/FoodPlace';
 import { TudeProps } from '@/components/CoordInput';
 
 const { Option } = Select;
+const storageData = {
+  tags: [],
+  title: '',
+  content: '',
+  rate: 0,
+  ...JSON.parse(localStorage.getItem('article') as string),
+};
+
 const Publish: React.FC<PublishProps> = ({ userId, kinds }) => {
   const [imgUrl, setImgUrl] = useState<string[]>([]);
   const inputRef = useRef<Input>(null);
   // 经纬度
-  const [location, setLocation] = useState<LocationState>();
+  const [location, setLocation] = useState<LocationState>(storageData.location);
   const [inputState, setInputState] = useState<InputState>({
-    tags: [],
+    tags: storageData.tags,
     inputVisible: false,
     inputValue: '',
   });
   // 模态框可见
   const [modalVisible, setModalVisible] = useState(false);
   // 评分
-  const [rate, setRate] = useState(0);
+  const [rate, setRate] = useState(storageData.rate);
   // 标题
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState(storageData.title);
   // 内容
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(storageData.content);
   // 分类
-  const [kind, setKind] = useState<string>(kinds[0].id || '');
+  const [kind, setKind] = useState<string>(storageData?.kind || kinds[0].id || '');
   // 随机生成颜色
   const colors = useMemo(() => radomlyGeneratColor(inputState.tags.length), [inputState.tags]);
   const handleClose = useCallback(
@@ -70,9 +78,8 @@ const Publish: React.FC<PublishProps> = ({ userId, kinds }) => {
       inputValue: e.target.value,
     });
   };
-
-  const sendArticle = () => {
-    const data: CreateArticleData = {
+  const data = useMemo(
+    () => ({
       author: userId || '',
       content,
       title,
@@ -83,9 +90,15 @@ const Publish: React.FC<PublishProps> = ({ userId, kinds }) => {
       score: rate,
       // 解决城市文章分类问题
       cityCode: location?.cityCode || '',
-    };
+    }),
+    [content, imgUrl, inputState.tags, kind, location, rate, title, userId],
+  );
+
+  const sendArticle = () => {
     sendArticleAndValidate(data)
       .then((val) => {
+        // 清除保存的文章
+        localStorage.removeItem('article');
         history.replace({
           pathname: '/article',
           query: { articleId: val?.createArticle.articleId },
@@ -95,7 +108,19 @@ const Publish: React.FC<PublishProps> = ({ userId, kinds }) => {
         return notification.warning({ message: err.message, duration: 1.5 });
       });
   };
-
+  // 保存文章
+  const save = () => {
+    const data = {
+      location,
+      rate,
+      title,
+      content,
+      tags: inputState.tags,
+      kind,
+    };
+    localStorage.setItem('article', JSON.stringify(data));
+    notification.success({ message: '保存成功', duration: 1.5 });
+  };
   const tags = inputState.tags.map((tag, index) => {
     const isLongTag = tag.length > 7;
     const tagEle = (
@@ -123,7 +148,7 @@ const Publish: React.FC<PublishProps> = ({ userId, kinds }) => {
       <header>
         <LeftOutlined onClick={() => history.goBack()} />
         <div className={styles.right}>
-          <span>保存</span>
+          <span onClick={() => save()}>保存</span>
           <Button className={styles['right-button']} onClick={() => sendArticle()}>
             发布文章
           </Button>
