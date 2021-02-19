@@ -1,24 +1,37 @@
-import { Button, Rate, Tag, Input, Tooltip } from 'antd';
+import { Button, Rate, Tag, Input, Tooltip, Select, notification } from 'antd';
 import styles from './index.less';
-import { LeftOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
-import { history } from 'umi';
+import { LeftOutlined, PlusOutlined } from '@ant-design/icons';
+import { connect, history, State } from 'umi';
 import ImgPicker from './components/ImgPicker';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { TweenOneGroup } from 'rc-tween-one';
-import { radomlyGeneratColor } from '@/utils';
+import { CreateArticleData, radomlyGeneratColor, sendArticleAndValidate } from '@/utils';
 import FoodPlace from './components/FoodPlace';
+import { TudeProps } from '@/components/CoordInput';
 
-const Publish: React.FC = () => {
+const { Option } = Select;
+const Publish: React.FC<PublishProps> = ({ userId, kinds }) => {
   const [imgUrl, setImgUrl] = useState<string[]>([]);
   const inputRef = useRef<Input>(null);
+  // 经纬度
+  const [location, setLocation] = useState<LocationState>();
   const [inputState, setInputState] = useState<InputState>({
     tags: [],
     inputVisible: false,
     inputValue: '',
   });
+  // 模态框可见
   const [modalVisible, setModalVisible] = useState(false);
+  // 评分
+  const [rate, setRate] = useState(0);
+  // 标题
+  const [title, setTitle] = useState('');
+  // 内容
+  const [content, setContent] = useState('');
+  // 分类
+  const [kind, setKind] = useState<string>(kinds[0].id || '');
+  // 随机生成颜色
   const colors = useMemo(() => radomlyGeneratColor(inputState.tags.length), [inputState.tags]);
-  console.log(imgUrl);
   const handleClose = useCallback(
     (removeTag: string) => {
       const newtags = inputState.tags.filter((tag) => tag !== removeTag);
@@ -58,6 +71,31 @@ const Publish: React.FC = () => {
     });
   };
 
+  const sendArticle = () => {
+    const data: CreateArticleData = {
+      author: userId || '',
+      content,
+      title,
+      imgPath: imgUrl,
+      location: `${location?.tude?.longitude},${location?.tude?.latitude}`,
+      label: inputState.tags,
+      kind,
+      score: rate,
+      // 解决城市文章分类问题
+      cityCode: location?.cityCode || '',
+    };
+    sendArticleAndValidate(data)
+      .then((val) => {
+        history.replace({
+          pathname: '/article',
+          query: { articleId: val?.createArticle.articleId },
+        });
+      })
+      .catch((err) => {
+        return notification.warning({ message: err.message, duration: 1.5 });
+      });
+  };
+
   const tags = inputState.tags.map((tag, index) => {
     const isLongTag = tag.length > 7;
     const tagEle = (
@@ -86,7 +124,9 @@ const Publish: React.FC = () => {
         <LeftOutlined onClick={() => history.goBack()} />
         <div className={styles.right}>
           <span>保存</span>
-          <Button className={styles['right-button']}>发布文章</Button>
+          <Button className={styles['right-button']} onClick={() => sendArticle()}>
+            发布文章
+          </Button>
         </div>
       </header>
       <main>
@@ -102,8 +142,14 @@ const Publish: React.FC = () => {
           placeholder="一个好标题有更多人看到哦~"
           maxLength={15}
           className={styles['title-input']}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
-        <textarea placeholder="看到了美食,我要感觉记录下来"></textarea>
+        <textarea
+          placeholder="看到了美食,我要感觉记录下来"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        ></textarea>
         {/* 这里进行label添加,至少两个,最多4个,在上面有一条单横线 */}
         <div className={styles.tags}>
           <>
@@ -119,7 +165,6 @@ const Publish: React.FC = () => {
               }}
               className={styles.tween}
               leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
-              // appear={false}
             >
               {tags}
             </TweenOneGroup>
@@ -146,30 +191,71 @@ const Publish: React.FC = () => {
       </main>
       <div className={styles.bottom}>
         对菜品进行评分
-        <Rate className={styles['rate-child']} />
+        <Rate className={styles['rate-child']} value={rate} onChange={(value) => setRate(value)} />
       </div>
       <div className={styles.bottom}>
         关联美食地点
-        {/* 市级单位,在这里填写城市,然后请求接口 */}
         <span
           className={styles.choose}
           onClick={() => {
             setModalVisible(true);
           }}
         >
-          {modalVisible ? '选择中' : '去选择'}
-          <RightOutlined />
+          {modalVisible ? '选择中' : location?.name || '去选择'}
         </span>
       </div>
-      <FoodPlace modalVisible={modalVisible} setModalVisible={setModalVisible} />
+      <div className={styles.bottom}>
+        选择分类
+        <span className={styles.choose}>
+          <Select
+            defaultValue={kinds[0]?.id}
+            onChange={(v) => setKind(v)}
+            className={styles.selector}
+            bordered={false}
+          >
+            {kinds.map((v) => {
+              return (
+                <Option value={v.id || ''} key={v.id}>
+                  {v.kindName}
+                </Option>
+              );
+            })}
+          </Select>
+        </span>
+      </div>
+      <FoodPlace
+        modalVisible={modalVisible}
+        tude={location?.tude}
+        setLocation={setLocation}
+        setModalVisible={setModalVisible}
+      />
     </div>
   );
 };
 
-export default Publish;
+const mapStateToProps = (state: State) => ({
+  userId: state.index.user.id,
+  kinds: state.home.kind,
+});
+
+export default connect(mapStateToProps)(Publish);
 
 interface InputState {
   tags: string[];
   inputVisible: boolean;
   inputValue: string;
+}
+
+export interface LocationState {
+  tude: TudeProps;
+  name: string;
+  cityCode: string;
+}
+
+interface PublishProps {
+  userId?: string;
+  kinds: {
+    kindName?: string;
+    id?: string;
+  }[];
 }

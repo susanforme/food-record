@@ -9,11 +9,8 @@ import Icon from '@/components/Icon';
 import Propose from './components/Propose';
 
 const { TabPane } = Tabs;
-const Home: React.FC<HomeProps> = ({ location, getWeather, weather, getKind, kind }) => {
+const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
   const { city, weather: localWeather, temperature } = weather;
-  useEffect(() => {
-    getKind();
-  }, [getKind]);
   useEffect(() => {
     if (!city) {
       getWeather(location || '510700');
@@ -87,11 +84,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
       payload: city,
     });
   },
-  getKind() {
-    dispatch({
-      type: 'home/getKind',
-    });
-  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
@@ -100,7 +92,6 @@ interface HomeProps {
   title: string;
   location?: string;
   getWeather(city: string): void;
-  getKind(): void;
   weather: {
     temperature?: string;
     weather?: string;

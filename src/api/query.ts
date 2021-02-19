@@ -66,6 +66,8 @@ export const TOOL_API = {
     query getCoord($search: String!) {
       coord(search: $search) {
         location
+        name
+        cityCode
       }
     }
   `,
@@ -98,6 +100,13 @@ export const ARTICLE_API = {
       kind {
         kindName
         id
+      }
+    }
+  `,
+  CREATE_ARTICLE: gql`
+    mutation createArticle($data: CreateArticleData!) {
+      createArticle(data: $data) {
+        articleId
       }
     }
   `,

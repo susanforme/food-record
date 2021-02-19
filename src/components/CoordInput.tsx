@@ -20,11 +20,12 @@ const CoordInput: React.FC<CoordInputProps> = React.memo(({ onSuccess, size }) =
         setLoading(true);
         searchSomeWhere(value)
           .then((v) => {
-            const { location } = v.data?.coord;
+            const { location, name, cityCode } = v.data?.coord;
             const position = location.split(',').map((v) => Number(v));
             onSuccess({
-              longitude: position[0],
-              latitude: position[1],
+              tude: { longitude: position[0], latitude: position[1] },
+              name,
+              cityCode,
             });
           })
           .catch((err) => {
@@ -63,11 +64,15 @@ function searchSomeWhere(search: string) {
 }
 
 interface CoordData {
-  coord: { location: string };
+  coord: { location: string; name: string; cityCode: string };
 }
 
 interface CoordInputProps {
-  onSuccess: (data: { longitude: number; latitude: number }) => any;
+  onSuccess: (data: {
+    tude: { longitude: number; latitude: number };
+    name: string;
+    cityCode: string;
+  }) => any;
   size?: InputProps['size'];
 }
 

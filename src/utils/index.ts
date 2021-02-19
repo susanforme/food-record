@@ -1,5 +1,5 @@
 import client from '@/api';
-import { TOOL_API } from '@/api/query';
+import { ARTICLE_API, TOOL_API } from '@/api/query';
 import { notification } from 'antd';
 import { SHA256 as sha256 } from 'crypto-js';
 
@@ -55,8 +55,6 @@ export const debounceFactory = (delay: number) => {
     }
   };
 };
-
-export const baiduMapKey = 'TXekIWRi1mnbMbR11Ks1dURc9GgY33bX';
 
 export const validateAndLogin = (
   loginArgs: LoginArgs,
@@ -307,4 +305,57 @@ export function radomlyGeneratColor(random: number) {
     res.push(colors[randomNum]);
   }
   return res;
+}
+
+export async function validateArticle(data: CreateArticleData) {
+  const { author, title, content, imgPath, kind, label, location } = data;
+  if (!author) {
+    throw new Error('未登录');
+  }
+  if (!title) {
+    throw new Error('请填写标题');
+  }
+  if (!content) {
+    throw new Error('请填写正文');
+  }
+  if (imgPath.length > 1) {
+    throw new Error('请至少上传一张图片');
+  }
+  if (!kind) {
+    throw new Error('请选择分类');
+  }
+  if (!(label.length > 1 && label.length < 5)) {
+    throw new Error('至少选择2个标签,至多4个');
+  }
+  if (!location) {
+    throw new Error('选择位置');
+  }
+  return true;
+}
+
+export async function sendArticleAndValidate(data: CreateArticleData) {
+  const validate = await validateArticle(data);
+  console.log(data);
+
+  if (validate) {
+    const res = await client.mutate({
+      mutation: ARTICLE_API.CREATE_ARTICLE,
+      variables: {
+        data,
+      },
+    });
+    return res.data;
+  }
+}
+
+export interface CreateArticleData {
+  author: string;
+  title: string;
+  content: string;
+  imgPath: string[];
+  kind: string;
+  label: string[];
+  location: string;
+  score: number;
+  cityCode: string;
 }

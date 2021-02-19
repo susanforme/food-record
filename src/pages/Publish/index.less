@@ -75,6 +75,9 @@
     .anima-span {
       display: inline-block;
     }
+    .tags {
+      margin-top: 10px;
+    }
   }
   .bottom {
     margin-top: 10px;
@@ -96,6 +99,36 @@
       font-size: 14px;
       font-weight: 400;
       color: gray;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 60px;
+      text-align: center;
+      .selector {
+        display: flex;
+        align-items: center;
+        > div {
+          border: none;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 60px;
+          > span {
+            padding-right: 0;
+          }
+          span {
+            text-align: center;
+          }
+        }
+        > span {
+          display: none;
+        }
+        input {
+          outline: none;
+          border: none;
+        }
+      }
     }
   }
 }

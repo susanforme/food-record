@@ -22,12 +22,13 @@ const Layout: React.FC<LayoutProps> = ({
   route,
   routeHistory,
   loginBySession,
-  loading: ALoading,
+  loading,
+  getKind,
 }) => {
   useEffect(() => {
     loginBySession();
-  }, [loginBySession]);
-  const loading = ALoading === undefined ? true : ALoading;
+    getKind();
+  }, [getKind, loginBySession]);
   const path = history.location.pathname;
   const isShowBottomNav = !!bottomNavMap.find((v) => v.path === path) && path !== '/publish';
   const currentRoute = route.routes?.find((v) => v.path === path);
@@ -69,15 +70,26 @@ const Layout: React.FC<LayoutProps> = ({
   );
 };
 
-const mapStateToProps = (state: State) => ({
-  routeHistory: state.index.routeHistory,
-  loading: state.loading.effects['index/loginBySession'],
-});
+const mapStateToProps = (state: State) => {
+  const loginLoading = state.loading.effects['index/loginBySession'];
+  const kindLoading = state.loading.effects['home/getKind'];
+  return {
+    routeHistory: state.index.routeHistory,
+    loading:
+      (loginLoading === undefined ? true : loginLoading) ||
+      (kindLoading === undefined ? true : kindLoading),
+  };
+};
 
 const mapDispatchToProps = (dispatch: Function) => ({
   loginBySession() {
     dispatch({
       type: 'index/loginBySession',
+    });
+  },
+  getKind() {
+    dispatch({
+      type: 'home/getKind',
     });
   },
 });
@@ -90,6 +102,7 @@ interface LayoutProps {
   routeHistory: Location[];
   loginBySession(): void;
   loading: boolean | undefined;
+  getKind(): void;
 }
 
 type ChildComponent = React.FunctionComponentElement<{ classNames: any }>;
