@@ -4,10 +4,16 @@ import './animate.less';
 import BottomNav from '@/components/BottomNav';
 import { history, Redirect, IRoute, connect, State, Location } from 'umi';
 import { bottomNavMap } from '@/utils';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import TopNav from '@/components/TopNav';
-import { useEffect } from 'react';
+import { cloneElement, useEffect } from 'react';
 import Shelf from '@/components/Shelf';
-import { TweenOneGroup } from 'rc-tween-one';
+
+const DEFAULT_ANIMATION_MAP: DefaultAnimationMap = {
+  PUSH: 'forward',
+  POP: 'back',
+  REPLACE: 'bottom',
+};
 
 document.documentElement.style.fontSize = document.documentElement.clientWidth / 20 + 'px';
 
@@ -28,8 +34,12 @@ const Layout: React.FC<LayoutProps> = ({
   const currentRoute = route.routes?.find((v) => v.path === path);
   const noNav = currentRoute?.noNav;
   let key = history.location.key;
+  let animateClass = DEFAULT_ANIMATION_MAP[history.action];
   if (history.action === 'REPLACE') {
     key = routeHistory[routeHistory.length - 2]?.key;
+  }
+  if (currentRoute?.wrappers) {
+    animateClass = 'bottom';
   }
   if (path === '/') {
     return <Redirect to="/home" />;
@@ -41,27 +51,24 @@ const Layout: React.FC<LayoutProps> = ({
       {loading ? (
         <Shelf />
       ) : (
-        // 等完成在添加更多动画 https://motion.ant.design/api/tween-one-cn#TweenOneGroup-API
-        <TweenOneGroup
-          enter={{
-            opacity: 0,
-            width: 0,
-            scale: 0,
-            duration: 400,
-            height: 0,
-            type: 'from',
-            onComplete: (e: any) => {
-              e.target.style = '';
-            },
-          }}
-
-          // leave={{ opacity: 0, width: 0, scale: 0, duration: 800, height: 0, type: 'from' }}
+        <TransitionGroup
+          exit={false}
+          appear={true}
+          unmountOnExit={true}
+          childFactory={(child: ChildComponent) =>
+            cloneElement(child, {
+              classNames: animateClass,
+            })
+          }
         >
-          <div className="layout" key={key}>
-            {children}
-          </div>
-        </TweenOneGroup>
+          <CSSTransition timeout={400} key={key}>
+            <div className="layout" key={key}>
+              {children}
+            </div>
+          </CSSTransition>
+        </TransitionGroup>
       )}
+
       {isShowBottomNav && !noNav ? <BottomNav /> : null}
     </ApolloProvider>
   );
@@ -100,4 +107,12 @@ interface LayoutProps {
   loginBySession(): void;
   loading: boolean | undefined;
   getKind(): void;
+}
+
+type ChildComponent = React.FunctionComponentElement<{ classNames: any }>;
+
+interface DefaultAnimationMap {
+  [k: string]: string;
+  PUSH: 'forward';
+  POP: 'back';
 }
