@@ -1,22 +1,43 @@
-// 文章详情中的地图通过https://lbs.amap.com/api/webservice/guide/api/staticmaps静态地图返回
-
 import { ArticleApiData, ARTICLE_API } from '@/api/query';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { history } from 'umi';
+import { Carousel } from 'antd';
+import Shelf from '@/components/Shelf';
+import { useEffect } from 'react';
 
 const Article: React.FC = () => {
   const articleId = history.location.query?.article;
-  if (!articleId) {
-    history.push('/404');
-  }
-  const { data, loading } = useQuery<ArticleApiData['article']>(ARTICLE_API.ARTICLE, {
-    variables: {
-      id: articleId,
+  const [getArticle, { data, loading }] = useLazyQuery<ArticleApiData['article']>(
+    ARTICLE_API.ARTICLE,
+    {
+      variables: {
+        id: articleId,
+      },
     },
-  });
-  console.log(data);
+  );
+  useEffect(() => {
+    if (articleId) {
+      getArticle();
+    }
+  }, [articleId, getArticle]);
+  useEffect(() => {
+    if (!loading && !data?.article && data !== undefined) {
+      history.push('/404');
+    }
+  }, [data, loading]);
+  console.log(123123123);
 
-  return <div></div>;
+  return loading ? (
+    <Shelf />
+  ) : (
+    <div>
+      <Carousel>
+        {data?.article.imgPath.map((v) => {
+          return <img src={'https://' + v} alt="" key={v} />;
+        })}
+      </Carousel>
+    </div>
+  );
 };
 
 export default Article;

@@ -46,9 +46,11 @@ const Layout: React.FC<LayoutProps> = ({
   }
   return (
     <ApolloProvider client={client}>
-      {!isShowBottomNav && !noNav ? <TopNav title={currentRoute?.title} /> : null}
+      {!isShowBottomNav && !noNav ? <TopNav /> : null}
       <TransitionGroup
         exit={false}
+        appear={true}
+        unmountOnExit={true}
         childFactory={(child: ChildComponent) =>
           cloneElement(child, {
             classNames: animateClass,
