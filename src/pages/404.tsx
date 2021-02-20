@@ -13,7 +13,7 @@ const ErrPage = React.memo(() => {
           type="primary"
           style={{ borderRadius: '0.26666666666666666rem' }}
           onClick={() => {
-            history.push('/home');
+            history.replace('/home');
           }}
         >
           返回首页

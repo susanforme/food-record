@@ -131,6 +131,55 @@ export const ARTICLE_API = {
       }
     }
   `,
+  ARTICLE: gql`
+    query getArticle($id: ID!) {
+      article(id: $id) {
+        createTime
+        author {
+          ...User
+        }
+        title
+        content
+        traffic
+        comment {
+          createTime
+          publisher {
+            ...User
+          }
+          comment
+          commentChild {
+            articleId
+            lastEditTime
+            commentFatherId
+            img
+            id
+            comment
+            createTime
+            publisher {
+              ...User
+            }
+          }
+          articleId
+          lastEditTime
+          img
+          id
+        }
+        lastEditTime
+        label
+        kind
+        imgPath
+        isGive
+        giveCount
+        location
+        cityCode
+      }
+    }
+    fragment User on Author {
+      headImg
+      id
+      username
+    }
+  `,
 };
 export interface ArticleApiData {
   kind: {
@@ -138,6 +187,54 @@ export interface ArticleApiData {
       kindName: string;
       id: string;
     }[];
+  };
+  article: {
+    article: {
+      createTime: number;
+      author: {
+        headImg: string;
+        id: string;
+        username: string;
+      };
+      title: string;
+      content: string;
+      traffic: number;
+      comment: {
+        createTime: number;
+        publisher: {
+          headImg: string;
+          id: string;
+          username: string;
+        };
+        comment: string;
+        commentChild: {
+          articleId: string;
+          lastEditTime: number;
+          commentFatherId: string;
+          img: string;
+          id: string;
+          comment: string;
+          createTime: number;
+          publisher: {
+            headImg: string;
+            id: string;
+            username: string;
+          };
+        };
+        articleId: string;
+        lastEditTime: number;
+        img: string;
+        id: string;
+      };
+      lastEditTime: number;
+      label: string[];
+      kind: string;
+      imgPath: string[];
+      isGive: boolean;
+      giveCount: number;
+      location: string;
+      cityCode: string;
+    };
   };
 }
 export interface ToolApiData {

@@ -26,7 +26,6 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
     const handler = () => {
       debounce(() => {
         setCurrentPosition(dom.scrollTop);
-        console.log(dom.scrollTop);
       });
     };
 
