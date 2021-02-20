@@ -79,6 +79,12 @@ const IndexModel: IndexModelType = {
       });
     },
     title({ dispatch }) {
+      const observer = new MutationObserver(() => {
+        dispatch({
+          type: 'CHANGE_TITLE',
+          payload: document.title || '食遇记',
+        });
+      });
       window.onload = () => {
         const title = document.querySelector('title');
         const MutationObserverConfig = {
@@ -86,14 +92,9 @@ const IndexModel: IndexModelType = {
           subtree: true,
           characterData: true,
         };
-        const observer = new MutationObserver(() => {
-          dispatch({
-            type: 'CHANGE_TITLE',
-            payload: title?.text || '食遇记',
-          });
-        });
         observer.observe(title as HTMLTitleElement, MutationObserverConfig);
       };
+      return () => observer.disconnect();
     },
   },
 };
