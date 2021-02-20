@@ -162,7 +162,6 @@ const Publish: React.FC<PublishProps> = ({ userId, kinds }) => {
           onChange={(v) => {
             const urls = v.filter((v) => v.isUpload).map((v) => v.url);
             setImgUrl(urls);
-            console.log(urls, 'onChange');
           }}
         />
         {/* 限制为6个字 */}

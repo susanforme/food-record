@@ -2,7 +2,7 @@ import { createUseStyles } from 'react-jss';
 import { PlusOutlined } from '@ant-design/icons';
 import TouchFeedback from 'rmc-feedback';
 import React, { useState } from 'react';
-import { Image, Progress } from 'antd';
+import { Image, notification, Progress } from 'antd';
 import closeImg from '../assets/img/close.png';
 import { parseFile, ParseFileData, uploadImg } from '@/utils';
 
@@ -12,11 +12,19 @@ const UploadImg = React.forwardRef<null, UploadImgProps>(
     const [uploadProgress, setUploadProgress] = useState(0);
     const [isUpload, setIsUpload] = useState(false);
     const [file, setFile] = useState<ParseFileData>();
+    const accept = '.jpg,.png,.gif,.jpeg,.svg';
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files;
       if (file) {
         parseFile(file[0])
           .then((v) => {
+            console.log(v);
+            // eslint-disable-next-line no-useless-escape
+            const reg = /\.[^\.]+$/;
+            const result = v.file?.name.match(reg);
+            if (Object.is(result, null) || !(result && accept.includes(result[0]))) {
+              throw new Error('请重新上传');
+            }
             setFile(v);
             onReadComplete && onReadComplete(v.src);
             return uploadImg(file[0], (progress) => {
@@ -29,13 +37,12 @@ const UploadImg = React.forwardRef<null, UploadImgProps>(
             console.log('上传成功');
           })
           .catch(() => {
-            // 请重新上传
+            notification.error({ message: '请重新上传', duration: 1.5 });
           });
       }
     };
     const styles = useStyles();
     return (
-      // 有时间添加动画
       <TouchFeedback activeClassName={styles.active}>
         <div className={styles.imgItem} style={!file ? undefined : { border: 'none' }}>
           {file ? (
@@ -57,7 +64,7 @@ const UploadImg = React.forwardRef<null, UploadImgProps>(
           ) : (
             <>
               <PlusOutlined size={30} />
-              <input type="file" className={styles.inputFile} onChange={onChange} />
+              <input type="file" accept={accept} className={styles.inputFile} onChange={onChange} />
             </>
           )}
         </div>

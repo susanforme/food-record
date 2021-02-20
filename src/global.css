@@ -177,3 +177,6 @@ img {
 .ant-tabs-nav-list {
   width: 100%;
 }
+.tween-one-leaving {
+  display: none !important;
+}
