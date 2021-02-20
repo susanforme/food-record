@@ -2,8 +2,8 @@ import styles from './index.less';
 import { Input, Avatar, Tabs, BackTop } from 'antd';
 import { SearchOutlined, DownOutlined } from '@ant-design/icons';
 import { connect, State } from 'umi';
-import { useEffect, useState } from 'react';
-import { convertWeather } from '@/utils';
+import { useEffect, useMemo, useState } from 'react';
+import { convertWeather, debounceFactory } from '@/utils';
 import AnimatedWeather from 'react-animated-weather';
 import Icon from '@/components/Icon';
 import Propose from './components/Propose';
@@ -13,12 +13,26 @@ const { TabPane } = Tabs;
 const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
   const { city, weather: localWeather, temperature } = weather;
   const [articleKind, setArticleKind] = useState<string>();
-
+  const [currentPosition, setCurrentPosition] = useState(0);
+  const isFixed = useMemo(() => currentPosition > 317, [currentPosition]);
+  const debounce = debounceFactory(10);
   useEffect(() => {
     if (!city) {
       getWeather(location || '510700');
     }
   }, [getWeather, location, city]);
+  useEffect(() => {
+    const dom = document.documentElement;
+    const handler = () => {
+      debounce(() => {
+        setCurrentPosition(dom.scrollTop);
+        console.log(dom.scrollTop);
+      });
+    };
+
+    window.addEventListener('scroll', handler);
+    return () => window.removeEventListener('scroll', handler);
+  }, [debounce]);
   const suffix = (
     <SearchOutlined
       style={{
@@ -38,7 +52,7 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
     <div className={styles.home}>
       <img className={styles['home-img']} src={require('@/assets/img/food.jpeg')} />
       <div className={styles['img-wrapper']}>
-        <div className={styles.title}>
+        <div className={`${styles.title} ${isFixed && styles['fixed-title']}`}>
           <div className={styles.location}>
             <span>{city}</span>
             <DownOutlined color="white" />
@@ -66,7 +80,7 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
         </div>
       </div>
       <Propose />
-      <div className={styles.tab}>
+      <div className={`${styles.tab} ${isFixed && styles['fixed-tab']}`}>
         <Tabs
           defaultActiveKey="1"
           centered
@@ -76,12 +90,14 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
             } else {
               setArticleKind(key);
             }
+            window.scrollTo(0, 0);
           }}
         >
           <TabPane key="all" tab="全部"></TabPane>
           {TabPanes}
         </Tabs>
       </div>
+      {isFixed && <div className={styles['tab-position']} />}
       <ArticleItems kind={articleKind} />
       <div className={styles.position}></div>
       <BackTop style={{ bottom: '5rem' }}>

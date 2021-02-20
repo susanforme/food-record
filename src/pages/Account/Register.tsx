@@ -14,6 +14,7 @@ import style from './account.less';
 import { RegisterArgs, validateAndRegister } from '@/utils';
 
 const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
+  document.title = '注册你的账号';
   const [captcha, setCaptcha] = useState('');
   const [needRefresh, setNeedrefresh] = useState(false);
   const [registerArgs, setRegisterArgs] = useState<RegisterArgs>({

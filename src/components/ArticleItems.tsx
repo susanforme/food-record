@@ -39,7 +39,11 @@ const ArticleItems: React.FC<ArticleItemsProps> = ({ page, perPage, kind, isGive
     );
   }
   if (data?.articleItems.total === 0) {
-    return <Empty description="这个城市没有人分享美食哦~" />;
+    return (
+      <div className={styles.articleItems}>
+        <Empty description="这个城市没有人分享美食哦~" />
+      </div>
+    );
   }
   return (
     <div className={styles.articleItems}>
@@ -103,6 +107,7 @@ function useStyles() {
     },
     articleItems: {
       padding: '0 4vw',
+      marginTop: '0.8533333333333334rem',
     },
     item: {
       border: '0.05333333333333334rem solid rgba(0, 0, 0, 0.1)',

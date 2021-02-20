@@ -14,6 +14,7 @@ import style from './account.less';
 import { LoginArgs, validateAndLogin } from '@/utils';
 
 const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
+  document.title = '登录你的账号';
   // 1位为手机登录,2为邮箱登录
   const [loginStatus, setLoginStatus] = useState(1);
   const [captcha, setCaptcha] = useState('');

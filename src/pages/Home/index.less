@@ -15,6 +15,65 @@
   }
   .tab {
     padding: 0 2vw;
+    transition: all 0.3s ease;
+    > div {
+      > div {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .fixed-tab {
+    position: fixed;
+    top: 57px;
+    z-index: 10;
+    background-color: #fff;
+    width: 100%;
+    overflow: hidden;
+  }
+  .tab-position {
+    height: 55px;
+  }
+  .title {
+    display: flex;
+    padding: 2vw;
+    z-index: 2;
+    position: fixed;
+    width: 100vw;
+    margin-top: 10px;
+    height: 47px;
+    padding-right: 4vw;
+    transition: all 1s ease;
+    .location {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex: 1;
+      color: white;
+    }
+    .input {
+      flex: 3;
+      border-radius: 20px;
+      opacity: 0.5;
+    }
+  }
+  .fixed-title {
+    background-color: white;
+    padding-top: 4vw;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    height: 57px;
+    padding-right: 4vw;
+    .location {
+      color: black;
+    }
+    input {
+      color: black;
+    }
+    > span {
+      height: 32px;
+    }
   }
   .img-wrapper {
     height: 300px;
@@ -104,26 +163,5 @@
     justify-content: center;
     align-items: center;
     height: 46px;
-  }
-}
-.title {
-  display: flex;
-  padding: 2vw;
-  z-index: 2;
-  position: fixed;
-  width: 96vw;
-  margin-top: 10px;
-  .location {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    flex: 1;
-    color: white;
-  }
-  .input {
-    flex: 3;
-    border-radius: 20px;
-    opacity: 0.5;
   }
 }

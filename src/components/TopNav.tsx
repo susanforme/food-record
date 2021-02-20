@@ -1,19 +1,22 @@
-import { history, useLocation } from 'umi';
+import { connect, history, State } from 'umi';
 import Icon from './Icon';
 import { createUseStyles } from 'react-jss';
 
-const TopNav: React.FC<TopNavProps> = ({ title }) => {
+const TopNav: React.FC<TopNavProps> = ({ siteTitle }) => {
   const style = useStyles();
-  const aTitle = useLocation<LocationStateProps>().state?.title || title;
   return (
     <div className={style.topNav}>
       <Icon type="icon-left" className={style.icon} onClick={() => history.goBack()}></Icon>
-      <span>{aTitle}</span>
+      <span>{siteTitle}</span>
     </div>
   );
 };
 
-export default TopNav;
+const mapStateToProps = (state: State) => ({
+  siteTitle: state.index.title,
+});
+
+export default connect(mapStateToProps)(TopNav);
 
 function useStyles() {
   return createUseStyles({
@@ -38,9 +41,5 @@ function useStyles() {
   })();
 }
 interface TopNavProps {
-  title?: string;
-}
-
-interface LocationStateProps {
-  title: string;
+  siteTitle: string;
 }

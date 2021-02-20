@@ -170,7 +170,7 @@ img {
   overflow: hidden;
 }
 .ant-tabs-tab {
-  margin: 0;
+  margin: 0 10px;
   flex: 1;
   justify-content: center;
 }

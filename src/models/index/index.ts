@@ -7,6 +7,7 @@ export interface IndexModelState {
   isLogin: boolean;
   routeHistory: Location[];
   user: User;
+  title: string;
 }
 
 export interface IndexModelType {
@@ -17,9 +18,10 @@ export interface IndexModelType {
     UPDATE_AND_CLEAN_ROUTE_HISTORY: ImmerReducer<IndexModelState>;
     UPDATE_USER: ImmerReducer<IndexModelState>;
     FETCH_ERROR: ImmerReducer<IndexModelState>;
+    CHANGE_TITLE: ImmerReducer<IndexModelState>;
   };
   effects: Action;
-  subscriptions: { setup: Subscription };
+  subscriptions: { setup: Subscription; title: Subscription };
 }
 
 const IndexModel: IndexModelType = {
@@ -30,6 +32,7 @@ const IndexModel: IndexModelType = {
     user: {
       location: '510700',
     },
+    title: '食遇记',
   },
   reducers: {
     UPDATE_ROUTE_HISTORY(state, action) {
@@ -46,6 +49,9 @@ const IndexModel: IndexModelType = {
     },
     FETCH_ERROR(state, { payload }) {
       return notification.error({ message: payload, duration: 1.5 });
+    },
+    CHANGE_TITLE(state, { payload }) {
+      state.title = payload;
     },
   },
   effects,
@@ -71,6 +77,23 @@ const IndexModel: IndexModelType = {
           });
         }
       });
+    },
+    title({ dispatch }) {
+      window.onload = () => {
+        const title = document.querySelector('title');
+        const MutationObserverConfig = {
+          childList: true,
+          subtree: true,
+          characterData: true,
+        };
+        const observer = new MutationObserver(() => {
+          dispatch({
+            type: 'CHANGE_TITLE',
+            payload: title?.text || '食遇记',
+          });
+        });
+        observer.observe(title as HTMLTitleElement, MutationObserverConfig);
+      };
     },
   },
 };
