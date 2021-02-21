@@ -9,6 +9,7 @@ import Icon from '@/components/Icon';
 import Propose from './components/Propose';
 import ArticleItems from '@/components/ArticleItems';
 
+// 下拉刷新未实现
 const { TabPane } = Tabs;
 const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
   const { city, weather: localWeather, temperature } = weather;

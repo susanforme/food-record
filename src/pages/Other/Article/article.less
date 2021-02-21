@@ -1,6 +1,120 @@
 .article {
+  @paddingTop: 15px;
+  @paddingLeft: 10px;
+  background-color: #fff;
+  min-height: 100vh;
   .img {
     width: 100%;
     height: 300px;
+  }
+  .author {
+    padding: @paddingTop @paddingLeft;
+    display: flex;
+    align-items: center;
+    .flex {
+      display: flex;
+      flex-direction: column;
+      .username {
+        font-size: 14px;
+      }
+      .chear {
+        font-size: 12px;
+        color: rgba(128, 128, 128, 0.521);
+        margin-top: 3px;
+        transform: scale(0.9);
+        margin-left: -8px;
+      }
+    }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+  }
+  .title {
+    display: flex;
+    align-items: center;
+    padding: @paddingTop @paddingLeft;
+    font-size: 12px;
+    h2 {
+      font-weight: 600;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 20px;
+      height: 20px;
+    }
+    .rate {
+      display: flex;
+      font-size: 0.64rem;
+      align-items: center;
+      margin-left: 0.4266666666666667rem;
+      height: 20px;
+      li {
+        margin-right: 0;
+      }
+    }
+  }
+  .content {
+    padding: 0 @paddingLeft;
+    color: gray;
+    .article-content {
+      word-wrap: break-word;
+      line-height: 23px;
+      font-size: 16px;
+    }
+    .share-reason {
+      font-size: 12px;
+      transform: scale(0.8);
+      background-color: gold;
+      padding: 4px;
+      border-radius: 4px;
+      margin-right: 4px;
+      float: left;
+      font-weight: 400;
+      margin-left: -6px;
+    }
+  }
+  .tags {
+    display: flex;
+    margin-top: 10px;
+    padding: 0 @paddingLeft;
+    > span {
+      font-size: 12px;
+      line-height: 20px;
+    }
+  }
+  .tip {
+    padding: @paddingTop @paddingLeft;
+    font-size: 12px;
+    color: rgba(128, 128, 128, 0.521);
+    transform: scale(0.9);
+    margin-left: -14px;
+  }
+  .give {
+    position: fixed;
+    top: 52%;
+    right: 10px;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 217, 0, 0.623);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 16x;
+    color: rgb(189, 159, 159);
+    .give-count {
+      margin-top: 2px;
+      font-size: 12px;
+    }
+  }
+  .active {
+    background-color: rgba(255, 217, 0, 0.932);
+  }
+  .input-comment {
+    position: fixed;
+    bottom: 0;
   }
 }

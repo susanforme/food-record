@@ -45,7 +45,7 @@ const IndexModel: IndexModelType = {
     UPDATE_USER(state, action) {
       state.isLogin = true;
       state.user = { ...state.user, ...action.payload };
-      return notification.success({ message: '登录成功', duration: 2.5 });
+      return notification.success({ message: '登录成功 😄', duration: 2.5 });
     },
     FETCH_ERROR(state, { payload }) {
       return notification.error({ message: payload, duration: 1.5 });
