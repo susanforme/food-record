@@ -172,6 +172,7 @@ export const ARTICLE_API = {
         giveCount
         location
         cityCode
+        score
       }
     }
     fragment User on Author {
@@ -225,7 +226,7 @@ export interface ArticleApiData {
         lastEditTime: number;
         img: string;
         id: string;
-      };
+      }[];
       lastEditTime: number;
       label: string[];
       kind: string;
@@ -234,6 +235,7 @@ export interface ArticleApiData {
       giveCount: number;
       location: string;
       cityCode: string;
+      score: number;
     };
   };
 }

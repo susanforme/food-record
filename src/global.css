@@ -180,3 +180,7 @@ img {
 .tween-one-leaving {
   display: none !important;
 }
+
+.slide {
+  background-color: transparent !important;
+}

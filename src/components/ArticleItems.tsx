@@ -54,7 +54,7 @@ const ArticleItems: React.FC<ArticleItemsProps> = ({ page, perPage, kind, isGive
           const colors = radomlyGeneratColor(item.label.length);
           return (
             <Item
-              onClick={() => history.push({ pathname: '/article', query: { article: item.id } })}
+              onClick={() => history.push({ pathname: '/article', query: { articleId: item.id } })}
             >
               <TouchFeedback activeClassName={styles.active}>
                 <div className={styles.item}>

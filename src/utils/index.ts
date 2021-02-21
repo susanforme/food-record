@@ -318,7 +318,7 @@ export async function validateArticle(data: CreateArticleData) {
   if (!content) {
     throw new Error('请填写正文');
   }
-  if (imgPath.length > 1) {
+  if (imgPath.length < 1) {
     throw new Error('请至少上传一张图片');
   }
   if (!kind) {

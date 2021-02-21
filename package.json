@@ -37,6 +37,7 @@
     "react-amap": "^1.2.8",
     "react-animated-weather": "^4.0.1",
     "react-jss": "^10.5.1",
+    "react-responsive-carousel": "^3.2.12",
     "react-transition-group": "^4.4.1",
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
