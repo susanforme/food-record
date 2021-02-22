@@ -92,6 +92,13 @@ export const TOOL_API = {
       imgByCoord(location: $location)
     }
   `,
+  EMOJI: gql`
+    query getEmoji {
+      emoji {
+        content
+      }
+    }
+  `,
 };
 
 export const ARTICLE_API = {
@@ -242,5 +249,10 @@ export interface ArticleApiData {
 export interface ToolApiData {
   verifyCode: {
     captcha: { text: string; img: string };
+  };
+  emoji: {
+    emoji: {
+      content: string;
+    }[];
   };
 }

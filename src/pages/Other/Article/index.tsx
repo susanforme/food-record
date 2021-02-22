@@ -1,23 +1,33 @@
-import { ArticleApiData, ARTICLE_API } from '@/api/query';
-import { useLazyQuery } from '@apollo/client';
+import { ArticleApiData, ARTICLE_API, ToolApiData, TOOL_API } from '@/api/query';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { history } from 'umi';
 import Shelf from '@/components/Shelf';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './article.less';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
-import { Rate, Avatar, Tag, Comment, Empty, Input, notification } from 'antd';
+import { Rate, Avatar, Tag, Comment, Empty, Input, notification, Image, Button, List } from 'antd';
 import { radomlyGeneratColor } from '@/utils';
-import { HeartOutlined } from '@ant-design/icons';
-import TouchFeedback from 'rmc-feedback';
 import Icon from '@/components/Icon';
+import { SmileOutlined } from '@ant-design/icons';
+import TouchFeedback from 'rmc-feedback';
+
+const { Item } = List;
 const Article: React.FC = () => {
   const articleId = history.location.query?.articleId;
   const [getArticle, { data, loading }] = useLazyQuery<ArticleApiData['article']>(
     ARTICLE_API.ARTICLE,
   );
+  const { data: emojiData } = useQuery<ToolApiData['emoji']>(TOOL_API.EMOJI);
   const article = useMemo(() => data?.article, [data?.article]);
+  const inputRef = useRef<Input>(null);
   const [showInput, setShowInput] = useState(false);
+  const [showEmoji, setShowEmoji] = useState(false);
+  const [comment, setComment] = useState('');
+  const colors = useMemo(() => radomlyGeneratColor(article?.label.length || 0), [
+    article?.label.length,
+  ]);
+
   useEffect(() => {
     if (articleId) {
       getArticle({
@@ -37,9 +47,6 @@ const Article: React.FC = () => {
       document.title = data.article.title;
     }
   }, [data]);
-  const colors = useMemo(() => radomlyGeneratColor(article?.label.length || 0), [
-    article?.label.length,
-  ]);
 
   return loading ? (
     <Shelf />
@@ -61,7 +68,15 @@ const Article: React.FC = () => {
         showIndicators={(article?.imgPath.length || 0) > 1}
       >
         {article?.imgPath.map((v) => {
-          return <img src={'https://' + v} className={styles.img} alt="" key={v} />;
+          return (
+            <Image
+              fallback={require('@/assets/img/error.png')}
+              src={'https://' + v}
+              className={styles.img}
+              alt=""
+              key={v}
+            />
+          );
         })}
       </Carousel>
       <div className={styles.title}>
@@ -80,6 +95,7 @@ const Article: React.FC = () => {
             </Tag>
           );
         })}
+        点赞xx个
       </div>
       <div className={styles.tip}>图文信息均来自用户上传,如有侵权请联系删除</div>
       <div className={styles.comment}>
@@ -89,24 +105,11 @@ const Article: React.FC = () => {
           <Empty description="暂无评论" />
         )}
       </div>
-      <TouchFeedback activeClassName={styles.active} disabled={article?.isGive}>
-        <div
-          className={styles.give}
-          onClick={() => {
-            if (!article?.isGive) {
-              console.log(123123);
-            }
-          }}
-        >
-          <HeartOutlined className={styles.heart} />
-          <span className={styles['give-count']}>{article?.giveCount || 0 + 11}</span>
-        </div>
-      </TouchFeedback>
       <div className={styles['input-comment']}>
         {!showInput ? (
           <div className={styles['bottom-button']}>
             <div
-              className={styles.share + ' clipboard-text'}
+              className={styles.share}
               onClick={() => {
                 const content = `${article?.title} - ${article?.author.username} 的分享 - 食遇记`;
                 if (navigator.share) {
@@ -133,25 +136,68 @@ const Article: React.FC = () => {
                 }
               }}
             >
-              <Icon type="icon-forward" />
+              <Icon type="icon-forward" className={styles.icon} />
               转发
             </div>
             <div className={styles['publish-comment']} onClick={() => setShowInput(true)}>
-              <Icon type="icon-comment" />
+              <Icon type="icon-comment" className={styles.icon} />
               评论
             </div>
-            <div className={styles['give-a-five']}>
-              <Icon type="icon-give" />
+            <div
+              className={`${styles['give-a-five']} ${article?.isGive ? styles['active-icon'] : ''}`}
+            >
+              <Icon
+                type={article?.isGive ? 'icon-give-active-copy' : 'icon-give'}
+                className={styles.icon}
+                onClick={() => {
+                  if (!article?.isGive) {
+                    console.log('点赞了');
+                  }
+                }}
+              />
               点赞
             </div>
           </div>
         ) : (
-          <div>
-            {/* 下方的在点击评论才显示 */}
-            <Input placeholder="发条友善的评论吧" />
+          <div
+            className={`${styles['list-father']} ${showEmoji ? styles['active-list-father'] : ''}`}
+          >
+            <div className={styles['publish-emoji']}>
+              <Input
+                ref={inputRef}
+                placeholder="发条友善的评论吧"
+                onFocus={() => setShowEmoji(false)}
+                className={styles.input}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+              <SmileOutlined onClick={() => setShowEmoji(!showEmoji)} className={styles.icon} />
+              <Button className={styles.button}>发送</Button>
+            </div>
+            <List
+              className={styles.list}
+              dataSource={emojiData?.emoji}
+              grid={{ gutter: 1, column: 3 }}
+              renderItem={(item) => {
+                return (
+                  <Item
+                    className={styles.items}
+                    onClick={() => {
+                      setComment(`${comment} ${item.content}`);
+                    }}
+                  >
+                    <TouchFeedback activeClassName={styles.active}>
+                      <span>{item.content}</span>
+                    </TouchFeedback>
+                  </Item>
+                );
+              }}
+            />
           </div>
         )}
       </div>
+      <div className={showEmoji && showInput ? styles['position-emoji'] : styles.position}></div>
+      {showInput && <div className={styles.fixed} onClick={() => setShowInput(false)} />}
     </div>
   );
 };

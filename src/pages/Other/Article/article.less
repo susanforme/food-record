@@ -113,8 +113,98 @@
   .active {
     background-color: rgba(255, 217, 0, 0.932);
   }
+  .active-icon {
+    color: rgba(255, 217, 0, 0.932);
+  }
   .input-comment {
     position: fixed;
     bottom: 0;
+    z-index: 10;
+    background-color: #fff;
+    box-shadow: 0.05333333333333334rem 0.05333333333333334rem 0.5333333333333333rem 0
+      rgba(204, 204, 204, 0.61);
+    .bottom-button {
+      display: flex;
+      width: 100vw;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      height: 50px;
+      color: gray;
+      > * {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        font-size: 14px;
+        align-items: center;
+      }
+      .icon {
+        font-size: 18px;
+        margin-right: 5px;
+      }
+    }
+    .list-father {
+      height: 50px;
+      transition: all 0.5s ease;
+      background-color: #fff;
+      .publish-emoji {
+        display: flex;
+        align-items: center;
+        width: 100vw;
+        height: 50px;
+        padding: 10px;
+        * {
+          outline: none;
+          border: none;
+        }
+        .input {
+          background-color: rgb(245, 245, 245);
+        }
+        .icon {
+          font-size: 23px;
+          color: gray;
+          margin-left: 15px;
+        }
+        .button {
+          padding: 4px 12px;
+        }
+      }
+      .list {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        height: 160px;
+        .items {
+          display: flex;
+          justify-content: center;
+          user-select: none;
+          > span {
+            display: block;
+            text-align: center;
+            width: 100%;
+            height: 30px;
+          }
+          .active {
+            background-color: rgb(201, 200, 200);
+          }
+        }
+      }
+    }
+    .active-list-father {
+      height: 210px;
+    }
+  }
+  .fixed {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9;
+  }
+  .position {
+    height: 60px;
+  }
+  .position-emoji {
+    height: 220px;
   }
 }
