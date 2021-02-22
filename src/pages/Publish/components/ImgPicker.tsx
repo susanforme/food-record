@@ -45,7 +45,7 @@ const ImgPicker: React.FC<ImgPickerProps> = ({ onChange }) => {
     return (
       <UploadImg
         key={v.id}
-        onClick={deleteImg}
+        onClose={deleteImg}
         onComplete={onComplete}
         onReadComplete={onReadComplete}
       />

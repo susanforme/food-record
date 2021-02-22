@@ -1,21 +1,37 @@
 import { createUseStyles } from 'react-jss';
 import { List, Button, Input } from 'antd';
-import { SmileOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
+import { FileImageOutlined, SmileOutlined } from '@ant-design/icons';
+import React, { useEffect, useRef, useState } from 'react';
 import { ToolApiData, TOOL_API } from '@/api/query';
 import { useQuery } from '@apollo/client';
 import TouchFeedback from 'rmc-feedback';
+import UploadImg from './UploadImg';
 
 const { Item } = List;
-const SendInput: React.FC<SendInputProps> = ({ msg, setMsg, onChangeEmojiStatus }) => {
+const SendInput: React.FC<SendInputProps> = ({ msg, setMsg, onChangeEmojiStatus, setImgPath }) => {
   const styles = useStyles();
   const [showEmoji, setShowEmoji] = useState(false);
   const { data: emojiData } = useQuery<ToolApiData['emoji']>(TOOL_API.EMOJI);
+  const [showImg, setShowImg] = useState(false);
+  const imgRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     onChangeEmojiStatus && onChangeEmojiStatus(showEmoji);
   }, [onChangeEmojiStatus, showEmoji]);
   return (
     <div className={`${styles.listFather} ${showEmoji ? styles.activeListFather : ''}`}>
+      <div className={styles.upload}>
+        <UploadImg
+          onClose={() => {
+            setShowImg(false);
+          }}
+          onComplete={(url) => {
+            setImgPath && setImgPath(url);
+          }}
+          onReadComplete={() => setShowImg(true)}
+          ref={imgRef}
+          style={{ display: showImg ? 'flex' : 'none' }}
+        />
+      </div>
       <div className={styles.publishEmoji}>
         <Input
           placeholder="发条友善的评论吧"
@@ -24,6 +40,7 @@ const SendInput: React.FC<SendInputProps> = ({ msg, setMsg, onChangeEmojiStatus 
           onChange={(e) => setMsg(e.target.value)}
         />
         <SmileOutlined onClick={() => setShowEmoji(!showEmoji)} className={styles.icon} />
+        <FileImageOutlined onClick={() => imgRef.current?.click()} className={styles.icon} />
         <Button className={styles.button}>发送</Button>
       </div>
       <List
@@ -55,6 +72,8 @@ interface SendInputProps {
   msg: string;
   setMsg: React.Dispatch<React.SetStateAction<string>>;
   onChangeEmojiStatus?: (status: boolean) => any;
+  imgPath?: string;
+  setImgPath?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 function useStyles() {
@@ -79,12 +98,12 @@ function useStyles() {
       backgroundColor: 'rgb(245, 245, 245)',
     },
     icon: {
-      fontSize: '23px',
+      fontSize: '21px',
       color: 'gray',
-      marginLeft: '15px',
+      marginLeft: '8px',
     },
     button: {
-      padding: '4px 12px',
+      padding: '4px 8px',
     },
     list: {
       overflowX: 'hidden',
@@ -113,6 +132,12 @@ function useStyles() {
     },
     positionEmoji: {
       height: '220px',
+    },
+    upload: {
+      position: 'absolute',
+      backgroundColor: '#fff',
+      top: '-80px',
+      left: '20px',
     },
   })();
 }
