@@ -1,33 +1,35 @@
-import { ArticleApiData, ARTICLE_API, ToolApiData, TOOL_API } from '@/api/query';
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { ArticleApiData, ARTICLE_API } from '@/api/query';
+import { useLazyQuery } from '@apollo/client';
 import { history } from 'umi';
 import Shelf from '@/components/Shelf';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './article.less';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
-import { Rate, Avatar, Tag, Comment, Empty, Input, notification, Image, Button, List } from 'antd';
+import { Rate, Avatar, Tag, Comment, Empty, notification, Image } from 'antd';
 import { radomlyGeneratColor } from '@/utils';
 import Icon from '@/components/Icon';
-import { SmileOutlined } from '@ant-design/icons';
-import TouchFeedback from 'rmc-feedback';
+import SendInput from '@/components/SendInput';
 
-const { Item } = List;
 const Article: React.FC = () => {
   const articleId = history.location.query?.articleId;
   const [getArticle, { data, loading }] = useLazyQuery<ArticleApiData['article']>(
     ARTICLE_API.ARTICLE,
   );
-  const { data: emojiData } = useQuery<ToolApiData['emoji']>(TOOL_API.EMOJI);
   const article = useMemo(() => data?.article, [data?.article]);
-  const inputRef = useRef<Input>(null);
   const [showInput, setShowInput] = useState(false);
-  const [showEmoji, setShowEmoji] = useState(false);
   const [comment, setComment] = useState('');
   const colors = useMemo(() => radomlyGeneratColor(article?.label.length || 0), [
     article?.label.length,
   ]);
-
+  const [status, setStatus] = useState(false);
+  const height = useMemo(() => {
+    if (status) {
+      return '220px';
+    } else {
+      return '60px';
+    }
+  }, [status]);
   useEffect(() => {
     if (articleId) {
       getArticle({
@@ -159,44 +161,15 @@ const Article: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div
-            className={`${styles['list-father']} ${showEmoji ? styles['active-list-father'] : ''}`}
-          >
-            <div className={styles['publish-emoji']}>
-              <Input
-                ref={inputRef}
-                placeholder="发条友善的评论吧"
-                onFocus={() => setShowEmoji(false)}
-                className={styles.input}
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-              />
-              <SmileOutlined onClick={() => setShowEmoji(!showEmoji)} className={styles.icon} />
-              <Button className={styles.button}>发送</Button>
-            </div>
-            <List
-              className={styles.list}
-              dataSource={emojiData?.emoji}
-              grid={{ gutter: 1, column: 3 }}
-              renderItem={(item) => {
-                return (
-                  <Item
-                    className={styles.items}
-                    onClick={() => {
-                      setComment(`${comment} ${item.content}`);
-                    }}
-                  >
-                    <TouchFeedback activeClassName={styles.active}>
-                      <span>{item.content}</span>
-                    </TouchFeedback>
-                  </Item>
-                );
-              }}
-            />
-          </div>
+          <SendInput msg={comment} onChangeEmojiStatus={(s) => setStatus(s)} setMsg={setComment} />
         )}
       </div>
-      <div className={showEmoji && showInput ? styles['position-emoji'] : styles.position}></div>
+      <div
+        style={{
+          height,
+          transition: 'height 0.5s ease',
+        }}
+      ></div>
       {showInput && <div className={styles.fixed} onClick={() => setShowInput(false)} />}
     </div>
   );
