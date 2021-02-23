@@ -26,6 +26,8 @@ const Article: React.FC<ArticleProps> = ({ user }) => {
   const [commentData, setCommentData] = useState<ArticleApiData['comment']['comment']>();
   const [commentFatherId, setCommentFatherId] = useState<string>();
   const [img, setImg] = useState<string>();
+  const [give, setGive] = useState(false);
+  const isGive = useMemo(() => article?.isGive || give, [article?.isGive, give]);
   const colors = useMemo(() => radomlyGeneratColor(article?.label.length || 0), [
     article?.label.length,
   ]);
@@ -118,7 +120,7 @@ const Article: React.FC<ArticleProps> = ({ user }) => {
               </Tag>
             );
           })}
-          点赞xx个
+          <div className={styles.give}>赞{article?.giveCount || 0 + 10}个</div>
         </div>
         <div className={styles.tip}>图文信息均来自用户上传,如有侵权请联系删除</div>
         <div className={styles.comment}>
@@ -169,20 +171,30 @@ const Article: React.FC<ArticleProps> = ({ user }) => {
                 评论
               </div>
               <div
-                className={`${styles['give-a-five']} ${
-                  article?.isGive ? styles['active-icon'] : ''
-                }`}
+                className={`${styles['give-a-five']} ${isGive ? styles['active-icon'] : ''}`}
                 onClick={() => {
                   if (!user.id) {
                     return history.push('/account/login');
                   }
-                  if (!article?.isGive) {
-                    console.log('点赞了');
+                  if (!isGive) {
+                    client
+                      .mutate({
+                        mutation: ARTICLE_API.GIVE_ARTICLE,
+                        variables: {
+                          articleId,
+                        },
+                      })
+                      .then(() => {
+                        setGive(true);
+                        return notification.success({ message: '成功点赞 🥳', duration: 1.5 });
+                      });
+                  } else {
+                    notification.success({ message: '你已经点过赞啦 🤪', duration: 1.5 });
                   }
                 }}
               >
                 <Icon
-                  type={article?.isGive ? 'icon-give-active-copy' : 'icon-give'}
+                  type={isGive ? 'icon-give-active-copy' : 'icon-give'}
                   className={styles.icon}
                 />
                 点赞

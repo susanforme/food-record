@@ -199,6 +199,11 @@ export const ARTICLE_API = {
       username
     }
   `,
+  GIVE_ARTICLE: gql`
+    mutation updateArticleGive($articleId: ID!) {
+      updateArticleGive(id: $articleId)
+    }
+  `,
 };
 export interface ArticleApiData {
   kind: {

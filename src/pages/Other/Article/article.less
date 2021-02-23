@@ -79,9 +79,16 @@
     display: flex;
     margin-top: 10px;
     padding: 0 @paddingLeft;
+    position: relative;
     > span {
       font-size: 12px;
       line-height: 20px;
+    }
+    .give {
+      font-size: 14px;
+      position: absolute;
+      right: 4vw;
+      color: rgba(128, 128, 128, 0.678);
     }
   }
   .tip {
@@ -91,26 +98,7 @@
     transform: scale(0.9);
     margin-left: -14px;
   }
-  .give {
-    position: fixed;
-    top: 52%;
-    right: 10px;
-    z-index: 10;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: rgba(255, 217, 0, 0.623);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    font-size: 16x;
-    color: rgb(189, 159, 159);
-    .give-count {
-      margin-top: 2px;
-      font-size: 12px;
-    }
-  }
+
   .active {
     background-color: rgba(255, 217, 0, 0.932);
   }
