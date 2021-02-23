@@ -31,9 +31,9 @@ const UploadImg = React.forwardRef<HTMLInputElement, UploadImgProps>(
               setUploadProgress(progress.loaded / progress.total);
             });
           })
-          .then((data) => {
+          .then(({ data }) => {
             setIsUpload(true);
-            onComplete(data.data?.singleUpload.url);
+            onComplete(data?.singleUpload.url);
             console.log('上传成功');
           })
           .catch(() => {

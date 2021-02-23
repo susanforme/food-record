@@ -2,15 +2,17 @@ import { ARTICLE_API } from '@/api/query';
 import { useLazyQuery } from '@apollo/client';
 import { Spin, Empty, List, Avatar, Rate, Tag } from 'antd';
 import { HeartOutlined } from '@ant-design/icons';
-import { useEffect, useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { createUseStyles } from 'react-jss';
 import { history } from 'umi';
 import TouchFeedback from 'rmc-feedback';
 import { radomlyGeneratColor } from '@/utils';
+import { ImgPrefixConext } from '@/context';
 
 const { Item } = List;
 const ArticleItems: React.FC<ArticleItemsProps> = ({ page, perPage, kind, isGive }) => {
   const styles = useStyles();
+  const imgPrefix = useContext(ImgPrefixConext);
   const requestData = useMemo(() => {
     return {
       // 页码
@@ -58,7 +60,7 @@ const ArticleItems: React.FC<ArticleItemsProps> = ({ page, perPage, kind, isGive
             >
               <TouchFeedback activeClassName={styles.active}>
                 <div className={styles.item}>
-                  <img src={'https://' + item.img} className={styles.foodImg} />
+                  <img src={imgPrefix + item.img} className={styles.foodImg} />
                   <div className={styles.head}>
                     <Avatar src={item.author.headImg} className={styles.avatar} />
                     <div className={styles.flex}>

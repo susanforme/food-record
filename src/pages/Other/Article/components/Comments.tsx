@@ -1,13 +1,15 @@
 import { Comment, Spin, Empty, Avatar, List, Tooltip, Image } from 'antd';
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { createUseStyles } from 'react-jss';
 import moment from 'moment';
 import { ArticleApiData } from '@/api/query';
 import { history } from 'umi';
+import { ImgPrefixConext } from '@/context';
 
 const Comments: React.FC<CommentsProps> = React.memo(({ datasource, replay }) => {
   const styles = useStyles();
   const loading = useMemo(() => datasource === undefined, [datasource]);
+  const imgPrefix = useContext(ImgPrefixConext);
   return (
     <Spin spinning={loading}>
       {datasource?.length || 0 > 0 ? (
@@ -32,7 +34,7 @@ const Comments: React.FC<CommentsProps> = React.memo(({ datasource, replay }) =>
                       {img && (
                         <Image
                           className={styles.img}
-                          src={'https://' + img}
+                          src={imgPrefix + img}
                           fallback={require('@/assets/img/error.png')}
                         />
                       )}
@@ -71,7 +73,7 @@ const Comments: React.FC<CommentsProps> = React.memo(({ datasource, replay }) =>
                                 <Image
                                   className={styles.img}
                                   fallback={require('@/assets/img/error.png')}
-                                  src={'https://' + img}
+                                  src={imgPrefix + img}
                                 />
                               )}
                               <p>{comment}</p>

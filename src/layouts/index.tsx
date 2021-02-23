@@ -6,8 +6,9 @@ import { history, Redirect, IRoute, connect, State, Location } from 'umi';
 import { bottomNavMap } from '@/utils';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import TopNav from '@/components/TopNav';
-import { cloneElement, useEffect } from 'react';
+import React, { cloneElement, useEffect } from 'react';
 import Shelf from '@/components/Shelf';
+import { ImgPrefixConext } from '@/context';
 
 const DEFAULT_ANIMATION_MAP: DefaultAnimationMap = {
   PUSH: 'forward',
@@ -46,30 +47,32 @@ const Layout: React.FC<LayoutProps> = ({
   }
   return (
     <ApolloProvider client={client}>
-      {!isShowBottomNav && !noNav ? <TopNav /> : null}
+      <ImgPrefixConext.Provider value="https://img.52acfun.cn">
+        {!isShowBottomNav && !noNav ? <TopNav /> : null}
 
-      {loading ? (
-        <Shelf />
-      ) : (
-        <TransitionGroup
-          exit={false}
-          appear={true}
-          unmountOnExit={true}
-          childFactory={(child: ChildComponent) =>
-            cloneElement(child, {
-              classNames: animateClass,
-            })
-          }
-        >
-          <CSSTransition timeout={400} key={key}>
-            <div className="layout" key={key}>
-              {children}
-            </div>
-          </CSSTransition>
-        </TransitionGroup>
-      )}
+        {loading ? (
+          <Shelf />
+        ) : (
+          <TransitionGroup
+            exit={false}
+            appear={true}
+            unmountOnExit={true}
+            childFactory={(child: ChildComponent) =>
+              cloneElement(child, {
+                classNames: animateClass,
+              })
+            }
+          >
+            <CSSTransition timeout={400} key={key}>
+              <div className="layout" key={key}>
+                {children}
+              </div>
+            </CSSTransition>
+          </TransitionGroup>
+        )}
 
-      {isShowBottomNav && !noNav ? <BottomNav /> : null}
+        {isShowBottomNav && !noNav ? <BottomNav /> : null}
+      </ImgPrefixConext.Provider>
     </ApolloProvider>
   );
 };

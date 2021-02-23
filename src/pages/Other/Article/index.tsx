@@ -2,7 +2,7 @@ import { ArticleApiData, ARTICLE_API } from '@/api/query';
 import { useLazyQuery } from '@apollo/client';
 import { connect, history, State } from 'umi';
 import Shelf from '@/components/Shelf';
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import styles from './article.less';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
@@ -13,12 +13,14 @@ import SendInput from '@/components/SendInput';
 import client from '@/api';
 import Comments from './components/Comments';
 import { LoadingOutlined } from '@ant-design/icons';
+import { ImgPrefixConext } from '@/context';
 
 const Article: React.FC<ArticleProps> = ({ user }) => {
   const articleId = history.location.query?.articleId;
   const [getArticle, { data, loading }] = useLazyQuery<ArticleApiData['article']>(
     ARTICLE_API.ARTICLE,
   );
+  const imgPrefix = useContext(ImgPrefixConext);
   const article = useMemo(() => data?.article, [data?.article]);
   const [showInput, setShowInput] = useState(false);
   const [comment, setComment] = useState('');
@@ -96,7 +98,7 @@ const Article: React.FC<ArticleProps> = ({ user }) => {
             return (
               <Image
                 fallback={require('@/assets/img/error.png')}
-                src={'https://' + v}
+                src={imgPrefix + v}
                 className={styles.img}
                 alt=""
                 key={v}

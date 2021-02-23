@@ -131,9 +131,7 @@ const mapDispatchToProps = (dispatch: Function) => ({
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Register));
 
 function goToOtherPage() {
-  open(
-    'https://chengcheng-1256396014.cos.ap-guangzhou.myqcloud.com/%E9%9A%90%E7%A7%81%E6%9D%83%E6%94%BF%E7%AD%96.html',
-  );
+  open('https://img.52acfun.cn/%E9%9A%90%E7%A7%81%E6%9D%83%E6%94%BF%E7%AD%96.html');
 }
 
 interface RegisterProps {
