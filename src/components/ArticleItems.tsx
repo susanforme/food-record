@@ -134,6 +134,9 @@ function useStyles() {
     username: {
       fontSize: '0.5333333333333333rem',
       marginLeft: '0.26666666666666666rem',
+      width: '3.2rem',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
     flex: {
       display: 'inline-flex',
