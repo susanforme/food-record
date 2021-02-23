@@ -88,7 +88,7 @@ interface SendInputProps {
 function useStyles() {
   return createUseStyles({
     listFather: {
-      height: '50px',
+      height: '2.6666666666666665rem',
       transition: ' all 0.5s ease',
       backgroundColor: '#fff',
     },
@@ -96,8 +96,8 @@ function useStyles() {
       display: 'flex',
       alignItems: 'center',
       width: '100vw',
-      height: '50px',
-      padding: '10px',
+      height: '2.6666666666666665rem',
+      padding: '0.5333333333333333rem',
       '& *': {
         outline: 'none',
         border: 'none',
@@ -107,17 +107,17 @@ function useStyles() {
       backgroundColor: 'rgb(245, 245, 245)',
     },
     icon: {
-      fontSize: '21px',
+      fontSize: '1.12rem',
       color: 'gray',
-      marginLeft: '8px',
+      marginLeft: '0.4266666666666667rem',
     },
     button: {
-      padding: '4px 8px',
+      padding: '0.21333333333333335rem 0.4266666666666667rem',
     },
     list: {
       overflowX: 'hidden',
       overflowY: 'scroll',
-      height: '160px',
+      height: '8.533333333333333rem',
     },
     items: {
       display: 'flex',
@@ -127,26 +127,26 @@ function useStyles() {
         display: 'block',
         textAlign: 'center',
         width: '100%',
-        height: '30px',
+        height: '1.6rem',
       },
     },
     activeEmoji: {
       backgroundColor: 'rgb(201, 200, 200)',
     },
     activeListFather: {
-      height: '210px',
+      height: '11.2rem',
     },
     position: {
-      height: '60px',
+      height: '3.2rem',
     },
     positionEmoji: {
-      height: '220px',
+      height: '11.733333333333333rem',
     },
     upload: {
       position: 'absolute',
       backgroundColor: '#fff',
-      top: '-80px',
-      left: '20px',
+      top: '-4.266666666666667rem',
+      left: '1.0666666666666667rem',
     },
   })();
 }

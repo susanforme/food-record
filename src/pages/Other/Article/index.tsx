@@ -1,20 +1,20 @@
 import { ArticleApiData, ARTICLE_API } from '@/api/query';
 import { useLazyQuery } from '@apollo/client';
-import { history } from 'umi';
+import { connect, history, State } from 'umi';
 import Shelf from '@/components/Shelf';
 import { useEffect, useMemo, useState } from 'react';
 import styles from './article.less';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
-import { Rate, Avatar, Tag, Empty, notification, Image, Spin } from 'antd';
+import { Rate, Avatar, Tag, notification, Image, Spin } from 'antd';
 import { radomlyGeneratColor } from '@/utils';
 import Icon from '@/components/Icon';
 import SendInput from '@/components/SendInput';
 import client from '@/api';
-import Comments from './Article/components/Comments';
+import Comments from './components/Comments';
 import { LoadingOutlined } from '@ant-design/icons';
 
-const Article: React.FC = () => {
+const Article: React.FC<ArticleProps> = ({ user }) => {
   const articleId = history.location.query?.articleId;
   const [getArticle, { data, loading }] = useLazyQuery<ArticleApiData['article']>(
     ARTICLE_API.ARTICLE,
@@ -23,6 +23,9 @@ const Article: React.FC = () => {
   const [showInput, setShowInput] = useState(false);
   const [comment, setComment] = useState('');
   const [commentLoading, setCommentLoading] = useState(false);
+  const [commentData, setCommentData] = useState<ArticleApiData['comment']['comment']>();
+  const [commentFatherId, setCommentFatherId] = useState<string>();
+  const [img, setImg] = useState<string>();
   const colors = useMemo(() => radomlyGeneratColor(article?.label.length || 0), [
     article?.label.length,
   ]);
@@ -41,6 +44,16 @@ const Article: React.FC = () => {
           id: articleId,
         },
       });
+      client
+        .query<ArticleApiData['comment']>({
+          query: ARTICLE_API.COMMENT,
+          variables: {
+            articleId,
+          },
+        })
+        .then(({ data }) => {
+          setCommentData(data.comment);
+        });
     }
   }, [articleId, getArticle]);
   useEffect(() => {
@@ -53,7 +66,6 @@ const Article: React.FC = () => {
       document.title = data.article.title;
     }
   }, [data]);
-
   return loading ? (
     <Shelf />
   ) : (
@@ -110,7 +122,13 @@ const Article: React.FC = () => {
         </div>
         <div className={styles.tip}>图文信息均来自用户上传,如有侵权请联系删除</div>
         <div className={styles.comment}>
-          {(article?.comment.length || 0) > 0 ? <Comments /> : <Empty description="暂无评论" />}
+          <Comments
+            datasource={commentData}
+            replay={(commentFatherId) => {
+              setCommentFatherId(commentFatherId);
+              setShowInput(true);
+            }}
+          />
         </div>
         <div className={styles['input-comment']}>
           {!showInput ? (
@@ -154,15 +172,18 @@ const Article: React.FC = () => {
                 className={`${styles['give-a-five']} ${
                   article?.isGive ? styles['active-icon'] : ''
                 }`}
+                onClick={() => {
+                  if (!user.id) {
+                    return history.push('/account/login');
+                  }
+                  if (!article?.isGive) {
+                    console.log('点赞了');
+                  }
+                }}
               >
                 <Icon
                   type={article?.isGive ? 'icon-give-active-copy' : 'icon-give'}
                   className={styles.icon}
-                  onClick={() => {
-                    if (!article?.isGive) {
-                      console.log('点赞了');
-                    }
-                  }}
                 />
                 点赞
               </div>
@@ -172,24 +193,69 @@ const Article: React.FC = () => {
               msg={comment}
               onChangeEmojiStatus={(s) => setStatus(s)}
               setMsg={setComment}
+              setImgPath={setImg}
               onSend={() => {
+                if (!user.id) {
+                  return history.push('/account/login');
+                }
                 const data = {
                   articleId,
                   comment,
+                  commentFatherId,
+                  img,
                 };
                 setCommentLoading(true);
                 client
                   .mutate({
-                    mutation: ARTICLE_API.COMMENT,
+                    mutation: ARTICLE_API.SEND_COMMENT,
                     variables: {
                       data,
                     },
                   })
-                  .then(({ data }) => {
-                    console.log(data);
+                  .then(({ data: sendCommendData }) => {
+                    const commentId = sendCommendData.createArticleComment;
+                    const comment = {
+                      id: commentId,
+                      createTime: new Date().valueOf(),
+                      img,
+                      comment: data.comment,
+                      publisher: {
+                        headImg: user.headImg || '',
+                        id: user.id || '',
+                        username: user.username || '',
+                      },
+                    };
+                    if (commentData) {
+                      if (commentFatherId) {
+                        const data = [...commentData];
+                        const index = [...commentData].findIndex((v) => v.id === commentFatherId);
+                        const child = data[index].commentChild;
+                        let comm: any;
+                        if (child) {
+                          comm = [...child, comment];
+                        } else {
+                          comm = [comment];
+                        }
+                        data.splice(index, 1, {
+                          ...data[index],
+                          commentChild: comm,
+                        });
+                        setCommentData(data);
+                      } else {
+                        setCommentData([...commentData, comment]);
+                      }
+                    } else {
+                      setCommentData([comment]);
+                    }
+                    console.log(sendCommendData);
+                  })
+                  .catch(() => {
+                    notification.error({ message: '评论发送失败,请稍后再试 😟' });
                   })
                   .finally(() => {
                     setCommentLoading(false);
+                    setShowInput(false);
+                    setCommentFatherId(undefined);
                   });
               }}
             />
@@ -201,10 +267,26 @@ const Article: React.FC = () => {
             transition: 'height 0.5s ease',
           }}
         ></div>
-        {showInput && <div className={styles.fixed} onClick={() => setShowInput(false)} />}
+        {showInput && (
+          <div
+            className={styles.fixed}
+            onClick={() => {
+              setShowInput(false);
+              setCommentFatherId(undefined);
+            }}
+          />
+        )}
       </div>
     </Spin>
   );
 };
 
-export default Article;
+const mapStateToProps = (state: State) => ({
+  user: state.index.user,
+});
+
+export default connect(mapStateToProps)(Article);
+
+interface ArticleProps {
+  user: State['index']['user'];
+}

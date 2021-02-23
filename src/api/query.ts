@@ -148,28 +148,6 @@ export const ARTICLE_API = {
         title
         content
         traffic
-        comment {
-          createTime
-          publisher {
-            ...User
-          }
-          comment
-          commentChild {
-            articleId
-            lastEditTime
-            commentFatherId
-            img
-            id
-            comment
-            createTime
-            publisher {
-              ...User
-            }
-          }
-          lastEditTime
-          img
-          id
-        }
         lastEditTime
         label
         kind
@@ -187,9 +165,38 @@ export const ARTICLE_API = {
       username
     }
   `,
-  COMMENT: gql`
+  SEND_COMMENT: gql`
     mutation sendComment($data: CreateArticleCommentData!) {
       createArticleComment(data: $data)
+    }
+  `,
+  COMMENT: gql`
+    query getComment($articleId: ID!) {
+      comment(articleId: $articleId) {
+        createTime
+        publisher {
+          ...User
+        }
+        comment
+        commentChild {
+          lastEditTime
+          img
+          id
+          comment
+          createTime
+          publisher {
+            ...User
+          }
+        }
+        lastEditTime
+        img
+        id
+      }
+    }
+    fragment User on Author {
+      headImg
+      id
+      username
     }
   `,
 };
@@ -211,33 +218,6 @@ export interface ArticleApiData {
       title: string;
       content: string;
       traffic: number;
-      comment: {
-        createTime: number;
-        publisher: {
-          headImg: string;
-          id: string;
-          username: string;
-        };
-        comment: string;
-        commentChild: {
-          articleId: string;
-          lastEditTime: number;
-          commentFatherId: string;
-          img: string;
-          id: string;
-          comment: string;
-          createTime: number;
-          publisher: {
-            headImg: string;
-            id: string;
-            username: string;
-          };
-        };
-        articleId: string;
-        lastEditTime: number;
-        img: string;
-        id: string;
-      }[];
       lastEditTime: number;
       label: string[];
       kind: string;
@@ -248,6 +228,34 @@ export interface ArticleApiData {
       cityCode: string;
       score: number;
     };
+  };
+  comment: {
+    comment: {
+      createTime: number;
+      publisher: {
+        headImg: string;
+        id: string;
+        username: string;
+      };
+      comment: string;
+      commentChild?: [
+        {
+          lastEditTime?: number;
+          img?: string;
+          id: string;
+          comment: string;
+          createTime: number;
+          publisher: {
+            headImg: string;
+            id: string;
+            username: string;
+          };
+        },
+      ];
+      lastEditTime?: number;
+      img?: string;
+      id: string;
+    }[];
   };
 }
 export interface ToolApiData {

@@ -55,6 +55,11 @@ const routes: IRoute[] = [
         title: '寻美食',
       },
       {
+        path: '/user',
+        component: '@/pages/Other/User',
+        title: '寻美食',
+      },
+      {
         path: '/article',
         component: '@/pages/Other/Article',
         title: '文章',
