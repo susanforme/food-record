@@ -166,7 +166,6 @@ export const ARTICLE_API = {
               ...User
             }
           }
-          articleId
           lastEditTime
           img
           id
@@ -186,6 +185,11 @@ export const ARTICLE_API = {
       headImg
       id
       username
+    }
+  `,
+  COMMENT: gql`
+    mutation sendComment($data: CreateArticleCommentData!) {
+      createArticleComment(data: $data)
     }
   `,
 };

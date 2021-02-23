@@ -8,7 +8,13 @@ import TouchFeedback from 'rmc-feedback';
 import UploadImg from './UploadImg';
 
 const { Item } = List;
-const SendInput: React.FC<SendInputProps> = ({ msg, setMsg, onChangeEmojiStatus, setImgPath }) => {
+const SendInput: React.FC<SendInputProps> = ({
+  msg,
+  setMsg,
+  onChangeEmojiStatus,
+  setImgPath,
+  onSend,
+}) => {
   const styles = useStyles();
   const [showEmoji, setShowEmoji] = useState(false);
   const { data: emojiData } = useQuery<ToolApiData['emoji']>(TOOL_API.EMOJI);
@@ -41,7 +47,9 @@ const SendInput: React.FC<SendInputProps> = ({ msg, setMsg, onChangeEmojiStatus,
         />
         <SmileOutlined onClick={() => setShowEmoji(!showEmoji)} className={styles.icon} />
         <FileImageOutlined onClick={() => imgRef.current?.click()} className={styles.icon} />
-        <Button className={styles.button}>发送</Button>
+        <Button className={styles.button} onClick={onSend}>
+          发送
+        </Button>
       </div>
       <List
         className={styles.list}
@@ -74,6 +82,7 @@ interface SendInputProps {
   onChangeEmojiStatus?: (status: boolean) => any;
   imgPath?: string;
   setImgPath?: React.Dispatch<React.SetStateAction<string | undefined>>;
+  onSend?: ((event: React.MouseEvent<HTMLElement, MouseEvent>) => void) | undefined;
 }
 
 function useStyles() {
