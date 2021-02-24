@@ -1,7 +1,7 @@
 import styles from './index.less';
 import { Input, Avatar, Tabs, BackTop } from 'antd';
 import { SearchOutlined, DownOutlined } from '@ant-design/icons';
-import { connect, State } from 'umi';
+import { connect, State, history } from 'umi';
 import { useEffect, useMemo, useState } from 'react';
 import { convertWeather, debounceFactory } from '@/utils';
 import AnimatedWeather from 'react-animated-weather';
@@ -33,6 +33,9 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
     window.addEventListener('scroll', handler);
     return () => window.removeEventListener('scroll', handler);
   }, [debounce]);
+  if (history.location.pathname !== '/home') {
+    return <div></div>;
+  }
   const suffix = (
     <SearchOutlined
       style={{

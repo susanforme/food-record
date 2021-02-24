@@ -3,9 +3,37 @@ import { gql } from '@apollo/client';
 
 export const USER_API = {
   USER_DATA: gql`
-    query user($id: ID!) {
-      user(id: $id) {
-        username
+    query getUser($userId: ID!) {
+      user(id: $userId) {
+        user {
+          headImg
+          id
+          username
+        }
+        discuss {
+          attention
+          fan
+        }
+        article {
+          total
+          items {
+            img
+            score
+            author {
+              headImg
+              username
+              userId
+            }
+            give
+            title
+            content
+            label
+            id
+          }
+        }
+        foodTags
+        commentCount
+        articleCount
       }
     }
   `,
@@ -271,5 +299,32 @@ export interface ToolApiData {
     emoji: {
       content: string;
     }[];
+  };
+}
+
+export interface UserApiData {
+  user: {
+    user: {
+      user: {
+        id: string;
+        headImg: string;
+        username: string;
+      };
+      discuss: {
+        attention: number;
+        fan: number;
+      };
+      foodTags: string[];
+      article: any;
+      articleCount: number;
+      comment: {
+        createTime: number;
+        comment: string;
+        articleId: {
+          content: string;
+        };
+      }[];
+      commentCount: number;
+    };
   };
 }

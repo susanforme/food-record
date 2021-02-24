@@ -78,7 +78,10 @@ const Article: React.FC<ArticleProps> = ({ user }) => {
       size="large"
       indicator={<LoadingOutlined style={{ fontSize: 60 }} spin />}
     >
-      <div className={styles.article}>
+      <div
+        className={styles.article}
+        onClick={() => history.push({ pathname: '/user', query: { userId: user.id || '' } })}
+      >
         <div className={styles.author}>
           <Avatar src={article?.author.headImg} className={styles.avatar} />
           <div className={styles.flex}>
@@ -211,6 +214,9 @@ const Article: React.FC<ArticleProps> = ({ user }) => {
               onSend={() => {
                 if (!user.id) {
                   return history.push('/account/login');
+                }
+                if (!comment) {
+                  return notification.error({ message: '评论不能为空哦~ 🥺' });
                 }
                 const data = {
                   articleId,
