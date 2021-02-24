@@ -34,6 +34,13 @@ export const USER_API = {
         foodTags
         commentCount
         articleCount
+        comment {
+          createTime
+          comment
+          articleId {
+            content
+          }
+        }
       }
     }
   `,
@@ -290,6 +297,25 @@ export interface ArticleApiData {
       id: string;
     }[];
   };
+  articleItems: {
+    articleItems: {
+      items: {
+        author: {
+          headImg: string;
+          userId: string;
+          username: string;
+        };
+        content: string;
+        give: number;
+        id: string;
+        img: string;
+        label: string[];
+        score: number;
+        title: string;
+      }[];
+      total: number;
+    };
+  };
 }
 export interface ToolApiData {
   verifyCode: {
@@ -315,7 +341,7 @@ export interface UserApiData {
         fan: number;
       };
       foodTags: string[];
-      article: any;
+      article: ArticleApiData['articleItems']['articleItems'];
       articleCount: number;
       comment: {
         createTime: number;

@@ -7,7 +7,7 @@ import { convertWeather, debounceFactory } from '@/utils';
 import AnimatedWeather from 'react-animated-weather';
 import Icon from '@/components/Icon';
 import Propose from './components/Propose';
-import ArticleItems from '@/components/ArticleItems';
+import ArticleList from '@/components/ArticleList';
 
 // 下拉刷新未实现
 const { TabPane } = Tabs;
@@ -101,7 +101,7 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
         </Tabs>
       </div>
       {isFixed && <div className={styles['tab-position']} />}
-      <ArticleItems kind={articleKind} />
+      <ArticleList kind={articleKind} />
       <div className={styles.position}></div>
       <BackTop style={{ bottom: '5rem' }}>
         <Icon type="icon-top" style={{ fontSize: '3rem' }} />

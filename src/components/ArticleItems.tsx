@@ -1,103 +1,87 @@
-import { ARTICLE_API } from '@/api/query';
-import { useLazyQuery } from '@apollo/client';
 import { Spin, Empty, List, Avatar, Rate, Tag } from 'antd';
 import { HeartOutlined } from '@ant-design/icons';
-import { useContext, useEffect, useMemo } from 'react';
+import React, { useContext } from 'react';
 import { createUseStyles } from 'react-jss';
 import { history } from 'umi';
 import TouchFeedback from 'rmc-feedback';
 import { radomlyGeneratColor } from '@/utils';
 import { ImgPrefixConext } from '@/context';
+import { ArticleApiData } from '@/api/query';
 
 const { Item } = List;
-const ArticleItems: React.FC<ArticleItemsProps> = ({ page, perPage, kind, isGive }) => {
-  const styles = useStyles();
-  const imgPrefix = useContext(ImgPrefixConext);
-  const requestData = useMemo(() => {
-    return {
-      // 页码
-      page,
-      // 每页页数
-      perPage,
-      // 分类
-      kind,
-      // 是否按照点赞来进行排序
-      isGive,
-    };
-  }, [isGive, kind, page, perPage]);
-  const [getArticle, { loading, data }] = useLazyQuery(ARTICLE_API.ARTICLE_ITEM);
-  useEffect(() => {
-    getArticle({
-      variables: {
-        data: requestData,
-      },
-    });
-  }, [getArticle, requestData]);
-  if (loading) {
-    return (
-      <div className={styles.loading}>
-        <Spin />
-      </div>
-    );
-  }
-  if (data?.articleItems.total === 0) {
+const ArticleList: React.FC<ArticleItemsProps> = React.memo(
+  ({ datasource, loading, emptyDescription }) => {
+    const data = datasource;
+    const styles = useStyles();
+    const imgPrefix = useContext(ImgPrefixConext);
+    if (loading) {
+      return (
+        <div className={styles.loading}>
+          <Spin />
+        </div>
+      );
+    }
+    if (data?.total === 0) {
+      return (
+        <div className={styles.articleItems}>
+          <Empty description={emptyDescription || '这个城市没有人分享美食哦~'} />
+        </div>
+      );
+    }
     return (
       <div className={styles.articleItems}>
-        <Empty description="这个城市没有人分享美食哦~" />
-      </div>
-    );
-  }
-  return (
-    <div className={styles.articleItems}>
-      <List
-        grid={{ gutter: 16, column: 2 }}
-        dataSource={data?.articleItems.items}
-        renderItem={(item: ArticleItem) => {
-          const colors = radomlyGeneratColor(item.label.length);
-          return (
-            <Item
-              onClick={() => history.push({ pathname: '/article', query: { articleId: item.id } })}
-            >
-              <TouchFeedback activeClassName={styles.active}>
-                <div className={styles.item}>
-                  <img src={imgPrefix + item.img} className={styles.foodImg} />
-                  <div className={styles.head}>
-                    <Avatar src={item.author.headImg} className={styles.avatar} />
-                    <div className={styles.flex}>
-                      <span className={styles.username}>{item.author.username}</span>
-                      <div className={styles.right}>
-                        <HeartOutlined className={styles.heart} />
-                        <span className={styles.give}>{item.give + 11}</span>
+        <List
+          grid={{ gutter: 16, column: 2 }}
+          dataSource={data?.items}
+          renderItem={(item) => {
+            const colors = radomlyGeneratColor(item.label.length);
+            return (
+              <Item
+                onClick={() =>
+                  history.push({ pathname: '/article', query: { articleId: item.id } })
+                }
+              >
+                <TouchFeedback activeClassName={styles.active}>
+                  <div className={styles.item}>
+                    <img src={imgPrefix + item.img} className={styles.foodImg} />
+                    <div className={styles.head}>
+                      <Avatar src={item.author.headImg} className={styles.avatar} />
+                      <div className={styles.flex}>
+                        <span className={styles.username}>{item.author.username}</span>
+                        <div className={styles.right}>
+                          <HeartOutlined className={styles.heart} />
+                          <span className={styles.give}>{item.give + 11}</span>
+                        </div>
                       </div>
                     </div>
+                    <div className={styles.title}>
+                      <span>{item.title}</span>
+                      <Rate value={item.score} disabled className={styles.rate} />
+                    </div>
+                    <div className={styles.label}>
+                      {item.label.map((v, index) => {
+                        return (
+                          <Tag className={styles.tag} key={v} color={colors[index]}>
+                            {v.length > 5 ? v.slice(0, 5) + '...' : v}
+                          </Tag>
+                        );
+                      })}
+                    </div>
+                    <div className={styles.content}>
+                      <p>{item.content}</p>
+                    </div>
                   </div>
-                  <div className={styles.title}>
-                    <span>{item.title}</span>
-                    <Rate value={item.score} disabled className={styles.rate} />
-                  </div>
-                  <div className={styles.label}>
-                    {item.label.map((v, index) => {
-                      return (
-                        <Tag className={styles.tag} key={v} color={colors[index]}>
-                          {v.length > 5 ? v.slice(0, 5) + '...' : v}
-                        </Tag>
-                      );
-                    })}
-                  </div>
-                  <div className={styles.content}>
-                    <p>{item.content}</p>
-                  </div>
-                </div>
-              </TouchFeedback>
-            </Item>
-          );
-        }}
-      />
-    </div>
-  );
-};
+                </TouchFeedback>
+              </Item>
+            );
+          }}
+        />
+      </div>
+    );
+  },
+);
 
-export default ArticleItems;
+export default ArticleList;
 
 function useStyles() {
   return createUseStyles({
@@ -197,22 +181,7 @@ function useStyles() {
 }
 
 interface ArticleItemsProps {
-  page?: number;
-  kind?: string;
-  perPage?: number;
-  isGive?: boolean;
-}
-interface ArticleItem {
-  author: {
-    headImg: string;
-    userId: string;
-    username: string;
-  };
-  content: string;
-  give: number;
-  id: string;
-  img: string;
-  label: string[];
-  score: number;
-  title: string;
+  datasource?: ArticleApiData['articleItems']['articleItems'];
+  loading?: boolean;
+  emptyDescription?: string;
 }
