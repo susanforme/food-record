@@ -5,6 +5,7 @@ import Empty from 'antd/es/empty';
 import React, { useEffect, useMemo } from 'react';
 import { history } from 'umi';
 import Shelf from '@/components/Shelf';
+import styles from './user.less';
 
 const User: React.FC = () => {
   const userId = history.location.query?.userId;
@@ -31,7 +32,7 @@ const User: React.FC = () => {
     <Shelf />
   ) : (
     <div>
-      <div className="bg"></div>
+      <div className={styles.bg}></div>
     </div>
   );
 };
