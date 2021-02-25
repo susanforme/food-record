@@ -39,6 +39,8 @@ export const USER_API = {
           comment
           articleId {
             content
+            id
+            imgPath
           }
         }
       }
@@ -348,6 +350,8 @@ export interface UserApiData {
         comment: string;
         articleId: {
           content: string;
+          id: string;
+          imgPath: [string];
         };
       }[];
       commentCount: number;

@@ -82,7 +82,7 @@ const Article: React.FC<ArticleProps> = ({ user }) => {
         <div
           className={styles.author}
           onClick={() =>
-            history.push({ pathname: '/account/user', query: { userId: user.id || '' } })
+            history.push({ pathname: '/account/user', query: { userId: article?.author.id || '' } })
           }
         >
           <Avatar src={article?.author.headImg} className={styles.avatar} />

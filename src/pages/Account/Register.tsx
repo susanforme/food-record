@@ -10,7 +10,7 @@ import AuthCode from '@/components/AuthCode';
 import Icon from '@/components/Icon';
 import { connect, history, State, withRouter } from 'umi';
 import { useEffect, useState } from 'react';
-import style from './account.less';
+import styles from './account.less';
 import { RegisterArgs, validateAndRegister } from '@/utils';
 
 const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
@@ -30,14 +30,14 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
     }
   }, [isLogin]);
   return (
-    <>
-      <div className={style['img-father']}>
+    <div className={styles.account}>
+      <div className={styles['img-father']}>
         <img src={require('@/assets/img/icon.png')} />
       </div>
       <Input
         size="large"
         placeholder="用户名"
-        className={style.input}
+        className={styles.input}
         maxLength={20}
         allowClear
         value={registerArgs.username}
@@ -53,7 +53,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         value={registerArgs.email}
         onChange={(e) => setRegisterArgs({ ...registerArgs, email: e.target.value })}
         prefix={<MailOutlined />}
-        className={style.input}
+        className={styles.input}
       />
       <Input.Password
         size="large"
@@ -62,7 +62,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
         value={registerArgs.password}
         onChange={(e) => setRegisterArgs({ ...registerArgs, password: e.target.value })}
-        className={style.input}
+        className={styles.input}
         prefix={<LockOutlined />}
       />
       <Input.Password
@@ -72,7 +72,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
         value={registerArgs.repassword}
         onChange={(e) => setRegisterArgs({ ...registerArgs, repassword: e.target.value })}
-        className={style.input}
+        className={styles.input}
         prefix={<LockOutlined />}
       />
       <Input
@@ -88,33 +88,33 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
             style={{ marginRight: '-1.6rem' }}
           />
         }
-        className={style.input}
+        className={styles.input}
         onPressEnter={() => validateAndRegister(registerArgs, captcha, setNeedrefresh, register)}
       />
-      <p className={style.tips}>
+      <p className={styles.tips}>
         注册即代表自动同意 《用户服务协议》和
         <span onClick={() => goToOtherPage()}>《隐私权政策》</span>
       </p>
       <Button
-        className={style['login-button']}
+        className={styles['login-button']}
         type="primary"
         onClick={() => validateAndRegister(registerArgs, captcha, setNeedrefresh, register)}
       >
         注册
       </Button>
-      <div className={style.bottom}>
-        <span className={style.about} onClick={() => history.push('/about')}>
+      <div className={styles.bottom}>
+        <span className={styles.about} onClick={() => history.push('/about')}>
           关于我们
         </span>
-        <span className={style.shu}>|</span>
+        <span className={styles.shu}>|</span>
         <span
-          className={style.about}
+          className={styles.about}
           onClick={() => history.push('/account/login', { title: '登录' })}
         >
           已有账号?登录
         </span>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -62,7 +62,7 @@ const ArticleList: React.FC<ArticleItemsProps> = React.memo(
                       {item.label.map((v, index) => {
                         return (
                           <Tag className={styles.tag} key={v} color={colors[index]}>
-                            {v.length > 5 ? v.slice(0, 5) + '...' : v}
+                            {v}
                           </Tag>
                         );
                       })}
@@ -149,6 +149,7 @@ function useStyles() {
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         width: '1.84rem',
+        flex: 1.2,
       },
     },
     rate: {
@@ -156,12 +157,21 @@ function useStyles() {
       marginLeft: '0.4266666666666667rem',
       display: 'flex',
       alignItems: 'center',
+      flex: 1,
+      '& li': {
+        marginRight: '0 !important',
+      },
     },
     label: {
       padding: '0 0.26666666666666666rem',
+      display: 'flex',
+      width: '100%',
     },
     tag: {
       border: 'none',
+      flex: 1,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
     content: {
       marginTop: '0.26666666666666666rem',

@@ -10,7 +10,7 @@ import AuthCode from '@/components/AuthCode';
 import Icon from '@/components/Icon';
 import { connect, history, State, withRouter } from 'umi';
 import { useEffect, useState } from 'react';
-import style from './account.less';
+import styles from './account.less';
 import { LoginArgs, validateAndLogin } from '@/utils';
 
 const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
@@ -36,15 +36,15 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
   }, [isLogin]);
 
   return (
-    <>
-      <div className={style['img-father']}>
+    <div className={styles.account}>
+      <div className={styles['img-father']}>
         <img src={require('@/assets/img/icon.png')} />
       </div>
       {loginStatus === 1 ? (
         <Input
           size="large"
           placeholder="用户名"
-          className={style.input}
+          className={styles.input}
           maxLength={20}
           allowClear
           value={loginArgs.username}
@@ -65,7 +65,7 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
             setLoginArgs({ ...loginArgs, email: e.target.value });
           }}
           prefix={<MailOutlined />}
-          className={style.input}
+          className={styles.input}
         />
       )}
       <Input.Password
@@ -77,7 +77,7 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
         onChange={(e) => {
           setLoginArgs({ ...loginArgs, password: e.target.value });
         }}
-        className={style.input}
+        className={styles.input}
         prefix={<LockOutlined />}
       />
       <Input
@@ -95,38 +95,38 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
             style={{ marginRight: '-1.6rem' }}
           />
         }
-        className={style.input}
+        className={styles.input}
         onPressEnter={() =>
           validateAndLogin(loginArgs, captcha, loginStatus, setNeedrefresh, beLogin)
         }
       />
-      <p className={style['email-login']} onClick={changLoginMethod}>
+      <p className={styles['email-login']} onClick={changLoginMethod}>
         {loginStatus === 1 ? '邮箱登录' : '用户名登录'}
       </p>
-      <p className={style.tips}>
+      <p className={styles.tips}>
         登录即自动表示已同意 《用户服务协议》和
         <span onClick={() => goToOtherPage()}>《隐私权政策》</span>
       </p>
       <Button
-        className={style['login-button']}
+        className={styles['login-button']}
         type="primary"
         onClick={() => validateAndLogin(loginArgs, captcha, loginStatus, setNeedrefresh, beLogin)}
       >
         登录
       </Button>
-      <div className={style.bottom}>
-        <span className={style.about} onClick={() => history.push('/about')}>
+      <div className={styles.bottom}>
+        <span className={styles.about} onClick={() => history.push('/about')}>
           关于我们
         </span>
-        <span className={style.shu}>|</span>
+        <span className={styles.shu}>|</span>
         <span
-          className={style.about}
+          className={styles.about}
           onClick={() => history.push('/account/register', { title: '注册' })}
         >
           注册账号
         </span>
       </div>
-    </>
+    </div>
   );
 };
 
