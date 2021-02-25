@@ -169,7 +169,6 @@ function useStyles() {
     },
     tag: {
       border: 'none',
-      flex: 1,
       overflow: 'hidden',
       textOverflow: 'ellipsis',
     },

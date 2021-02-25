@@ -89,14 +89,20 @@ function useStyles() {
     },
     content: {
       fontSize: '16px',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
     fromNow: {
       fontSize: '12px',
       marginTop: '3px',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
     comment: {
       fontSize: '14px',
       margin: '8px 0',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
     commentBox: {
       border: '1px solid rgba(206, 205, 205, 0.486)',
