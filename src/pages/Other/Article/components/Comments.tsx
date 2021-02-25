@@ -23,7 +23,9 @@ const Comments: React.FC<CommentsProps> = React.memo(({ datasource, replay }) =>
               return (
                 <Comment
                   avatar={
-                    <div onClick={() => history.push({ pathname: '/user', query: { userId } })}>
+                    <div
+                      onClick={() => history.push({ pathname: '/account/user', query: { userId } })}
+                    >
                       <Avatar src={headImg} alt={username} />
                     </div>
                   }
@@ -60,7 +62,9 @@ const Comments: React.FC<CommentsProps> = React.memo(({ datasource, replay }) =>
                         <Comment
                           avatar={
                             <div
-                              onClick={() => history.push({ pathname: '/user', query: { userId } })}
+                              onClick={() =>
+                                history.push({ pathname: '/account/user', query: { userId } })
+                              }
                             >
                               <Avatar src={headImg} alt={username} />
                             </div>

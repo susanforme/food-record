@@ -3,7 +3,7 @@ import { UserApiData, USER_API } from '@/api/query';
 import { useQuery } from '@apollo/client';
 import Empty from 'antd/es/empty';
 import React, { useEffect, useMemo, useState } from 'react';
-import { history } from 'umi';
+import { connect, history, State } from 'umi';
 import Shelf from '@/components/Shelf';
 import styles from './user.less';
 import TouchFeedback from 'rmc-feedback';
@@ -12,7 +12,7 @@ import { radomlyGeneratColor } from '@/utils';
 import TabContent from './components/TabContent';
 
 const { TabPane } = Tabs;
-const User: React.FC = () => {
+const User: React.FC<UserProps> = ({ me }) => {
   const userId = history.location.query?.userId;
   if (!userId) {
     return <div></div>;
@@ -51,7 +51,19 @@ const User: React.FC = () => {
           <span>{user?.discuss.fan}粉丝</span>
           <span>{user?.discuss.attention}关注</span>
           <TouchFeedback activeClassName={styles.active}>
-            <button className={styles.button}>聊天</button>
+            <button
+              className={styles.button}
+              onClick={() => {
+                if (userId === me.id) {
+                  history.push('/me');
+                } else {
+                  // 通过state传入防止修改
+                  history.push({ pathname: '/chat', state: { userId: me.id || '' } });
+                }
+              }}
+            >
+              {userId === me.id ? '编辑' : '聊天'}
+            </button>
           </TouchFeedback>
         </div>
       </div>
@@ -85,6 +97,14 @@ const User: React.FC = () => {
   );
 };
 
-export default User;
+const mapStateToProps = (state: State) => ({
+  me: state.index.user,
+});
+
+export default connect(mapStateToProps)(User);
 
 type ShowKey = 'article' | 'comment' | 'strategy';
+
+interface UserProps {
+  me: State['index']['user'];
+}

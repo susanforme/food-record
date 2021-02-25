@@ -31,6 +31,9 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
   }, [isLogin]);
   return (
     <>
+      <div className={style['img-father']}>
+        <img src={require('@/assets/img/icon.png')} />
+      </div>
       <Input
         size="large"
         placeholder="用户名"
@@ -38,7 +41,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         maxLength={20}
         allowClear
         value={registerArgs.username}
-        onChange={(e) => setRegisterArgs((pre) => ({ ...pre, username: e.target.value }))}
+        onChange={(e) => setRegisterArgs({ ...registerArgs, username: e.target.value })}
         prefix={<UserOutlined />}
       />
       <Input
@@ -48,7 +51,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         type="email"
         allowClear
         value={registerArgs.email}
-        onChange={(e) => setRegisterArgs((pre) => ({ ...pre, email: e.target.value }))}
+        onChange={(e) => setRegisterArgs({ ...registerArgs, email: e.target.value })}
         prefix={<MailOutlined />}
         className={style.input}
       />
@@ -58,7 +61,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         maxLength={24}
         iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
         value={registerArgs.password}
-        onChange={(e) => setRegisterArgs((pre) => ({ ...pre, password: e.target.value }))}
+        onChange={(e) => setRegisterArgs({ ...registerArgs, password: e.target.value })}
         className={style.input}
         prefix={<LockOutlined />}
       />
@@ -68,7 +71,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         maxLength={24}
         iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
         value={registerArgs.repassword}
-        onChange={(e) => setRegisterArgs((pre) => ({ ...pre, repassword: e.target.value }))}
+        onChange={(e) => setRegisterArgs({ ...registerArgs, repassword: e.target.value })}
         className={style.input}
         prefix={<LockOutlined />}
       />
@@ -77,7 +80,7 @@ const Register: React.FC<RegisterProps> = ({ register, isLogin }) => {
         prefix={<Icon type="icon-yanzhengma-2" style={{ fontSize: '0.8533333333333334rem' }} />}
         maxLength={4}
         value={registerArgs.captcha}
-        onChange={(e) => setRegisterArgs((pre) => ({ ...pre, captcha: e.target.value }))}
+        onChange={(e) => setRegisterArgs({ ...registerArgs, captcha: e.target.value })}
         suffix={
           <AuthCode
             setCaptcha={setCaptcha}

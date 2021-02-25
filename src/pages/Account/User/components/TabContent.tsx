@@ -9,7 +9,7 @@ const TabContent: React.FC<TabContentProps> = React.memo(({ showKey, user }) => 
   const styles = useStyles();
   if (showKey === 'article') {
     return (
-      <div>
+      <div className={styles.article}>
         <ArticleItems datasource={user?.article} />
       </div>
     );
@@ -27,7 +27,7 @@ const TabContent: React.FC<TabContentProps> = React.memo(({ showKey, user }) => 
       <div>
         {comment.map((v) => {
           return (
-            <div key={v.createTime}>
+            <div key={v.createTime} className={styles.tabContent}>
               <div>{moment(v.createTime).fromNow()}</div>
             </div>
           );
@@ -48,10 +48,13 @@ function useStyles() {
   return createUseStyles({
     tabContent: {
       padding: '2rem',
-      minHeight: '65vh',
+      minHeight: '55vh',
     },
     comment: {
-      minHeight: '65vh',
+      minHeight: '55vh',
+    },
+    article: {
+      marginTop: '-0.5rem',
     },
   })();
 }

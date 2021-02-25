@@ -37,6 +37,9 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
 
   return (
     <>
+      <div className={style['img-father']}>
+        <img src={require('@/assets/img/icon.png')} />
+      </div>
       {loginStatus === 1 ? (
         <Input
           size="large"
@@ -45,7 +48,9 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
           maxLength={20}
           allowClear
           value={loginArgs.username}
-          onChange={(e) => setLoginArgs((pre) => ({ ...pre, username: e.target.value }))}
+          onChange={(e) => {
+            setLoginArgs({ ...loginArgs, username: e.target.value });
+          }}
           prefix={<UserOutlined />}
         />
       ) : (
@@ -56,7 +61,9 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
           type="email"
           allowClear
           value={loginArgs.email}
-          onChange={(e) => setLoginArgs((pre) => ({ ...pre, email: e.target.value }))}
+          onChange={(e) => {
+            setLoginArgs({ ...loginArgs, email: e.target.value });
+          }}
           prefix={<MailOutlined />}
           className={style.input}
         />
@@ -67,7 +74,9 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
         maxLength={24}
         iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
         value={loginArgs.password}
-        onChange={(e) => setLoginArgs((pre) => ({ ...pre, password: e.target.value }))}
+        onChange={(e) => {
+          setLoginArgs({ ...loginArgs, password: e.target.value });
+        }}
         className={style.input}
         prefix={<LockOutlined />}
       />
@@ -76,7 +85,9 @@ const Login: React.FC<LoginProps> = ({ beLogin, isLogin }) => {
         prefix={<Icon type="icon-yanzhengma-2" style={{ fontSize: '0.8533333333333334rem' }} />}
         maxLength={4}
         value={loginArgs.captcha}
-        onChange={(e) => setLoginArgs((pre) => ({ ...pre, captcha: e.target.value }))}
+        onChange={(e) => {
+          setLoginArgs({ ...loginArgs, captcha: e.target.value });
+        }}
         suffix={
           <AuthCode
             setCaptcha={setCaptcha}

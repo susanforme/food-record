@@ -78,11 +78,13 @@ const Article: React.FC<ArticleProps> = ({ user }) => {
       size="large"
       indicator={<LoadingOutlined style={{ fontSize: 60 }} spin />}
     >
-      <div
-        className={styles.article}
-        onClick={() => history.push({ pathname: '/user', query: { userId: user.id || '' } })}
-      >
-        <div className={styles.author}>
+      <div className={styles.article}>
+        <div
+          className={styles.author}
+          onClick={() =>
+            history.push({ pathname: '/account/user', query: { userId: user.id || '' } })
+          }
+        >
           <Avatar src={article?.author.headImg} className={styles.avatar} />
           <div className={styles.flex}>
             <span className={styles.username}>{article?.author.username}</span>

@@ -35,6 +35,11 @@ const routes: IRoute[] = [
             component: '@/pages/Account/Register',
             title: '注册',
           },
+          {
+            path: '/account/user',
+            component: '@/pages/Account/User',
+            title: '寻美食',
+          },
         ],
       },
       {
@@ -54,15 +59,17 @@ const routes: IRoute[] = [
         component: '@/pages/Other/Food',
         title: '寻美食',
       },
-      {
-        path: '/user',
-        component: '@/pages/Other/User',
-        title: '寻美食',
-      },
+
       {
         path: '/article',
         component: '@/pages/Other/Article',
         title: '文章',
+      },
+      {
+        path: '/chat',
+        component: '@/pages/Other/Chat',
+        title: '聊天',
+        wrappers: ['@/wrappers/Auth'],
       },
       { path: '*', component: '@/pages/404', title: '页面走丢了' },
     ],
