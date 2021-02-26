@@ -8,7 +8,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages }) => {
       scrollList.current.scrollTop = scrollList.current.scrollHeight;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scrollList.current]);
+  }, [scrollList.current, messages.length]);
   return (
     <div className="sc-message-list" ref={scrollList}>
       {messages.map((message, i) => {

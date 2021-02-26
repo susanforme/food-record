@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import TextMessage from './TextMessage';
 import EmojiMessage from './EmojiMessage';
 import FileMessage from './FileMessage';
-import chatIconUrl from './../../assets/chat-icon.svg';
+import { UserHeadImgContext } from '../../context';
 
 const Message: React.FC<MessageProps> = ({ message }) => {
+  const headImg = useContext(UserHeadImgContext);
   const _renderMessageOfType = (type: string) => {
     switch (type) {
       case 'text':
@@ -24,7 +25,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
         <div
           className="sc-message--avatar"
           style={{
-            backgroundImage: `url(${chatIconUrl})`,
+            backgroundImage: `url(${headImg})`,
           }}
         ></div>
         {_renderMessageOfType(message.type)}

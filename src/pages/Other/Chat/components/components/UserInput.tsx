@@ -5,16 +5,15 @@ import EmojiIcon from './icons/EmojiIcon';
 import PopupWindow from './popups/PopupWindow';
 import EmojiPicker from './emoji-picker/EmojiPicker';
 
-const UserInput: React.FC<UserInputProps> = ({ onSubmit, onFilesSelected, showEmoji }) => {
+const UserInput: React.FC<UserInputProps> = ({ onSubmit, onFileChange }) => {
   const [state, setState] = useState({
-    inputActive: false,
-    inputHasText: false,
     emojiPickerIsOpen: false,
     emojiFilter: '',
   });
   const fileUploadButtonRef = useRef<HTMLInputElement>(null);
   const [emojiPickerButton, setEmojiPickerButton] = useState<Element | null>(null);
-  const userInputRef = useRef<HTMLDivElement>(null);
+  const [inputValue, setInputValue] = useState<string>('');
+
   useEffect(() => {
     setEmojiPickerButton(document.querySelector('#sc-emoji-picker-button'));
   }, []);
@@ -23,15 +22,6 @@ const UserInput: React.FC<UserInputProps> = ({ onSubmit, onFilesSelected, showEm
     if (event.keyCode === 13 && !event.shiftKey) {
       return _submitText(event);
     }
-  };
-
-  const handleKeyUp = (event: any) => {
-    const inputHasText = event.target.innerHTML.length !== 0 && event.target.innerText !== '\n';
-    setState({ ...state, inputHasText });
-  };
-
-  const _showFilePicker = () => {
-    fileUploadButtonRef.current?.click();
   };
 
   const toggleEmojiPicker = (e: any) => {
@@ -51,31 +41,20 @@ const UserInput: React.FC<UserInputProps> = ({ onSubmit, onFilesSelected, showEm
 
   const _submitText = (event: any) => {
     event.preventDefault();
-    const text = userInputRef.current?.textContent;
-    if (text && text.length > 0) {
+    if (inputValue && inputValue.length > 0) {
       onSubmit({
         author: 'me',
         type: 'text',
-        data: { text },
+        data: { text: inputValue },
       });
-      if (userInputRef.current) {
-        userInputRef.current.innerHTML = '';
-      }
+      setInputValue('');
     }
   };
 
-  const _onFilesSelected = (event: any) => {
-    if (event.target.files && event.target.files.length > 0) {
-      onFilesSelected(event.target.files);
-    }
-  };
-
-  const _handleEmojiPicked = (emoji: any) => {
+  const _handleEmojiPicked = (emoji: string) => {
     setState({ ...state, emojiPickerIsOpen: false });
-    if (state.inputHasText) {
-      if (userInputRef.current) {
-        userInputRef.current.innerHTML += emoji;
-      }
+    if (inputValue) {
+      setInputValue(inputValue + emoji);
     } else {
       onSubmit({
         author: 'me',
@@ -101,7 +80,7 @@ const UserInput: React.FC<UserInputProps> = ({ onSubmit, onFilesSelected, showEm
   );
 
   const _renderSendOrFileIcon = () => {
-    if (state.inputHasText) {
+    if (inputValue) {
       return (
         <div className="sc-user-input--button">
           <SendIcon onClick={_submitText} />
@@ -110,58 +89,54 @@ const UserInput: React.FC<UserInputProps> = ({ onSubmit, onFilesSelected, showEm
     }
     return (
       <div className="sc-user-input--button">
-        <FileIcon onClick={() => _showFilePicker()} />
+        <FileIcon
+          onClick={() => {
+            fileUploadButtonRef.current?.click();
+          }}
+        />
         <input
           type="file"
-          name="files[]"
-          multiple
           ref={fileUploadButtonRef}
-          onChange={_onFilesSelected}
+          accept=".jpg,.png,.gif,.jpeg,.svg"
+          onChange={onFileChange}
         />
       </div>
     );
   };
 
-  const { emojiPickerIsOpen, inputActive } = state;
+  const { emojiPickerIsOpen } = state;
   return (
-    <form className={`sc-user-input ${inputActive ? 'active' : ''}`}>
-      <div
+    <div className={`sc-user-input  active `}>
+      <input
         role="button"
         tabIndex={0}
-        onFocus={() => {
-          setState({ ...state, inputActive: true });
-        }}
-        onBlur={() => {
-          setState({ ...state, inputActive: false });
-        }}
-        ref={userInputRef}
         onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
-        contentEditable="true"
-        placeholder="Write a reply..."
+        contentEditable
+        placeholder="回复"
+        onChange={(e) => {
+          setInputValue(e.currentTarget.value);
+        }}
+        value={inputValue}
         className="sc-user-input--text"
-      ></div>
+      ></input>
       <div className="sc-user-input--buttons">
         <div className="sc-user-input--button"></div>
         <div className="sc-user-input--button">
-          {showEmoji && (
-            <EmojiIcon
-              onClick={toggleEmojiPicker}
-              isActive={emojiPickerIsOpen}
-              tooltip={_renderEmojiPopup()}
-            />
-          )}
+          <EmojiIcon
+            onClick={toggleEmojiPicker}
+            isActive={emojiPickerIsOpen}
+            tooltip={_renderEmojiPopup()}
+          />
         </div>
         {_renderSendOrFileIcon()}
       </div>
-    </form>
+    </div>
   );
 };
 
 interface UserInputProps {
   onSubmit: (data: { author: 'me' | 'them'; type: 'text' | 'emoji' | 'file'; data: any }) => any;
-  onFilesSelected: (filesList: any) => any;
-  showEmoji: boolean;
+  onFileChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default UserInput;

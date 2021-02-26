@@ -91,6 +91,8 @@ function useStyles() {
       fontSize: '16px',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      width: '80%',
     },
     fromNow: {
       fontSize: '12px',
@@ -103,6 +105,8 @@ function useStyles() {
       margin: '8px 0',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      width: '80%',
     },
     commentBox: {
       border: '1px solid rgba(206, 205, 205, 0.486)',
