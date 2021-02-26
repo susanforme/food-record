@@ -1,37 +1,63 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import ChatWindow from './components';
 import styles from './chat.less';
 import { connect, history, State, useHistory } from 'umi';
 import io from 'socket.io-client';
+import { isEmoji, parseFile, uploadImg } from '@/utils';
+import { notification } from 'antd';
+import { ImgPrefixConext } from '@/context';
 
 const Chat: React.FC<ChatProps> = ({ me }) => {
   const them = useHistory<{ userId?: string; headImg?: string }>().location.state;
   const socket = useMemo(() => io('http://localhost:4000'), []);
-  const [messageList, setMessage] = useState<MessageListType | []>([]);
+  const imgPrefix = useContext(ImgPrefixConext);
+  const [messageList, setMessageList] = useState<MessageListType | []>([]);
+
   useEffect(() => {
     socket.connect();
   }, [socket]);
-  console.log('函数外部');
-
+  useEffect(() => {
+    document.title = '聊天';
+  }, []);
   useEffect(() => {
     socket.on('back', (res: any) => {
       const response = res?.data;
-      console.log('开始back');
-
       if (response.send !== me.id) {
-        const data: SingleMessage = {
-          author: 'them',
-          type: 'text',
-          data: {
-            text: response.message,
-          },
-        };
-        console.log('开始修改');
-        setMessage((pre) => [...pre, data]);
+        if (response.img) {
+          const data: SingleMessage = {
+            author: 'them',
+            type: 'file',
+            data: {
+              url: response.img,
+            },
+          };
+          setMessageList((pre) => [...pre, data]);
+        } else if (isEmoji(response.message || '')) {
+          const data: SingleMessage = {
+            author: 'them',
+            type: 'emoji',
+            data: {
+              emoji: response.message,
+            },
+          };
+          setMessageList((pre) => [...pre, data]);
+        } else {
+          const data: SingleMessage = {
+            author: 'them',
+            type: 'text',
+            data: {
+              text: response.message,
+            },
+          };
+          setMessageList((pre) => [...pre, data]);
+        }
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  if (history.location.pathname !== '/chat') {
+    return <div></div>;
+  }
   if (!them?.userId) {
     history.replace('/account/login');
   }
@@ -40,7 +66,40 @@ const Chat: React.FC<ChatProps> = ({ me }) => {
       <ChatWindow
         isOpen
         onFileChange={(e) => {
-          console.log(e);
+          const files = e.target.files;
+          const accept = '.jpg,.png,.gif,.jpeg,.svg';
+          if (files) {
+            parseFile(files[0])
+              .then((v) => {
+                console.log(v);
+                // eslint-disable-next-line no-useless-escape
+                const reg = /\.[^\.]+$/;
+                const result = v.file?.name.match(reg);
+                if (
+                  Object.is(result, null) ||
+                  !(result && accept.includes(result[0].toLocaleLowerCase()))
+                ) {
+                  throw new Error('请重新上传');
+                }
+                setMessageList((pre) => [
+                  ...pre,
+                  { author: 'me', type: 'file', data: { url: v.src } },
+                ]);
+                return uploadImg(files[0]);
+              })
+              .then(({ data }) => {
+                console.log(data?.singleUpload.url);
+                console.log('上传成功');
+                socket.emit('chat', {
+                  send: me.id,
+                  receive: them?.userId,
+                  img: imgPrefix + data?.singleUpload.url,
+                });
+              })
+              .catch(() => {
+                notification.error({ message: '请重新上传', duration: 1.5 });
+              });
+          }
         }}
         onUserInputSubmit={(data) => {
           let message = '';
@@ -57,7 +116,7 @@ const Chat: React.FC<ChatProps> = ({ me }) => {
             receive: them?.userId,
             message,
           });
-          setMessage([...messageList, data]);
+          setMessageList([...messageList, data]);
         }}
         className={styles.chat}
         showHeader={false}

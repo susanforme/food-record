@@ -39,6 +39,7 @@
   white-space: pre-wrap;
   -webkit-font-smoothing: subpixel-antialiased;
   word-wrap: break-word;
+  max-width: 180px;
 }
 
 .sc-message--content.sent .sc-message--text {

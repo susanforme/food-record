@@ -11,7 +11,7 @@ const FileMessage: React.FC<FileMessageProps> = ({ data }) => {
 interface FileMessageProps {
   data: {
     url: string;
-    fileName: string;
+    fileName?: string;
   };
 }
 
