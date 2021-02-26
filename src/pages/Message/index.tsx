@@ -14,16 +14,22 @@ const Message: React.FC<MessageProps> = ({ user }) => {
   if (!user.id) {
     return <Empty description="没有登录哦"></Empty>;
   }
+  console.log(data);
+
   return (
     <div>
       <List
         dataSource={data?.messageList}
-        renderItem={(item: any) => {
+        renderItem={(item: MessageItemProps) => {
           return (
             <Item>
               <div>
-                <img src={item?.headImg} alt="" />
-                <span>{item?.username}</span>
+                <div className="left">
+                  <img src={item?.user.headImg} alt="" />
+                </div>
+                <span>{item?.user.username}</span>
+                <span>{item.record.img ? '图片' : item.record.message}</span>
+                <div className="right">{item.record.createTime}</div>
               </div>
             </Item>
           );
@@ -41,4 +47,18 @@ export default connect(mapStateToProps)(Message);
 
 interface MessageProps {
   user: State['index']['user'];
+}
+
+interface MessageItemProps {
+  record: {
+    createTime: number;
+    id: string;
+    img?: string;
+    message?: string;
+  };
+  user: {
+    username: string;
+    id: string;
+    headImg: string;
+  };
 }

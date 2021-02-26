@@ -368,9 +368,17 @@ export const CHAT_API = {
   MESSAGE_LIST: gql`
     query getMsgList($id: ID!) {
       messageList(id: $id) {
-        username
-        headImg
-        id
+        user {
+          username
+          headImg
+          id
+        }
+        record {
+          message
+          id
+          createTime
+          img
+        }
       }
     }
   `,
