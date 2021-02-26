@@ -19,6 +19,7 @@ export interface IndexModelType {
     UPDATE_USER: ImmerReducer<IndexModelState>;
     FETCH_ERROR: ImmerReducer<IndexModelState>;
     CHANGE_TITLE: ImmerReducer<IndexModelState>;
+    DELETE_USER: ImmerReducer<IndexModelState>;
   };
   effects: Action;
   subscriptions: { setup: Subscription; title: Subscription };
@@ -52,6 +53,12 @@ const IndexModel: IndexModelType = {
     },
     CHANGE_TITLE(state, { payload }) {
       state.title = payload;
+    },
+    DELETE_USER(state) {
+      state.user = {
+        location: '510700',
+      };
+      state.isLogin = false;
     },
   },
   effects,

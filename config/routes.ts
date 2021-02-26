@@ -20,7 +20,7 @@ const routes: IRoute[] = [
         component: '@/pages/Message',
         title: '消息',
       },
-      { path: '/me', component: '@/pages/Me', title: '我的' },
+      { path: '/me', component: '@/pages/Me', title: '我的', wrappers: ['@/wrappers/Auth'] },
       {
         path: '/account',
         component: '@/pages/Account',

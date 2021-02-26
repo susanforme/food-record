@@ -35,6 +35,16 @@ const effects: Action = {
       yield put({ type: 'FETCH_ERROR', payload: error?.message });
     }
   },
+  *logout(_, { call, put }) {
+    try {
+      yield call(client.mutate, {
+        mutation: USER_API.LOGOUT,
+      });
+      yield put({ type: 'DELETE_USER' });
+    } catch (error) {
+      yield put({ type: 'FETCH_ERROR', payload: error?.message });
+    }
+  },
 };
 export default effects;
 
@@ -42,4 +52,5 @@ export interface Action {
   login: Effect;
   loginBySession: Effect;
   register: Effect;
+  logout: Effect;
 }

@@ -82,6 +82,11 @@ export const USER_API = {
       }
     }
   `,
+  LOGOUT: gql`
+    mutation logout {
+      logout
+    }
+  `,
 };
 
 // 注意wallpaer,自己收集图片然后随机生成
@@ -358,3 +363,15 @@ export interface UserApiData {
     };
   };
 }
+
+export const CHAT_API = {
+  MESSAGE_LIST: gql`
+    query getMsgList($id: ID!) {
+      messageList(id: $id) {
+        username
+        headImg
+        id
+      }
+    }
+  `,
+};
