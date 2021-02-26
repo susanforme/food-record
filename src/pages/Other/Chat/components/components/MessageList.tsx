@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Message from './Messages';
 
-const MessageList: React.FC<MessageListProps> = ({ messages }) => {
+const MessageList: React.FC<MessageListProps> = React.memo(({ messages }) => {
   const scrollList = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (scrollList.current) {
@@ -16,7 +16,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages }) => {
       })}
     </div>
   );
-};
+});
 
 interface MessageListProps {
   messages: {

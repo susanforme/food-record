@@ -58,7 +58,10 @@ const User: React.FC<UserProps> = ({ me }) => {
                   history.push('/me');
                 } else {
                   // 通过state传入防止修改
-                  history.push({ pathname: '/chat', state: { userId: me.id || '' } });
+                  history.push({
+                    pathname: '/chat',
+                    state: { userId: user?.user.id || '', headImg: user?.user.headImg || '' },
+                  });
                 }
               }}
             >

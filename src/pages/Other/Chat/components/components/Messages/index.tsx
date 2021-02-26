@@ -4,7 +4,7 @@ import EmojiMessage from './EmojiMessage';
 import FileMessage from './FileMessage';
 import { UserHeadImgContext } from '../../context';
 
-const Message: React.FC<MessageProps> = ({ message }) => {
+const Message: React.FC<MessageProps> = React.memo(({ message }) => {
   const headImg = useContext(UserHeadImgContext);
   const _renderMessageOfType = (type: string) => {
     switch (type) {
@@ -32,7 +32,7 @@ const Message: React.FC<MessageProps> = ({ message }) => {
       </div>
     </div>
   );
-};
+});
 
 export default Message;
 

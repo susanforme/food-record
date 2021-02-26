@@ -1,7 +1,6 @@
 import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import axios from 'axios';
-import io from 'socket.io-client';
 import { buildAxiosFetch } from '@lifeomic/axios-fetch';
 
 const uri = '/api';
@@ -21,5 +20,3 @@ const client = new ApolloClient({
 });
 
 export default client;
-
-export const getSocket = () => io('http://localhost:4000');
