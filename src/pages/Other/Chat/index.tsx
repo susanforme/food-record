@@ -11,6 +11,13 @@ const Chat: React.FC = () => {
         text: 'hi',
       },
     },
+    {
+      author: 'them',
+      type: 'file',
+      data: {
+        url: require('@/assets/img/food.jpeg'),
+      },
+    },
   ]);
   return (
     <div>
@@ -25,6 +32,7 @@ const Chat: React.FC = () => {
         className={styles.chat}
         showHeader={false}
         messageList={messageList}
+        headImg={undefined}
       ></ChatWindow>
     </div>
   );

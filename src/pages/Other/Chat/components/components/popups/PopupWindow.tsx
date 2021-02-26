@@ -1,11 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const PopupWindow: React.FC<PopupWindowProps> = ({
-  isOpen,
-  children,
-  onClickedOutside,
-  onInputChange,
-}) => {
+const PopupWindow: React.FC<PopupWindowProps> = ({ isOpen, children, onClickedOutside }) => {
   const emojiPopupRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -22,14 +17,7 @@ const PopupWindow: React.FC<PopupWindowProps> = ({
 
   return (
     <div className="sc-popup-window" ref={emojiPopupRef}>
-      <div className={`sc-popup-window--cointainer ${isOpen ? '' : 'closed'}`}>
-        <input
-          onChange={onInputChange}
-          className="sc-popup-window--search"
-          placeholder="Search emoji..."
-        />
-        {children}
-      </div>
+      <div className={`sc-popup-window--cointainer ${isOpen ? '' : 'closed'}`}>{children}</div>
     </div>
   );
 };

@@ -3,9 +3,9 @@ import Linkify from 'react-linkify';
 
 const TextMessage: React.FC<TextMessageProps> = ({ data }) => {
   return (
-    <div className="sc-message--text">
-      <Linkify properties={{ target: '_blank' }}>{data.text}</Linkify>
-    </div>
+    <Linkify properties={{ target: '_blank' }}>
+      <span className="sc-message--text">{data.text}</span>
+    </Linkify>
   );
 };
 interface TextMessageProps {

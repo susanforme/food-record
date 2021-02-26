@@ -14,10 +14,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   showHeader = true,
   className,
   onFileChange,
+  headImg,
 }) => {
   const classList = ['sc-chat-window', isOpen ? 'opened' : 'closed', className];
   return (
-    <UserHeadImgContext.Provider value={require('./assets/chat-icon.svg')}>
+    <UserHeadImgContext.Provider value={headImg || require('./assets/chat-icon.svg')}>
       <div className={classList.join(' ')}>
         {showHeader && (
           <Header
@@ -55,6 +56,7 @@ interface ChatWindowProps {
   showHeader?: boolean;
   className?: string;
   onFileChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  headImg?: string;
 }
 
 export default ChatWindow;

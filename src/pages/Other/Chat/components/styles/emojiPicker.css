@@ -1,7 +1,7 @@
 .sc-emoji-picker {
   overflow: auto;
   width: 100%;
-  max-height: calc(100% - 40px);
+  max-height: 100%;
   box-sizing: border-box;
   padding: 15px;
 }
@@ -29,7 +29,7 @@
   cursor: pointer;
   vertical-align: middle;
   font-size: 28px;
-  transition: transform 60ms ease-out,-webkit-transform 60ms ease-out;
+  transition: transform 60ms ease-out, -webkit-transform 60ms ease-out;
   transition-delay: 60ms;
 }
 
