@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
-import ChatWindow from './components';
+import ChatWindow from 'react-chat-pro';
 import styles from './chat.less';
 import { connect, history, State, useHistory } from 'umi';
 import io from 'socket.io-client';
