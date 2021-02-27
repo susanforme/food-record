@@ -382,4 +382,15 @@ export const CHAT_API = {
       }
     }
   `,
+  CHAT_HISTORY: gql`
+    query getChatHistory($data: ChatHistoryInput!) {
+      chatHistory(data: $data) {
+        send
+        receive
+        message
+        createTime
+        img
+      }
+    }
+  `,
 };

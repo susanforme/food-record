@@ -371,3 +371,13 @@ export function isEmoji(str: string) {
     return false;
   }
 }
+
+export function getNotEmptyArray(ary: Array<any>) {
+  const newAry: any[] = [];
+  for (const v of ary) {
+    if (!Object.is(undefined, v) && !Object.is(null, v)) {
+      newAry.push(v);
+    }
+  }
+  return newAry;
+}

@@ -7,6 +7,8 @@ import { isEmoji, parseFile, uploadImg } from '@/utils';
 import { notification } from 'antd';
 import { ImgPrefixConext } from '@/context';
 import replay from '@/assets/sounds/notification.mp3';
+import client from '@/api';
+import { CHAT_API } from '@/api/query';
 
 const Chat: React.FC<ChatProps> = ({ me }) => {
   const them = useHistory<{ userId?: string; headImg?: string }>().location.state;
@@ -19,40 +21,42 @@ const Chat: React.FC<ChatProps> = ({ me }) => {
   }, [socket]);
   useEffect(() => {
     document.title = '聊天';
+    return () => {
+      socket.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    if (me.id && them?.userId) {
+      client
+        .query({
+          query: CHAT_API.CHAT_HISTORY,
+          variables: {
+            data: {
+              me: me.id,
+              other: them.userId,
+            },
+          },
+        })
+        .then(({ data }) => {
+          const msg: SingleMessage[] = [];
+          (data?.chatHistory as SingleMessage[]).forEach((v) => {
+            const res = handleData(v, me.id || '', true);
+            if (res) {
+              msg.push(res);
+            }
+          });
+          setMessageList((pre) => [...pre, ...msg]);
+        });
+    }
+  }, [me.id, them?.userId]);
   useEffect(() => {
     socket.on('back', (res: any) => {
       const response = res?.data;
-      if (response.send !== me.id) {
+      const data = handleData(response, me.id || '');
+      if (data) {
         audio.play();
-        if (response.img) {
-          const data: SingleMessage = {
-            author: 'them',
-            type: 'file',
-            data: {
-              url: response.img,
-            },
-          };
-          setMessageList((pre) => [...pre, data]);
-        } else if (isEmoji(response.message || '')) {
-          const data: SingleMessage = {
-            author: 'them',
-            type: 'emoji',
-            data: {
-              emoji: response.message,
-            },
-          };
-          setMessageList((pre) => [...pre, data]);
-        } else {
-          const data: SingleMessage = {
-            author: 'them',
-            type: 'text',
-            data: {
-              text: response.message,
-            },
-          };
-          setMessageList((pre) => [...pre, data]);
-        }
+        setMessageList((pre) => [...pre, data]);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -143,4 +147,45 @@ type SingleMessage = {
 };
 interface ChatProps {
   me: State['index']['user'];
+}
+
+function handleData(response: any, meId: string, needOwn = false) {
+  const getData = (isMe: boolean) => {
+    const author = isMe ? 'me' : 'them';
+    if (response.img) {
+      const data: SingleMessage = {
+        author,
+        type: 'file',
+        data: {
+          url: response.img,
+        },
+      };
+      return data;
+    } else if (isEmoji(response.message || '')) {
+      const data: SingleMessage = {
+        author,
+        type: 'emoji',
+        data: {
+          emoji: response.message,
+        },
+      };
+      return data;
+    } else {
+      const data: SingleMessage = {
+        author,
+        type: 'text',
+        data: {
+          text: response.message,
+        },
+      };
+      return data;
+    }
+  };
+  if (response.send !== meId) {
+    return getData(false);
+  } else {
+    if (needOwn) {
+      return getData(true);
+    }
+  }
 }
