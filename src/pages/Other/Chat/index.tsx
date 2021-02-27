@@ -6,13 +6,14 @@ import io from 'socket.io-client';
 import { isEmoji, parseFile, uploadImg } from '@/utils';
 import { notification } from 'antd';
 import { ImgPrefixConext } from '@/context';
+import replay from '@/assets/sounds/notification.mp3';
 
 const Chat: React.FC<ChatProps> = ({ me }) => {
   const them = useHistory<{ userId?: string; headImg?: string }>().location.state;
   const socket = useMemo(() => io('http://localhost:4000'), []);
   const imgPrefix = useContext(ImgPrefixConext);
   const [messageList, setMessageList] = useState<MessageListType | []>([]);
-
+  const audio = useMemo(() => new Audio(replay), []);
   useEffect(() => {
     socket.connect();
   }, [socket]);
@@ -23,6 +24,7 @@ const Chat: React.FC<ChatProps> = ({ me }) => {
     socket.on('back', (res: any) => {
       const response = res?.data;
       if (response.send !== me.id) {
+        audio.play();
         if (response.img) {
           const data: SingleMessage = {
             author: 'them',

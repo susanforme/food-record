@@ -50,4 +50,14 @@ export default defineConfig({
   antd: {
     compact: true,
   },
+  chainWebpack(memo) {
+    memo.module
+      .rule('media')
+      .test(/.mp(3|4)$/)
+      .use('file-loader')
+      .loader(require.resolve('file-loader'))
+      .options({
+        name: 'assets/[name].[ext]',
+      });
+  },
 });
