@@ -1,36 +1,51 @@
 import React from 'react';
 import { List, Empty } from 'antd';
-import { connect, State } from 'umi';
+import { connect, history, State } from 'umi';
 import { useQuery } from '@apollo/client';
 import { CHAT_API } from '@/api/query';
+import TouchFeedback from 'rmc-feedback';
+import styles from './message.less';
+import moment from 'moment';
 
 const { Item } = List;
-const Message: React.FC<MessageProps> = ({ user }) => {
+const Message: React.FC<MessageProps> = ({ user, isLogin }) => {
   const { data } = useQuery(CHAT_API.MESSAGE_LIST, {
     variables: {
       id: user.id,
     },
   });
-  if (!user.id) {
+  if (!isLogin) {
     return <Empty description="没有登录哦"></Empty>;
   }
-  console.log(data);
 
   return (
-    <div>
+    <div className={styles.message}>
       <List
-        dataSource={data?.messageList}
+        dataSource={[...(data?.messageList || [])].sort(
+          (a, b) => b.record.createTime - a.record.createTime,
+        )}
         renderItem={(item: MessageItemProps) => {
           return (
-            <Item>
-              <div>
-                <div className="left">
-                  <img src={item?.user.headImg} alt="" />
+            <Item
+              key={item.user.id}
+              className={styles.item}
+              onClick={() => {
+                history.push({
+                  pathname: '/chat',
+                  state: { userId: item?.user.id || '', headImg: item?.user.headImg || '' },
+                });
+              }}
+            >
+              <TouchFeedback activeClassName={styles.active}>
+                <div className={styles['item-child']}>
+                  <div className={styles.left}>
+                    <img src={item?.user.headImg} alt="" />
+                  </div>
+                  <div className={styles.username}>{item?.user.username}</div>
+                  <div className={styles.msg}>{item.record.img ? '图片' : item.record.message}</div>
+                  <div className={styles.right}>{moment(item.record.createTime).fromNow()}</div>
                 </div>
-                <span>{item?.user.username}</span>
-                <span>{item.record.img ? '图片' : item.record.message}</span>
-                <div className="right">{item.record.createTime}</div>
-              </div>
+              </TouchFeedback>
             </Item>
           );
         }}
@@ -41,12 +56,14 @@ const Message: React.FC<MessageProps> = ({ user }) => {
 
 const mapStateToProps = (state: State) => ({
   user: state.index.user,
+  isLogin: state.index.isLogin,
 });
 
 export default connect(mapStateToProps)(Message);
 
 interface MessageProps {
   user: State['index']['user'];
+  isLogin: boolean;
 }
 
 interface MessageItemProps {
