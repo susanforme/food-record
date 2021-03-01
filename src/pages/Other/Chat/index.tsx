@@ -16,7 +16,7 @@ const Chat: React.FC<ChatProps> = ({ me }) => {
     if (process.env?.NODE_ENV === 'development') {
       return io('http://localhost:4000');
     } else {
-      return io('https://api.52acfun.cn:4000');
+      return io('https://api.52acfun.cn');
     }
   }, []);
   const imgPrefix = useContext(ImgPrefixConext);
