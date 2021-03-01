@@ -12,7 +12,13 @@ import { CHAT_API } from '@/api/query';
 
 const Chat: React.FC<ChatProps> = ({ me }) => {
   const them = useHistory<{ userId?: string; headImg?: string }>().location.state;
-  const socket = useMemo(() => io('http://localhost:4000'), []);
+  const socket = useMemo(() => {
+    if (process.env?.NODE_ENV === 'development') {
+      return io('http://localhost:4000');
+    } else {
+      return io('https://api.52acfun.cn:4000');
+    }
+  }, []);
   const imgPrefix = useContext(ImgPrefixConext);
   const [messageList, setMessageList] = useState<MessageListType | []>([]);
   const audio = useMemo(() => new Audio(replay), []);
