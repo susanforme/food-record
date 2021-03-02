@@ -18,9 +18,7 @@ const Home: React.FC<HomeProps> = ({ location, getWeather, weather, kind }) => {
   const isFixed = useMemo(() => currentPosition > 317, [currentPosition]);
   const debounce = debounceFactory(10);
   useEffect(() => {
-    if (!city) {
-      getWeather(location || '510700');
-    }
+    getWeather(location || '510700');
   }, [getWeather, location, city]);
   useEffect(() => {
     const dom = document.documentElement;
