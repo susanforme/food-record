@@ -150,7 +150,7 @@ const Article: React.FC<ArticleProps> = ({ user }) => {
                     navigator
                       .share({
                         title: document.title,
-                        url: window.location.pathname,
+                        url: `${window.location.pathname}?articleId=${articleId}`,
                         text: content,
                       })
                       .finally(() => {
