@@ -308,7 +308,7 @@ export function radomlyGeneratColor(random: number) {
 }
 
 export async function validateArticle(data: CreateArticleData) {
-  const { author, title, content, imgPath, kind, label, location } = data;
+  const { author, title, content, imgPath, kind, label, cityCode, score } = data;
   if (!author) {
     throw new Error('未登录');
   }
@@ -327,8 +327,11 @@ export async function validateArticle(data: CreateArticleData) {
   if (!(label.length > 1 && label.length < 5)) {
     throw new Error('至少选择2个标签,至多4个');
   }
-  if (!location) {
-    throw new Error('选择位置');
+  if (!cityCode) {
+    throw new Error('请选择选择位置');
+  }
+  if (score === 0) {
+    throw new Error('请评分');
   }
   return true;
 }
