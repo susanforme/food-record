@@ -1,6 +1,6 @@
 import client from '@/api';
 import { ArticleApiData, ARTICLE_API } from '@/api/query';
-import { notification, Spin } from 'antd';
+import { Spin } from 'antd';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ArticleItems from './ArticleItems';
 
@@ -31,7 +31,6 @@ const ArticleList: React.FC<ArticleItemsProps> = ({ kind }) => {
   useEffect(() => {
     if (data?.total) {
       if (requestData.page > Math.ceil(data.total / requestData.perPage)) {
-        notification.warning({ message: '没有美食了哦~~', duration: 1.5 });
         setRefreshing(false);
         return;
       }
