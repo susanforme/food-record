@@ -41,6 +41,7 @@ const Me: React.FC<MeProps> = ({ user, logout, updateHeadImg }) => {
         onReadComplete={() => {
           setLoad({ loading: true, progress: 0 });
         }}
+        showInput
         onComplete={(url) => {
           const headImg = imgPrefix + url;
           setLoad({ loading: false, progress: 0 });
