@@ -8,7 +8,7 @@ import { parseFile, ParseFileData, uploadImg } from '@/utils';
 
 // 解决上级使用动画调用ref报错
 const UploadImg = React.forwardRef<HTMLInputElement, UploadImgProps>(
-  ({ onClose, onComplete, onReadComplete, className, style }, ref) => {
+  ({ onClose, onComplete, onReadComplete, className, style, onUploadProgressChange }, ref) => {
     const [uploadProgress, setUploadProgress] = useState(0);
     const [isUpload, setIsUpload] = useState(false);
     const [file, setFile] = useState<ParseFileData>();
@@ -29,6 +29,7 @@ const UploadImg = React.forwardRef<HTMLInputElement, UploadImgProps>(
             onReadComplete && onReadComplete(v.src);
             return uploadImg(file[0], (progress) => {
               setUploadProgress(progress.loaded / progress.total);
+              onUploadProgressChange && onUploadProgressChange(progress.loaded / progress.total);
             });
           })
           .then(({ data }) => {
@@ -53,7 +54,7 @@ const UploadImg = React.forwardRef<HTMLInputElement, UploadImgProps>(
               {isUpload ? (
                 <>
                   <Image src={file.src} className={styles.img} />
-                  <div className={styles.close} onClick={() => onClose()}></div>
+                  <div className={styles.close} onClick={() => onClose && onClose()}></div>
                 </>
               ) : (
                 <Progress
@@ -131,9 +132,10 @@ function useStyles() {
 }
 
 interface UploadImgProps {
-  onClose: Function;
+  onClose?: Function;
   onComplete: (url: string) => any;
   onReadComplete?: (url: string) => any;
   style?: React.CSSProperties;
   className?: string;
+  onUploadProgressChange?: (progress: number) => any;
 }

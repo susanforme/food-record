@@ -384,3 +384,7 @@ export function getNotEmptyArray(ary: Array<any>) {
   }
   return newAry;
 }
+
+export function getHeadImg(img: string) {
+  return img.startsWith('data:image/png;') ? img : img + '/headImg';
+}

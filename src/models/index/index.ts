@@ -2,6 +2,7 @@ import { ImmerReducer, Subscription, Location, getDvaApp, Loading } from 'umi';
 import { notification } from 'antd';
 import effects, { Action } from './action';
 import { HomeModelState } from '../home/home';
+import { getHeadImg } from '@/utils';
 
 export interface IndexModelState {
   isLogin: boolean;
@@ -20,6 +21,7 @@ export interface IndexModelType {
     FETCH_ERROR: ImmerReducer<IndexModelState>;
     CHANGE_TITLE: ImmerReducer<IndexModelState>;
     DELETE_USER: ImmerReducer<IndexModelState>;
+    UPDATE_HEAD_IMG: ImmerReducer<IndexModelState>;
   };
   effects: Action;
   subscriptions: { setup: Subscription; title: Subscription };
@@ -43,12 +45,15 @@ const IndexModel: IndexModelType = {
     UPDATE_AND_CLEAN_ROUTE_HISTORY(state, action) {
       state.routeHistory = [...state.routeHistory.slice(6), action.payload];
     },
-    UPDATE_USER(state, action) {
+    UPDATE_USER(state, { payload }) {
       state.isLogin = true;
-      state.user = { ...state.user, ...action.payload };
+      const user = payload;
+      // 头像剪切处理
+      user.headImg = getHeadImg(user.headImg);
+      state.user = user;
       return notification.success({ message: '登录成功 😄', duration: 2.5 });
     },
-    FETCH_ERROR(state, { payload }) {
+    FETCH_ERROR(_, { payload }) {
       return notification.error({ message: payload, duration: 1.5 });
     },
     CHANGE_TITLE(state, { payload }) {
@@ -59,6 +64,9 @@ const IndexModel: IndexModelType = {
         location: '510700',
       };
       state.isLogin = false;
+    },
+    UPDATE_HEAD_IMG(state, { payload }) {
+      state.user.headImg = payload + '/headImg';
     },
   },
   effects,

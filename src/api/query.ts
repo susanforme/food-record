@@ -87,6 +87,11 @@ export const USER_API = {
       logout
     }
   `,
+  UPDATE_HEAD_IMG: gql`
+    mutation updateHeadImg($url: String!) {
+      updateHeadImg(url: $url)
+    }
+  `,
 };
 
 // 注意wallpaer,自己收集图片然后随机生成

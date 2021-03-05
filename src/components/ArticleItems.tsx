@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import { createUseStyles } from 'react-jss';
 import { history } from 'umi';
 import TouchFeedback from 'rmc-feedback';
-import { radomlyGeneratColor } from '@/utils';
+import { getHeadImg, radomlyGeneratColor } from '@/utils';
 import { ImgPrefixConext } from '@/context';
 import { ArticleApiData } from '@/api/query';
 
@@ -45,7 +45,7 @@ const ArticleList: React.FC<ArticleItemsProps> = React.memo(
                   <div className={styles.item}>
                     <img src={imgPrefix + item.img} className={styles.foodImg} />
                     <div className={styles.head}>
-                      <Avatar src={item.author.headImg} className={styles.avatar} />
+                      <Avatar src={getHeadImg(item.author.headImg)} className={styles.avatar} />
                       <div className={styles.flex}>
                         <span className={styles.username}>{item.author.username}</span>
                         <div className={styles.right}>
