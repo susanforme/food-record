@@ -71,6 +71,7 @@ const ArticleItems: React.FC<ArticleItemsProps> = React.memo(
             const colors = radomlyGeneratColor(item.label.length);
             return (
               <Item
+                key={item.id}
                 onClick={() =>
                   history.push({ pathname: '/article', query: { articleId: item.id } })
                 }

@@ -37,6 +37,9 @@ const ArticleList: React.FC<ArticleItemsProps> = ({ kind }) => {
         },
       })
       .then(({ data }) => {
+        if (data.articleItems.items.length === 0) {
+          return notification.warning({ message: '没有美食了哦~~', duration: 1.5 });
+        }
         setData((pre) => {
           return {
             items: [...(pre?.items || []), ...data.articleItems.items],
