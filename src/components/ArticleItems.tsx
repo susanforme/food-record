@@ -46,7 +46,8 @@ const ArticleItems: React.FC<ArticleItemsProps> = React.memo(
         listDom?.removeEventListener('touchstart', touchStartHandle);
         listDom?.removeEventListener('touchmove', touchMoveHandle);
       };
-    }, [onRefresh, refreshing]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [onRefresh, refreshing, listRef.current]);
     if (loading) {
       return (
         <div className={styles.loading}>
