@@ -88,7 +88,9 @@ const Article: React.FC<ArticleProps> = ({ user }) => {
           <Avatar src={article?.author.headImg} className={styles.avatar} />
           <div className={styles.flex}>
             <span className={styles.username}>{article?.author.username}</span>
-            <span className={styles.chear}>该用户已在食遇记分享33道美食</span>
+            <span className={styles.chear}>
+              该用户已在食遇记分享{Math.round(Math.random() * 10)}道美食
+            </span>
           </div>
         </div>
         <Carousel

@@ -85,7 +85,7 @@ const ArticleItems: React.FC<ArticleItemsProps> = React.memo(
                         <span className={styles.username}>{item.author.username}</span>
                         <div className={styles.right}>
                           <HeartOutlined className={styles.heart} />
-                          <span className={styles.give}>{item.give + 11}</span>
+                          {item.give > 0 && <span className={styles.give}>{item.give}</span>}
                         </div>
                       </div>
                     </div>
