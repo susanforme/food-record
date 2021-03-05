@@ -1,19 +1,52 @@
 import { Spin, Empty, List, Avatar, Rate, Tag } from 'antd';
 import { HeartOutlined } from '@ant-design/icons';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { history } from 'umi';
 import TouchFeedback from 'rmc-feedback';
-import { getHeadImg, radomlyGeneratColor } from '@/utils';
+import { debounceFactory, getHeadImg, radomlyGeneratColor } from '@/utils';
 import { ImgPrefixConext } from '@/context';
 import { ArticleApiData } from '@/api/query';
 
 const { Item } = List;
-const ArticleList: React.FC<ArticleItemsProps> = React.memo(
-  ({ datasource, loading, emptyDescription }) => {
+const ArticleItems: React.FC<ArticleItemsProps> = React.memo(
+  ({ datasource, loading, emptyDescription, onRefresh, refreshing }) => {
     const data = datasource;
     const styles = useStyles();
     const imgPrefix = useContext(ImgPrefixConext);
+    const listRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+      const listDom = listRef.current;
+      const debounce = debounceFactory(100);
+      let start = 0;
+      const touchStartHandle = (e: TouchEvent) => {
+        debounce(() => {
+          start = e.touches[0].pageY;
+        });
+      };
+      const touchMoveHandle = (e: TouchEvent) => {
+        debounce(() => {
+          if (e.touches[0].pageY - start < 0 && !refreshing) {
+            const isBottom =
+              document.documentElement.scrollHeight -
+                document.documentElement.scrollTop -
+                document.documentElement.clientHeight <
+              100;
+            if (isBottom) {
+              onRefresh && onRefresh();
+            }
+          }
+        });
+      };
+      if (listRef) {
+        listDom?.addEventListener('touchstart', touchStartHandle);
+        listDom?.addEventListener('touchmove', touchMoveHandle);
+      }
+      return () => {
+        listDom?.removeEventListener('touchstart', touchStartHandle);
+        listDom?.removeEventListener('touchmove', touchMoveHandle);
+      };
+    }, [onRefresh, refreshing]);
     if (loading) {
       return (
         <div className={styles.loading}>
@@ -29,7 +62,7 @@ const ArticleList: React.FC<ArticleItemsProps> = React.memo(
       );
     }
     return (
-      <div className={styles.articleItems}>
+      <div className={styles.articleItems} ref={listRef}>
         <List
           grid={{ gutter: 16, column: 2 }}
           dataSource={data?.items}
@@ -81,7 +114,7 @@ const ArticleList: React.FC<ArticleItemsProps> = React.memo(
   },
 );
 
-export default ArticleList;
+export default ArticleItems;
 
 function useStyles() {
   return createUseStyles({
@@ -94,6 +127,7 @@ function useStyles() {
     articleItems: {
       padding: '0 4vw',
       marginTop: '0.8533333333333334rem',
+      transition: 'all 0.5s ease',
     },
     item: {
       border: '0.05333333333333334rem solid rgba(0, 0, 0, 0.1)',
@@ -193,4 +227,6 @@ interface ArticleItemsProps {
   datasource?: ArticleApiData['articleItems']['articleItems'];
   loading?: boolean;
   emptyDescription?: string;
+  onRefresh?: Function;
+  refreshing?: boolean;
 }

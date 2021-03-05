@@ -1,39 +1,79 @@
+import client from '@/api';
 import { ArticleApiData, ARTICLE_API } from '@/api/query';
-import { useLazyQuery } from '@apollo/client';
-import React, { useEffect, useMemo } from 'react';
+import { notification, Spin } from 'antd';
+import React, { useCallback, useEffect, useState } from 'react';
 import ArticleItems from './ArticleItems';
 
-const ArticleList: React.FC<ArticleItemsProps> = ({ page, perPage, kind, isGive }) => {
-  const requestData = useMemo(() => {
-    return {
-      // 页码
-      page,
-      // 每页页数
-      perPage,
-      // 分类
-      kind,
-      // 是否按照点赞来进行排序
-      isGive,
-    };
-  }, [isGive, kind, page, perPage]);
-  const [getArticle, { loading, data }] = useLazyQuery<ArticleApiData['articleItems']>(
-    ARTICLE_API.ARTICLE_ITEM,
-  );
+const ArticleList: React.FC<ArticleItemsProps> = ({ kind }) => {
+  const [requestData, setRequestData] = useState({
+    // 页码
+    page: 1,
+    // 每页页数
+    perPage: 10,
+    // 分类
+    kind,
+    // 是否按照点赞来进行排序
+    isGive: true,
+  });
+  const [refreshing, setRefreshing] = useState(false);
+  const [data, setData] = useState<ArticleApiData['articleItems']['articleItems']>();
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setRequestData((pre) => ({ ...pre, page: pre.page + 1 }));
+  }, []);
   useEffect(() => {
-    getArticle({
-      variables: {
-        data: requestData,
-      },
-    });
-  }, [getArticle, requestData]);
-  return <ArticleItems datasource={data?.articleItems} loading={loading} />;
+    if (data?.total) {
+      if (requestData.page > Math.ceil(data.total / requestData.perPage)) {
+        notification.warning({ message: '没有美食了哦~~', duration: 1.5 });
+        setRefreshing(false);
+        return;
+      }
+    }
+    client
+      .query<ArticleApiData['articleItems']>({
+        query: ARTICLE_API.ARTICLE_ITEM,
+        variables: {
+          data: requestData,
+        },
+      })
+      .then(({ data }) => {
+        setData((pre) => {
+          return {
+            items: [...(pre?.items || []), ...data.articleItems.items],
+            total: data.articleItems.total,
+          };
+        });
+      })
+      .finally(() => {
+        setRefreshing(false);
+      });
+  }, [data?.total, requestData]);
+
+  return (
+    <>
+      <ArticleItems
+        datasource={data}
+        loading={data === undefined}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+      />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          height: refreshing ? '3rem' : '0px',
+          marginTop: '1rem',
+          transition: 'all 0.5s ease',
+        }}
+      >
+        <Spin />
+      </div>
+    </>
+  );
 };
 
 export default ArticleList;
 
 interface ArticleItemsProps {
-  page?: number;
   kind?: string;
-  perPage?: number;
-  isGive?: boolean;
 }
